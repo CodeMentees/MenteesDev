@@ -1,0 +1,37 @@
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  password: String,
+  isAdmin: { type: Boolean, default: false },
+});
+
+userSchema.pre("save", async function (next) {
+  try {
+    // If the password is not modified, skip the hashing process
+    if (!this.isModified("password")) {
+      return next();
+    }
+
+    // Generate salt and hash the password
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error); // Pass any errors to the next middleware
+  }
+});
+
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  try {
+    return await bcrypt.compare(enteredPassword, this.password);
+  } catch (error) {
+    throw new Error("Password comparison failed");
+  }
+};
+
+const User = mongoose.model("User", userSchema);
+
+export default User;
