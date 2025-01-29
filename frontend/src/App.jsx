@@ -9,6 +9,7 @@ import Blog from './Pages/Blog';
 import DashboardLayout from './Pages/Dashboard';
 import AddPost from './Pages/Post/AddPost';
 import PostList from './Pages/Post/PostList';
+import Footer from './Components/Footer/Footer';
 function App() {
   const firstPath = location.pathname.split('/')[1];
   let showHeader = true;
@@ -17,8 +18,9 @@ function App() {
   }
   return (
     <>
+      <Header/>
       <Router>
-       <div className="font-sans bg-gray-100 min-h-screen">
+       <div className="font-sans bg-gray-100   min-h-screen">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -51,6 +53,7 @@ function App() {
         </div>
 
       </Router>
+      <Footer/>
     </>
   )
 }

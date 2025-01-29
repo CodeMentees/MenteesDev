@@ -12,7 +12,7 @@ function Carousel() {
   ];
 
   return (
-    <div id="default-carousel" className="relative w-4/5 justify-center items-center mx-auto my-4" data-carousel="slide">
+    <div id="default-carousel" className="relative w-4/5 justify-center items-center mx-auto" data-carousel="slide">
       {/* Carousel wrapper */}
       <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
         {/* Dynamically render carousel items */}
