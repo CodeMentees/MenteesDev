@@ -3,6 +3,7 @@ import { CSharp } from '../../assets/mainPage';
 import CourseCard from '../CourseSubject/CourseCard';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import coursesData from "../../JSON/courseData.json"
 
 
 function CourseSection() {
@@ -10,69 +11,7 @@ function CourseSection() {
         AOS.init();
     }, [])
     const [activeTab, setActiveTab] = useState(0);
-    const coursesData = [
-        {
-            category: "Competitive Programming",
-            courses: [
-                {
-                    id: 0,
-                    name: "C++ Master Data structures and Algorithms using C++",
-                    image: CSharp,
-                    tags: [
-                        { label: "Classroom", bgColor: "blue", textColor: "blue" },
-                        { label: "Online", bgColor: "gray", textColor: "gray" },
-                        { label: "Live", bgColor: "red", textColor: "red" },
-                    ],
-                    features: ["2 team members", "20GB Cloud storage", "Integration help"],
-                },
-                {
-                    id: 1,
-                    name: "Python Mastering Data Structures and Algorithms",
-                    image: CSharp,  // Replace with another image if necessary
-                    tags: [
-                        { label: "Classroom", bgColor: "blue", textColor: "blue" },
-                        { label: "Online", bgColor: "gray", textColor: "gray" },
-                    ],
-                    features: ["3 team members", "30GB Cloud storage", "Expert mentorship"],
-                },
-                {
-                    id: 1,
-                    name: "Python Mastering Data Structures and Algorithms",
-                    image: CSharp,  // Replace with another image if necessary
-                    tags: [
-                        { label: "Classroom", bgColor: "blue", textColor: "blue" },
-                        { label: "Online", bgColor: "gray", textColor: "gray" },
-                    ],
-                    features: ["3 team members", "30GB Cloud storage", "Expert mentorship"],
-                },
-            ],
-        },
-        {
-            category: "Interview Preparation",
-            courses: [
-                {
-                    id: 2,
-                    name: "JavaScript Full Stack Development",
-                    image: CSharp,  // Replace with another image
-                    tags: [
-                        { label: "Online", bgColor: "green", textColor: "green" },
-                        { label: "Live", bgColor: "red", textColor: "yellow" },
-                    ],
-                    features: ["5 team members", "50GB Cloud storage", "Project-based learning"],
-                },
-                {
-                    id: 3,
-                    name: "System Design Concepts for Interviews",
-                    image: CSharp,  // Replace with another image
-                    tags: [
-                        { label: "Online", bgColor: "red", textColor: "yellow" },
-                        { label: "Live", bgColor: "orange", textColor: "orange" },
-                    ],
-                    features: ["1 on 1 mentoring", "40GB Cloud storage", "Mock interviews"],
-                },
-            ],
-        },
-    ];
+
 
     // Tab navigation data
     const tabs = [

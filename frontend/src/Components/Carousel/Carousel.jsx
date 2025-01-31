@@ -1,13 +1,10 @@
 import React from 'react';
-import { Designer } from '../../assets/mainPage';
 function Carousel() {
   // Define your carousel images dynamically
   const carouselImages = [
-    { src: Designer, alt: "Image 1" },
-    { src: Designer, alt: "Image 1" },
-    { src: Designer, alt: "Image 1" },
-    { src: Designer, alt: "Image 1" },
-    { src: Designer, alt: "Image 1" },
+    { src: "/images/Designer.jpeg", alt: "Image 1" },
+    { src: "/images/Designer.jpeg", alt: "Image 1" },
+    { src: "/images/Designer.jpeg", alt: "Image 1" },
 
   ];
 

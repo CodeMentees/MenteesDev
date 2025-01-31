@@ -14,11 +14,6 @@ import CourseSection from "../Components/CourseSection/CourseSection";
 import RatingSection from "../Components/RatingSection/RatingSection";
 
 function Home() {
-
-
-
-
-
   return (
     <div className="bg-gray-700 pb-10">
       <Carousel />

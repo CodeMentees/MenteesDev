@@ -1,0 +1,63 @@
+[
+    {
+        "category": "Competitive Programming",
+        "courses": [
+            {
+                "id": 0,
+                "name": "C++ Master Data structures and Algorithms using C++",
+                "image": "/images/c++.png",
+                "tags": [
+                    { "label": "Classroom", "bgColor": "blue", "textColor": "blue" },
+                    { "label": "Online", "bgColor": "gray", "textColor": "gray" },
+                    { "label": "Live", "bgColor": "red", "textColor": "red" }
+                ],
+                "features": ["2 team members", "20GB Cloud storage", "Integration help"]
+            },
+            {
+                "id": 1,
+                "name": "Python Mastering Data Structures and Algorithms",
+                "image": "/images/python.png", 
+                "tags": [
+                    { "label": "Classroom", "bgColor": "blue", "textColor": "blue" },
+                    { "label": "Online", "bgColor": "gray", "textColor": "gray" }
+                ],
+                "features": ["3 team members", "30GB Cloud storage", "Expert mentorship"]
+            },
+            {
+                "id": 2,
+                "name": "Java Data Structures and Algorithms",
+                "image": "/images/java.png", 
+                "tags": [
+                    { "label": "Classroom", "bgColor": "blue", "textColor": "blue" },
+                    { "label": "Online", "bgColor": "gray", "textColor": "gray" }
+                ],
+                "features": ["4 team members", "25GB Cloud storage", "Code reviews"]
+            }
+        ]
+    },
+    {
+        "category": "Interview Preparation",
+        "courses": [
+            {
+                "id": 3, 
+                "name": "JavaScript Full Stack Development",
+                "image": "/images/javascript.png", 
+                "tags": [
+                    { "label": "Online", "bgColor": "green", "textColor": "green" },
+                    { "label": "Live", "bgColor": "red", "textColor": "yellow" }
+                ],
+                "features": ["5 team members", "50GB Cloud storage", "Project-based learning"]
+            },
+            {
+                "id": 4,
+                "name": "System Design Concepts for Interviews",
+                "image": "/images/system-design.png", 
+                "tags": [
+                    { "label": "Online", "bgColor": "red", "textColor": "yellow" },
+                    { "label": "Live", "bgColor": "orange", "textColor": "orange" }
+                ],
+                "features": ["1 on 1 mentoring", "40GB Cloud storage", "Mock interviews"]
+            }
+        ]
+    }
+]

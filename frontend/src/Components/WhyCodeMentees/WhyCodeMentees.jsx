@@ -1,7 +1,6 @@
 import React from 'react';
 
 function WhyCodeMentees() {
-  // Define the data dynamically
   const items = [
     {
       icon: "fa-chalkboard-teacher", // Represents mentors/teachers
