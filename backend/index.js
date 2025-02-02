@@ -19,12 +19,23 @@ mongoose.connect(process.env.MONGODB_URI, {"useNewUrlParser": true, "useUnifiedT
 mongoose.connection.on("error", (error) => console.error(error));
 mongoose.connection.on("open", () => console.log("Connected to database"));
 
+
+
+
+
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/post",postRoutes);
 app.use("/api/course",courseRoutes);
 app.use("/api/category",categoryRoutes);
 app.use("/api/query",queryRoutes);
+
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// Fallback for all other routes to serve the index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
 
 
 
