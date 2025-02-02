@@ -1,10 +1,9 @@
 import { Router } from "express";
-import { getCourseCategory } from "../controllers/courseController.js"; // Import the correct controller
+import { getCourseCategory } from "../controllers/courseController.js";
+import { createCategory } from "../controllers/categoryController.js"; // Import the correct controller
 
 const router = Router();
-
-// Define routes
-router.get("/", getCourseCategory); // Get all courses
-
+router.get("/", getCourseCategory);
+router.post("/", createCategory); 
 
 export default router;

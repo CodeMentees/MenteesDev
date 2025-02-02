@@ -1,19 +1,31 @@
-
-import { useState } from "react";
-import { CSharp, Designer } from "../assets/mainPage"
+import React, { useEffect } from "react";
 import Carousel from "../Components/Carousel/Carousel"
-import CourseCard from "../Components/CourseSubject/CourseCard";
-import Header from "../Components/Header/Header";
 import WhyCodeMentees from "../Components/WhyCodeMentees/WhyCodeMentees"
 import Learning from "../Components/Learning/Learing";
-import FeatureGrid from "../Components/FeatureGrid/FeatureGrid";
 import WorkshopCard from "../Components/WorkshopCard/WorkshopCard";
 import BlogGridFour from "../Components/Blog/BlogGridFour";
-import Footer from "../Components/Footer/Footer";
 import CourseSection from "../Components/CourseSection/CourseSection";
 import RatingSection from "../Components/RatingSection/RatingSection";
+import { fetchCategory } from "../api/categoryApi"
+import { setCategory } from "../Slices/categorySlice"
+import { useDispatch, useSelector } from "react-redux";
 
 function Home() {
+  const categoryData = useSelector((state) => state.category);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchCategory();
+      dispatch(setCategory(data));
+    };
+
+    fetchData();
+  }, [dispatch]);
+
+
+  if (!categoryData) return <div>Loading...</div>;
+
   return (
     <div className="bg-gray-700 pb-10">
       <Carousel />
@@ -34,7 +46,7 @@ function Home() {
       </div>
 
       <BlogGridFour />
-      <RatingSection/>
+      <RatingSection />
     </div >
   )
 }

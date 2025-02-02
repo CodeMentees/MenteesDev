@@ -1,3 +1,4 @@
+import React from "react";
 const FeatureCard = ({ bgColor, title, description, delay, icon }) => {
   return (
     <div

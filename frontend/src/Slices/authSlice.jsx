@@ -15,6 +15,7 @@ export const authSlice = createSlice({
       localStorage.setItem('user', JSON.stringify(action.payload));
     },
     logout: (state) => {
+      console.log("state is ",state)
       state.isAuthenticated = false;
       state.user = null;
       // Remove user from localStorage

@@ -8,8 +8,10 @@ const UpdateCourseDetails = () => {
     {
       label: "",
       content: [{ title: "", description: "" }],
+      features: ['ok']
     },
   ]);
+  const [features, setFeatures] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -19,7 +21,9 @@ const UpdateCourseDetails = () => {
         .get(`/api/course/${courseId}`)
         .then((response) => {
           const fetchedDetails = response.data.data.details; // Assuming the API returns the course details
+          console.log("feached deat", fetchedDetails)
           setDetails(fetchedDetails || []); // Set details if available, otherwise default to empty array
+          setFeatures(response.data.data.features || [])
         })
         .catch((err) => {
           console.log(err);
@@ -60,13 +64,24 @@ const UpdateCourseDetails = () => {
     setDetails(updatedDetails);
   };
 
+  // Function to add a new feature
+  const addFeature = () => {
+    setFeatures([...features, `Feature ${features.length + 1}`]);
+  };
+
+  // Function to remove a feature
+  const removeFeature = (index) => {
+    const updatedFeatures = features.filter((_, i) => i !== index);
+    setFeatures(updatedFeatures);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      await axios.put(`/api/course/${courseId}/details`, { details });
+      await axios.put(`/api/course/${courseId}/details`, { details,features });
       alert("Course details updated successfully!");
     } catch (err) {
       setError("Failed to update course details.");
@@ -76,10 +91,11 @@ const UpdateCourseDetails = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold text-center mb-6">Update Course Details</h1>
-      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-      <form onSubmit={handleSubmit}>
+    <div className="max-w-xxl grid grid-cols-2 mx-auto bg-white p-8 rounded-lg shadow-md">
+
+      <form className="col-span-1" onSubmit={handleSubmit}>
+        <h1 className="text-2xl font-bold text-center mb-6">Update Course Details</h1>
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         <div className="mb-4">
           <label htmlFor="courseId" className="block text-sm font-medium text-gray-700">Course ID</label>
           <input
@@ -171,6 +187,34 @@ const UpdateCourseDetails = () => {
             {loading ? "Updating..." : "Update Details"}
           </button>
         </div>
+      </form>
+
+      <form name="keyHighlights" className="p-6">
+        {features.map((feature, index) => (
+          <div key={index} style={{ marginBottom: "10px" }}>
+            <input
+              type="text"
+              id={`feature-${index}`}
+              name={`feature-${index}`}
+              defaultValue={feature}
+              placeholder={`Enter ${feature}`}
+            />
+            {/* Button to remove the feature */}
+            <button
+              type="button"
+              onClick={() => removeFeature(index)}
+              style={{ marginLeft: "10px", color: "red" }}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        {/* Button to add a new feature */}
+        <button type="button" className="text-blue-800" onClick={addFeature} style={{ marginTop: "10px" }}>
+          Add Feature
+        </button>
+        <br />
+        <button className="px-6 py-2 bg-green-900" type="submit">Submit</button>
       </form>
     </div>
   );

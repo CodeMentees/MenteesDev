@@ -1,14 +1,22 @@
 import Course from "../models/course.js";
 import CourseCategory from "../models/courseCategory.js";
 import asyncHandler from "express-async-handler";
+import mongoose from "mongoose";
 
 // Create Course
 const createCourse = asyncHandler(async (req, res) => {
   const couseCat = await new CourseCategory();
   try {
-    const { name, image, category, description, module } = req.body;
+    const { name, image, category, description, module, price } = req.body;
 
-    const course = new Course({ name, image, category, description, module });
+    const course = new Course({
+      name,
+      image,
+      category,
+      description,
+      module,
+      price,
+    });
     const createdCourse = await course.save();
 
     res.status(201).json({
@@ -61,6 +69,7 @@ const updateCourse = asyncHandler(async (req, res) => {
     course.category = req.body.category || course.category;
     course.description = req.body.description || course.description;
     course.module = req.body.module || course.module;
+    course.price = req.body.price || course.price;
 
     const updatedCourse = await course.save();
     res.json({ data: updatedCourse, message: "Course updated successfully" });
@@ -88,7 +97,6 @@ const deleteCourse = asyncHandler(async (req, res) => {
 
 const getCourseCategory = asyncHandler(async (req, res) => {
   try {
-    console.log("opssss")
     const coursesCategory = await CourseCategory.find({}).limit(10);
     res.json({
       data: coursesCategory,
@@ -101,12 +109,12 @@ const getCourseCategory = asyncHandler(async (req, res) => {
 
 const updateCourseDetails = async (req, res) => {
   const { courseId } = req.params;
-  const { details } = req.body;
+  const { details,features } = req.body;
 
   try {
     const updatedCourse = await Course.findByIdAndUpdate(
       courseId,
-      { $set: { details } },
+      { $set: { details ,features} },
       { new: true, runValidators: true }
     );
 
@@ -120,6 +128,21 @@ const updateCourseDetails = async (req, res) => {
   }
 };
 
+const getCoursesByCategory = asyncHandler(async (req, res) => {
+  try {
+    console.log(req.params);
+    let { categoryId } = req.params;
+    const courses = await Course.find({
+      category: new mongoose.Types.ObjectId(categoryId),
+    })
+      .populate("category")
+      .limit(10);
+    res.json({ data: courses, message: "Courses fetched successfully" });
+  } catch (error) {
+    res.status(400).json({ data: null, message: error.message });
+  }
+});
+
 export {
   createCourse,
   getCourse,
@@ -127,5 +150,6 @@ export {
   updateCourse,
   deleteCourse,
   getCourseCategory,
-  updateCourseDetails
+  updateCourseDetails,
+  getCoursesByCategory,
 };

@@ -3,6 +3,13 @@ import mongoose from "mongoose";
 const courseSchema = new mongoose.Schema({
   name: { type: String, required: true },
   image: { type: String, required: true },
+  price :{type : Number, default:500},
+  features:{type : [String],default:["Hello"]},
+  tags: {
+    type: [String],
+    enum: ["Online", "Live", "Classroom"],
+    default: ["Online"],
+  },
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "CourseCategory",
@@ -12,13 +19,12 @@ const courseSchema = new mongoose.Schema({
   modules: [
     {
       icon: String,
-      tags: [{ type: String, enum: ["Online", "Live", "Classroom"] }],
       title: String,
     },
   ],
   details: [
     {
-      id:  mongoose.Schema.Types.ObjectId,
+      id: mongoose.Schema.Types.ObjectId,
       label: {
         type: String,
         required: true,

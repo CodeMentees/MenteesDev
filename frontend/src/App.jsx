@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React from 'react';
 import Home from './Pages/Home';
 import LoginPage from './Pages/Login';
 import RegisterPage from './Pages/Register';
@@ -12,13 +13,15 @@ import PostList from './Pages/Post/PostList';
 import Footer from './Components/Footer/Footer';
 import AllCourse from './Pages/AllCourse';
 import CourseDetails from './Pages/CourseDetails';
-import UpdateCourseDetails from './Pages/UpdateCourseDetails';
+import UpdateCourseDetails from './Pages/Course/UpdateCourseDetails';
+import AddCourse from './Pages/Course/AddCourse';
+import AddCourseCategory from './Pages/Course/AddCourseCategory';
+import QueryList from './Pages/Query/QueryList';
+import CourseList from './Pages/Course/CourseList';
+import Unauth from './Pages/Error/Unauth';
+import AdminRoutes from "./AdminRoute"
 function App() {
-  const firstPath = location.pathname.split('/')[1];
-  let showHeader = true;
-  if (firstPath == 'dashboard') {
-    showHeader = false
-  }
+
   return (
     <>
       <Router>
@@ -30,7 +33,8 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/all-course" element={<AllCourse/>} />
             <Route path="/course-details/:courseId" element={<CourseDetails/>} />
-            <Route path="/courses/:courseId/details" element={<UpdateCourseDetails />} />
+            <Route path="/unauth" element={<Unauth/>} />
+            
             <Route
               path="/about"
               element={
@@ -51,9 +55,14 @@ function App() {
           </Routes>
 
           <Routes>
-            <Route path="dashboard" element={<DashboardLayout />}>
+            <Route path="dashboard" element={<AdminRoutes><DashboardLayout /></AdminRoutes> }>
               <Route path="add-post" element={<AddPost />} />
               <Route path="post-list" element={<PostList />} />
+              <Route path="add-course" element={<AddCourse/>} />
+              <Route path="course-list" element={<CourseList/>} />
+              <Route path="courses/:courseId/details" element={<UpdateCourseDetails />} />
+              <Route path="add-category" element={<AddCourseCategory/>} />
+              <Route path="query-list" element={<QueryList/>} />
             </Route>
           </Routes>
         </div>

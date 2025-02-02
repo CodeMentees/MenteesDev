@@ -8,6 +8,7 @@ import authRoutes from "./routes/authRoutes.js";
 import postRoutes from "./routes/postRoutes.js"
 import courseRoutes from "./routes/courseRoutes.js"
 import categoryRoutes from "./routes/categoryRoutes.js"
+import queryRoutes from "./routes/queryRoutes.js"
 const app = express();
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/post",postRoutes);
 app.use("/api/course",courseRoutes);
 app.use("/api/category",categoryRoutes);
+app.use("/api/query",queryRoutes);
 
 
 

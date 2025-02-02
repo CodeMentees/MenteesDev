@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom"
-import { initFlowbite } from "flowbite"
-import ReusableTable from '../../Components/Table/Table';
 import useDelete from '../../Components/API/useDelete';
-function PostList() {
+import ReusableTable from '../../Components/Table/Table';
+function QueryList() {
 
-    const [Posts, setPosts] = useState([]);
+    const [Queries, setQueries] = useState([]);
     const { deleteItem, message, isSuccess, isLoading } = useDelete();
 
 
 
     const handleDelete = (id) => {
-        deleteItem(id, "/api/post");
+        deleteItem(id, "/api/query");
     };
 
-    const headers = ['title', 'content', 'Date', 'category'];
+    const headers = ['name', 'email', 'Date', 'courseName'];
     const actions = [
         { label: 'Show', handler: (id) => console.log(`Show item with ID: ${id}`) },
         { label: 'Edit', handler: (id) => console.log(`Edit item with ID: ${id}`) },
@@ -24,42 +23,39 @@ function PostList() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/post", {
+                const response = await fetch("/api/query", {
                     method: "GET",
                     headers: {
                         'Content-Type': "application/json"
                     }
-                })
-                if (response.ok) { // Check if response is successful
-                    const data = await response.json() // Parse the JSON response
-                    console.log(data) // Log the fetched data
-                    setPosts(data)
-                } else {
-                    console.error('Failed to fetch data:', response.statusText)
-                }
+                });
+                const data = await response.json();
+                setQueries(data.data);
             } catch (error) {
-                console.error('Error fetching data:', error)
+                console.error('Error fetching data:', error);
             }
-        }
-        fetchData() // Call the async function
-    }, [])
+        };
 
+        fetchData();
+    }, []);
+
+    // Reinitialize Flowbite dropdowns when Queries change
     useEffect(() => {
         initFlowbite();
-    }, [Posts])
+    }, [Queries]);
 
     return (
         <div className="mx-auto max-w-screen-xl px-2 py-10">
             <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
-                <div>
-                    <button onClick={handleDelete} disabled={isLoading}>
-                        {isLoading ? 'Deleting...' : 'Delete Item'}
-                    </button>
-                    {message && (
-                        <p style={{ color: isSuccess ? 'green' : 'red' }}>{message}</p>
-                    )}
-                </div>
                 <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
+                    <div>
+                        <button onClick={handleDelete} disabled={isLoading}>
+                            {isLoading ? 'Deleting...' : 'Delete Item'}
+                        </button>
+                        {message && (
+                            <p style={{ color: isSuccess ? 'green' : 'red' }}>{message}</p>
+                        )}
+                    </div>
                     {/* Start coding here */}
                     <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                         <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -285,7 +281,7 @@ function PostList() {
                         <div className="overflow-x-auto">
                             <ReusableTable
                                 headers={headers}
-                                data={Posts}
+                                data={Queries}
                                 actions={actions}
                                 isLoading={isLoading}
                             />
@@ -397,4 +393,4 @@ function PostList() {
     )
 }
 
-export default PostList
+export default QueryList

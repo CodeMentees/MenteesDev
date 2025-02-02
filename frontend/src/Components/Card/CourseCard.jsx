@@ -1,24 +1,23 @@
 import React from 'react';
 import {Link} from "react-router-dom"
-function CourseCard({ course }) {
-    console.log("course in card",course)
+function CourseCard({ category,courses }) {
     return (
         <div className='container dark:bg-black-500'>
         
             <div className="max-w-4xl mx-auto  p-4 rounded-lg shadow-lg">
-                <img className='inline' style={{ height: "32px" }} src={course.image} alt={course.title} />
-                <h1 className="text-xl inline mx-2 font-bold text-gray-800 dark:text-white mb-4">{course.name}</h1>
-                <p className="text-gray-600 text-sm mb-6 dark:text-white">{course.description}</p>
+                <img className='inline' style={{ height: "32px" }} src={category.image} alt={category.name} />
+                <h1 className="text-xl inline mx-2 font-bold text-gray-800 dark:text-white mb-4">{category.name}</h1>
+                <p className="text-gray-600 text-sm mb-6 dark:text-white">{category.description}</p>
 
                 <div className="gap-3 flex flex-wrap flex-row">
-                    {course.modules.map((module, index) => (
-                        <Link  to={`/course-details/${module._id}`}>
+                    {courses.map((course, index) => (
+                        <Link  to={`/course-details/${course._id}`}>
                         <div key={index} className="bg-blue-50 p-6 w-80 rounded-lg flex gap-2">
-                            <img className='inline' style={{ height: "32px" }} src={module.icon} alt={module.title} />
+                            <img className='inline' style={{ height: "32px" }} src={course.image} alt={course.name} />
                             <div>
-                                <h2 className="text-sm font-semibold text-blue-800 mb-2">{module.title}</h2>
+                                <h2 className="text-sm font-semibold text-blue-800 mb-2">{course.name}</h2>
                                 <div className='flex gap-2 '>
-                                    {module.tags.map((tag, tagIndex) => (
+                                    {course.tags.map((tag, tagIndex) => (
                                         <span key={tagIndex} className="bg-red-100 px-3 text-green-800 text-sm">
                                             {tag}
                                         </span>

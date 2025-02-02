@@ -27,7 +27,7 @@ const deletePost = asyncHandler(async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
         if (post) {
-            await post.remove();
+            await post.deleteOne();
             res.json({ message: 'Post removed' });
         } else {
             res.status(404);
