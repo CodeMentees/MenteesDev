@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import CourseCard from '../Components/Card/CourseCard';
-import { CSharp } from '../assets/mainPage';
-import tabData from '../JSON/tabData.json'
 import { useEffect } from 'react';
 import {fetchCourse} from "../api/courseApi"
 
@@ -60,7 +58,7 @@ function AllCourse() {
                             <li key={tab._id}>
                                 <a
                                     href="#"
-                                    className={`inline-flex items-center px-4 py-3 rounded-lg w-64 ${activeTab === tab._id
+                                    className={`inline-flex items-center px-4 py-3 rounded-lg w-full ${activeTab === tab._id
                                         ? 'text-white bg-blue-700 dark:bg-blue-600'
                                         : 'hover:text-gray-900 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white'
                                         }`}
@@ -74,7 +72,7 @@ function AllCourse() {
                     </ul>
 
                     {/* Tab Content */}
-                    <div className="p-6 bg-gray-500 text-medium text-gray-500 dark:text-gray-400 dark:bg-gray-800 rounded-lg w-full">
+                    <div className="py-2 px-3 lg:p-6 bg-gray-500 text-medium text-gray-500 dark:text-gray-400 dark:bg-gray-800 rounded-lg w-full">
                         <CourseCard category={activeTabData} courses={courses} />
                     </div>
                 </div>

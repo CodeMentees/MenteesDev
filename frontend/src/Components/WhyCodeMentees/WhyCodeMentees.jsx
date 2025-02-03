@@ -27,10 +27,10 @@ function WhyCodeMentees() {
   return (
     <section name="whycodementees" className="bg-white dark:bg-gray-900 container max-w-6xl mx-auto p-4 lg:p-12 my-10">
       <div className="mb-1 lg:mb-1 grid lg:grid-cols-4 gap-4 md:grid-cols-2">
-        <h2 className="col-span-1 sm:col-span-1 mb-4 text-3xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+        <h2 className="col-span-1 px-2 sm:col-span-1 mb-4  lg:text-3xl tracking-tight font-extrabold text-gray-900 dark:text-white">
           Why CodeMentees?
         </h2>
-        <div className="flex space-x-4 col-span-3">
+        <div className="flex space-x-2 col-span-3">
           <div className="lg:border-l-2 border-gray-300 h-full"></div>
           <p className=" text-gray-500 sm:text-xl dark:text-gray-400">
             Here at Flowbite we focus on markets where technology, innovation, and
@@ -39,7 +39,7 @@ function WhyCodeMentees() {
         </div>
       </div>
 
-      <div data-aos="fade-right" className=" flex flex-row gap-4 py-6 overflow-x-auto">
+      <div data-aos="fade-right" className=" flex flex-row gap-4 py-6 mx-2 lg:mx-0 overflow-x-auto">
         {/* Dynamically render items */}
         {items.map((item, index) => (
           <div key={index} className="py-4 px-3 min-w-40 text-left rounded shadow text-white border  lg:border-r-2 lg:border-y-0 lg:border-l-0 border-indigo-500">

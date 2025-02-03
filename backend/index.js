@@ -9,6 +9,7 @@ import postRoutes from "./routes/postRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import queryRoutes from "./routes/queryRoutes.js";
+import homeRoutes from "./routes/homeRoutes.js"
 import path from "path";
 const app = express();
 dotenv.config();
@@ -20,7 +21,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const corsOptions = {
-  origin: "https://jobgram.ranakartikchauhan.in",
+  origin: "https://codementees.com",
   credentials: true,
 };
 
@@ -34,6 +35,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 mongoose.connection.on("error", (error) => console.error(error));
 mongoose.connection.on("open", () => console.log("Connected to database"));
 
+app.use("/api/home", homeRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);

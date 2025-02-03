@@ -56,11 +56,11 @@ function Learning() {
     const currentFeatures = featuresData[tabs[activeTab].key];
 
     return (
-        <section data-aos="fade-right" name="chooselearn" className=" container max-w-6xl mx-auto px-3  lg:my-10">
-            <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+        <section data-aos="fade-right" name="chooselearn" className=" container max-w-6xl mx-auto px-6 my-6  lg:my-10 tracking-tight font-extrabold">
+            <h2 className="mb-4  lg:text-3xl tracking-tight font-extrabold text-gray-900 dark:text-white">
                 Choose how you learn!
             </h2>
-            <p className="mb-4 dark:text-white">
+            <p className="mb-4 text-gray-500 sm:text-xl dark:text-gray-400">
                 Each learner has their own manner of learning, and one model of teaching does not fit all.
                 At Coding Blocks, we realize this and therefore deliver programs in Classroom, Live interactive,
                 and Online guided learning models.

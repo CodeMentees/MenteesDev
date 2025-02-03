@@ -33,7 +33,7 @@ function Home() {
       <CourseSection />
       <Learning />
 
-      <div className=" container max-w-6xl mx-auto my-4 lg:my-10">
+      <div className=" container max-w-6xl mx-auto px-6 my-4 lg:my-10">
         <WorkshopCard
           imageUrl="https://via.placeholder.com/800x400"
           title="Upcoming Workshop: Mastering Tailwind CSS"

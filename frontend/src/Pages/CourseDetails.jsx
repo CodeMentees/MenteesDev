@@ -75,7 +75,7 @@ function CourseDetails() {
                 <QueryForm courseName={details.name} />
                 <div className="min-h-64 dark:bg-blue-700 relative">
                     <div className=" grid grid-cols-2 lg:grid-cols-6 ">
-                        <div className="max-w-3xl pl-8 col-span-4 h-80 mx-auto relative  py-8 my-8 dark:bg-blue-700">
+                        <div className="max-w-3xl p-4 lg:pl-8 col-span-4 h-80 mx-auto relative  py-8 my-8 dark:bg-blue-700">
                             <img
                                 className="inline"
                                 style={{ height: "64px" }}
@@ -94,32 +94,32 @@ function CourseDetails() {
                                 className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
                                 Choose Batch
                             </button>
-                            <div className="absolute h-12 py-8  -bottom-6 container max-w-screen-sm ml-4  bg-white-700 dark:bg-gray-700">
-                                <div className="grid grid-cols-1 bottom-1 absolute   md:grid-cols-4 gap-3 text-center">
+                            <div className="lg:absolute h-sm lg:h-12 py-8  -bottom-6 container max-w-screen-sm lg:ml-4  bg-white-700 dark:bg-gray-700">
+                                <div className="grid grid-cols-1 bottom-1 lg:absolute grid-cols-4  md:grid-cols-4 gap-3 text-center">
                                     <div className="text-center">
-                                        <div className="text-sm  text-white-600 dark:text-white">
+                                        <div className="text-xs lg:text-sm  text-white-600 dark:text-white">
                                             350+
                                         </div>
-                                        <div className="text-gray-600 text-xs text-white-600 dark:text-white">
+                                        <div className="text-gray-600 text-xs lg:text-sm text-white-600 dark:text-white">
                                             problems
                                         </div>
                                     </div>
 
                                     <div className="text-center">
-                                        <div className="text-sm  text-white-600 dark:text-white">6</div>
-                                        <div className="text-white-600 text-xs dark:text-white">
+                                        <div className="text-xs lg:text-sm  text-white-600 dark:text-white">6</div>
+                                        <div className="text-white-600 text-xs lg:text-sm dark:text-white">
                                             Live projects
                                         </div>
                                     </div>
 
                                     <div className="text-center">
-                                        <div className="text-sm text-white-600 dark:text-white">4/6</div>
-                                        <div className="text-white-600 text-xs dark:text-white">
+                                        <div className="text-xs lg:text-sm text-white-600 dark:text-white">4/6</div>
+                                        <div className="text-white-600 text-xs lg:text-sm dark:text-white">
                                             Duration
                                         </div>
                                     </div>
                                     <div className="text-center">
-                                        <div className="text-sm text-white-600 dark:text-white">
+                                        <div className="text-xs lg:text-sm text-white-600 dark:text-white">
                                             Classroom | Live | Online
                                         </div>
                                         <div className="text-white-600 text-xs dark:text-white ">
@@ -129,7 +129,7 @@ function CourseDetails() {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col absolute right-0 mx-10  col-span-2 p-6 mt-8 mx-left max-w-sm text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
+                        <div className="flex flex-col  lg:absolute right-0 mx-10  col-span-2 p-6 mt-8 mx-left max-w-sm text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
                             <p className="font-light text-gray-500 sm:text-lg dark:text-gray-400">
                                 Starting from
                             </p>

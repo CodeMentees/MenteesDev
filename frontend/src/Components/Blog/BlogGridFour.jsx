@@ -33,7 +33,7 @@ function BlogGridFour() {
     ];
     return (
 
-            <section className=" container max-w-6xl mx-auto py-12 px-4 lg:px-8">
+            <section className=" container max-w-6xl mx-auto py-12 px-6 lg:px-8">
                 <h2 className="text-3xl text-center font-semibold mb-8">
                     Latest from the <span className="text-[#FF5722]">Blog</span>
                 </h2>
