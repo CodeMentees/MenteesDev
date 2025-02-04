@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { login, logout } from '../Slices/authSlice';
 import { GoogleLogin } from '@react-oauth/google';
+import {Link} from "react-router-dom"
 
 function LoginPage() {
   const dispatch = useDispatch();
@@ -94,9 +95,9 @@ function LoginPage() {
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600 max-w">
             Or{' '}
-            <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
+            <Link to={"/register"}  className="font-medium text-blue-600 hover:text-blue-500">
               create an account
-            </a>
+            </Link>
           </p>
         </div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">

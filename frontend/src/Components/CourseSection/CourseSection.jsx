@@ -43,7 +43,7 @@ function CourseSection() {
                                 <li key={tab._id} className="me-2">
                                     <button
                                         onClick={() => fetchCourseData(tab._id)}
-                                        className={`m items-center justify-center p-4 border-b-2 ${activeTab === tab._id
+                                        className={`m items-center justify-center flex  p-1 lg:p-4 border-b-2 ${activeTab === tab._id
                                             ? "border-blue-500 text-blue-600"
                                             : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                                             } rounded-t-lg group`}

@@ -2,9 +2,9 @@ import React from 'react'
 
 function RatingSection() {
     return (
-        <div data-aos="fade-right" className=" container max-w-6xl mx-auto mt-2 lg:mt-10 bg-white dark:bg-gray-900 rounded-lg shadow-lg p-8">
+        <div data-aos="fade-right" className="  px-6 my-4 lg:my-10">
             {/* Heading */}
-            <div className="flex flex-col lg:flex-row gap-2 lg:gap-20">
+            <div className="flex flex-col lg:flex-row gap-2 lg:gap-20 p-4">
                 <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100  mb-2 lg:mb-6">
                     Talk to our Learning Consultant!
                 </h2>
@@ -15,14 +15,14 @@ function RatingSection() {
             </div>
 
             {/* Call-to-Action Section */}
-            {/* <div className="mb-8">
+            <div className="mb-8">
                 <p className="text-gray-600 mb-4  dark:text-gray-100">
                     Get a free counselling session from our experts
                 </p>
                 <button className="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300">
                     Let us call you &gt;
                 </button>
-            </div> */}
+            </div>
             {/* Reviews Section */}
             <div className="border-t pt-8 text-gray-800 dark:text-gray-100">
                 <h3 className="text-xl font-bold  mb-4">Our Reviews</h3>

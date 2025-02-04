@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
+import {Link} from "react-router-dom"
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -35,7 +36,6 @@ function Register() {
       });
 
       const data = await response.json();
-      console.log("Server Response:", data);
         alert(data.message);
         window.location.href = "/login";
       
@@ -128,12 +128,11 @@ function Register() {
               </button>
               <p className="text-sm text-white mt-8">
                 Already have an account?{" "}
-                <a
-                  href="#"
+                <Link to={"/login"}
                   className="text-yellow-500 font-semibold hover:underline ml-1"
                 >
                   Login here
-                </a>
+                </Link>
               </p>
             </div>
             <div className="mt-4">
