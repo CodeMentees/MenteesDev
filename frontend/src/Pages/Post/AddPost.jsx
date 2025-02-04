@@ -1,9 +1,10 @@
 import { initFlowbite } from 'flowbite'
 import React, { useEffect, useState } from 'react'
+import RichTextEditor from '../../Components/RichTextEditor';
+
+
 
 function AddPost() {
-
-
     const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
     const [postData, setPostData] = useState({
         title: '',
@@ -16,6 +17,15 @@ function AddPost() {
     useEffect(() => {
         initFlowbite();
     }, [])
+
+
+    const [editorContent, setEditorContent] = useState('');
+
+    // Function to handle editor content changes
+    const handleEditorChange = (content) => {
+        setEditorContent(content);
+        setPostData({ ...postData, content: editorContent })
+    };
 
     const handleChange = (e) => {
         setPostData({
@@ -40,7 +50,7 @@ function AddPost() {
                     setToast({ visible: false, message: "", type: "success" });
                 }, 5000);
                 setPostData({
-                    title:'',
+                    title: '',
                     category: '',
                     image: '',
                     content: ''
@@ -137,15 +147,12 @@ function AddPost() {
                             >
                                 Description
                             </label>
-                            <textarea
-                                rows={8}
-                                value={postData.content}
-                                name='content'
-                                onChange={handleChange}
-                                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
-                                placeholder="Your description here"
-                                defaultValue={""}
+                            <RichTextEditor
+                                value={editorContent}
+                                onChange={handleEditorChange}
+                                placeholder="Write your content here..."
                             />
+
                         </div>
                     </div>
                     <button

@@ -130,7 +130,6 @@ const updateCourseDetails = async (req, res) => {
 
 const getCoursesByCategory = asyncHandler(async (req, res) => {
   try {
-    console.log(req.params);
     let { categoryId } = req.params;
     const courses = await Course.find({
       category: new mongoose.Types.ObjectId(categoryId),

@@ -1,66 +1,68 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
+import { fetchLatestBlogs } from '../../api/blogApi';
 
 function BlogGridFour() {
 
-    const blogs = [
-        {
-            title: 'A thorough guide to C++ for Beginners',
-            image: 'https://cdn.pixabay.com/photo/2017/03/04/12/15/programming-2115930_640.jpg',
-            readTime: '3 min read',
-            link: '#',
-        },
-        {
-            title: "A beginner's guide to the skills you learn in CP",
-            image: 'https://cdn.pixabay.com/photo/2017/03/04/12/15/programming-2115930_640.jpg',
+    const [latestBlogs, setLatestBlogs] = useState({ blogs: [], currentPages: "", totalPages: "" });
+    useEffect(() => {
+        const fetchLatest = async () => {
+            try {
+                const blogs = await fetchLatestBlogs();
+                console.log("hello is is ", blogs)
+                setLatestBlogs({ blogs: blogs.blogs, currentPages: blogs.currentPages, totalPages: blogs.totalPages });
+            } catch (error) {
+                console.error("Error fetching latest blogs:", error);
+            }
+        };
 
-            readTime: '3 min read',
-            link: '#',
-        },
-        {
-            title: 'Rising demand for Data science professionals in India',
-            image: 'https://cdn.pixabay.com/photo/2017/03/04/12/15/programming-2115930_640.jpg',
+        fetchLatest();
+    }, []);
 
-            readTime: '4 min read',
-            link: '#',
-        },
-        {
-            title: 'Scope for Android developers now & in the upcoming years',
-            image: 'https://cdn.pixabay.com/photo/2017/03/04/12/15/programming-2115930_640.jpg',
+    console.log("latest blog is ", latestBlogs)
 
-            readTime: '3 min read',
-            link: '#',
-        },
-    ];
+
+    if (!latestBlogs) {
+        return <>Loading....</>;
+    }
     return (
 
-            <section className=" container max-w-6xl mx-auto py-12 px-6 lg:px-8">
-                <h2 className="text-3xl text-center font-semibold mb-8">
-                    Latest from the <span className="text-[#FF5722]">Blog</span>
-                </h2>
-                <div data-aos="flip-up" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {blogs.map((blog, index) => (
-                        <div key={index} className="bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
-                            <img
-                                src={blog.image}
-                                alt={`Blog ${index + 1}`}
-                                className="w-full h-32 lg:h-48 object-cover"
-                            />
-                            <div className="p-4">
-                                <h3 className="font-semibold text-sm lg:text-lg text-gray-800 dark:text-gray-100">{blog.title}</h3>
-                                <p className="text-[#999] text-xs mt-2">{blog.readTime}</p>
-                                <a href={blog.link} className="text-[#FF5722] text-xs mt-2 block">
-                                    Read more &gt;
+        <>
+            {/* Related Articles */}
+            <aside aria-label="Related articles" className="py-8 lg:py-24 bg-gray-50 dark:bg-gray-800">
+                <div className="px-4 mx-auto max-w-screen-xl">
+                    <h2 className="mb-8 text-2xl font-bold text-gray-900 dark:text-white">
+                        Related articles
+                    </h2>
+                    <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+                        {latestBlogs.blogs.map((latest) => (
+                            <article key={latest.id} className="max-w-xs">
+                                <a href={`/blog/${latest._id}`}>
+                                    <img
+                                        src={latest.image || "https://via.placeholder.com/300"}
+                                        className="mb-5 rounded-lg"
+                                        alt={latest.title}
+                                    />
                                 </a>
-                            </div>
-                        </div>
-                    ))}
+                                <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
+                                    <a href={`/blog/${latest._id}`}>{latest.title}</a>
+                                </h2>
+                                <p
+                                    className="mb-4 text-gray-500 dark:text-gray-400"
+                                    dangerouslySetInnerHTML={{ __html: latest.content.substring(0, 100) + "..." }}
+                                ></p>
+
+                                <a
+                                    href={`/blog/${latest._id}`}
+                                    className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline"
+                                >
+                                    Read More
+                                </a>
+                            </article>
+                        ))}
+                    </div>
                 </div>
-                <div className="text-center mt-8">
-                    <a href="#" className="text-[#FF5722] text-lg font-semibold">
-                        Read all blogs &gt;
-                    </a>
-                </div>
-            </section>
+            </aside>
+        </>
     )
 }
 

@@ -30,13 +30,10 @@ function AllCourse() {
                 const data = await response.json() // Parse the JSON response
                 setTabs(data.data)
                 let activeTabData = data.data[0];
-                console.log("active tab is ", activeTabData)
                 setActiveTab(activeTabData._id)
                 setActiveTabData({ name: activeTabData.name, description: activeTabData.description, image: activeTabData.image })
                 if (activeTabData._id) {
-                    console.log("called")
                     const fetchedCourse = await fetchCourse(activeTabData._id)
-                    console.log("hello course",fetchedCourse)
                     setCourses(fetchedCourse)
                 }
             } catch (error) {
@@ -44,8 +41,6 @@ function AllCourse() {
             }
         }
         fetchData()
-
-
     }, [])
 
     return (
@@ -58,7 +53,7 @@ function AllCourse() {
                             <li key={tab._id}>
                                 <a
                                     href="#"
-                                    className={`inline-flex items-center px-4 py-3 rounded-lg w-full ${activeTab === tab._id
+                                    className={`inline-flex items-center px-4 py-3 rounded-lg w-full lg:w-64 ${activeTab === tab._id
                                         ? 'text-white bg-blue-700 dark:bg-blue-600'
                                         : 'hover:text-gray-900 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white'
                                         }`}

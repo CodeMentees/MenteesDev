@@ -3,18 +3,18 @@ import { Link } from "react-router-dom"
 import { initFlowbite } from "flowbite"
 import ReusableTable from '../../Components/Table/Table';
 import useDelete from '../../Components/API/useDelete';
+import { fetchLatestBlogs } from '../../api/blogApi';
 function PostList() {
 
     const [Posts, setPosts] = useState([]);
     const { deleteItem, message, isSuccess, isLoading } = useDelete();
-
-
+    
 
     const handleDelete = (id) => {
         deleteItem(id, "/api/post");
     };
 
-    const headers = ['title', 'content', 'Date', 'category'];
+    const headers = ['title', 'Date', 'category'];
     const actions = [
         { label: 'Show', handler: (id) => console.log(`Show item with ID: ${id}`) },
         { label: 'Edit', handler: (id) => console.log(`Edit item with ID: ${id}`) },
@@ -24,19 +24,8 @@ function PostList() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/post", {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': "application/json"
-                    }
-                })
-                if (response.ok) { // Check if response is successful
-                    const data = await response.json() // Parse the JSON response
-                    console.log(data) // Log the fetched data
-                    setPosts(data)
-                } else {
-                    console.error('Failed to fetch data:', response.statusText)
-                }
+               const data = await fetchLatestBlogs();
+               setPosts(data.blogs)
             } catch (error) {
                 console.error('Error fetching data:', error)
             }

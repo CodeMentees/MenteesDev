@@ -20,6 +20,8 @@ import QueryList from './Pages/Query/QueryList';
 import CourseList from './Pages/Course/CourseList';
 import Unauth from './Pages/Error/Unauth';
 import AdminRoutes from "./AdminRoute"
+import BlogPage from './Pages/BlogPage';
+import HomeSite from './Pages/Home/HomeSite';
 function App() {
 
   return (
@@ -52,10 +54,19 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/blog/:id"
+              element={
+                <ProtectedRoute>
+                  <BlogPage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
 
           <Routes>
             <Route path="dashboard" element={<AdminRoutes><DashboardLayout /></AdminRoutes> }>
+              <Route path="add-site-data" element={<HomeSite/>} />
               <Route path="add-post" element={<AddPost />} />
               <Route path="post-list" element={<PostList />} />
               <Route path="add-course" element={<AddCourse/>} />

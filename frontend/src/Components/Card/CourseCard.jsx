@@ -11,8 +11,8 @@ function CourseCard({ category,courses }) {
 
                 <div className="gap-3 flex flex-wrap flex-row">
                     {courses.map((course, index) => (
-                        <Link  to={`/course-details/${course._id}`}>
-                        <div key={index} className="bg-blue-50 p-0 lg:p-6 w-xl lg:w-80 rounded-lg flex gap-2">
+                        <Link className='w-full'  to={`/course-details/${course._id}`}>
+                        <div key={index} className="bg-blue-50 p-0 p-4 lg:p-6 w-full lg:w-80 rounded-lg flex gap-2">
                             <img className='inline' style={{ height: "32px" }} src={course.image} alt={course.name} />
                             <div>
                                 <h2 className="text-sm font-semibold text-blue-800 mb-2">{course.name}</h2>
