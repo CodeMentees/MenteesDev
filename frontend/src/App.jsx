@@ -77,7 +77,6 @@ function App() {
             </Route>
           </Routes>
         </div>
-
       </Router>
       <Footer/>
     </>

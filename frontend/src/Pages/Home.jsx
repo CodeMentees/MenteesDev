@@ -27,12 +27,11 @@ function Home() {
   if (!categoryData) return <div>Loading...</div>;
 
   return (
-    <div className="bg-gray-700 pb-10">
+    <div className="bg-gray-700 pb-10 overflow-x-hidden">
       <Carousel />
       <WhyCodeMentees />
       <CourseSection />
       <Learning />
-
       <div className=" container max-w-6xl mx-auto px-6 my-4 lg:my-10">
         <WorkshopCard
           imageUrl="https://via.placeholder.com/800x400"
@@ -44,7 +43,6 @@ function Home() {
           buttonLink="#"
         />
       </div>
-
       <BlogGridFour />
       <RatingSection />
     </div >
