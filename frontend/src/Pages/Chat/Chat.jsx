@@ -1,0 +1,203 @@
+import React, { useState, useEffect, useRef } from "react";
+import io from "socket.io-client";
+
+function Chat() {
+  const [socket, setSocket] = useState(null);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [groupId, setGroupId] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [groups, setGroups] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1); // For pagination
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const messagesEndRef = useRef(null);
+  const chatContainerRef = useRef(null);
+
+  useEffect(() => {
+    const socketConnection = io("http://localhost:3000"); // Replace with your backend URL
+    setSocket(socketConnection);
+    setUserId(user._id);
+
+    return () => {
+      socketConnection.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleReceiveMessage = (newMessage) => {
+      if (newMessage.group === groupId) {
+        if (newMessage.sender !== userId.toString()) {
+          setMessages((prevMessages) => [...prevMessages, newMessage]);
+        }
+      }
+    };
+
+    socket.on("receive-message", handleReceiveMessage);
+
+    return () => {
+      socket.off("receive-message", handleReceiveMessage);
+    };
+  }, [socket, groupId]);
+
+  useEffect(() => {
+    fetch("/api/messages/group/getList")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => setGroups(data))
+      .catch((error) => console.error("Error fetching groups:", error));
+  }, []);
+
+  const fetchMessages = async (groupId, page) => {
+    try {
+      setLoading(true);
+
+      const response = await fetch(`/api/messages/${groupId}?page=${page}`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+
+      setMessages((prevMessages) => [...data.reverse(), ...prevMessages]); // Add new messages at the top
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const sendMessage = () => {
+    if (message.trim() && groupId) {
+      const newMessage = {
+        groupId,
+        senderId: userId,
+        content: message,
+        sender: { _id: userId, name: "You" },
+      };
+
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+      socket.emit("send-message", {
+        groupId,
+        senderId: userId,
+        content: message,
+      });
+
+      setMessage(""); // Clear the input field
+    }
+  };
+
+  // Scroll to the bottom of the chat
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleScroll = (e) => {
+    const container = e.target;
+    const scrollPosition = container.scrollTop;
+    const isAtTop = scrollPosition === 0 && !loading;
+
+    // If the user is at the top, load more messages
+    if (isAtTop) {
+      // Save the current scroll position before fetching new messages
+      const currentScrollPosition = container.scrollHeight;
+
+      setPage((prevPage) => {
+        const nextPage = prevPage + 1;
+        fetchMessages(groupId, nextPage); // Fetch previous messages
+        return nextPage;
+      });
+
+      // Wait until the new messages are added before restoring the scroll position
+      setTimeout(() => {
+        container.scrollTop = container.scrollHeight - currentScrollPosition;
+      }, 0); // Use timeout to ensure that scroll position is updated after the state change
+    }
+  };
+
+  const handleGroupClick = (groupId) => {
+    setGroupId(groupId);
+    setPage(1); // Reset pagination when a new group is selected
+    fetchMessages(groupId, 1); // Load the first set of messages
+  };
+
+  return (
+    <div className="flex h-screen">
+      {/* Sidebar */}
+      <div className="w-80 bg-gray-800 p-4 overflow-y-auto">
+        <h2 className="text-2xl font-bold mb-4">Groups</h2>
+        <ul>
+          {groups.map((group) => (
+            <li
+              key={group._id}
+              className="flex items-center p-3 mb-2 rounded-lg cursor-pointer hover:bg-gray-700"
+              onClick={() => handleGroupClick(group._id)}
+            >
+              <span>{group.name}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Chat UI */}
+      <div className="flex-1 flex flex-col">
+        <div className="bg-gray-800 p-4 flex items-center justify-between">
+          <h1 className="text-xl font-bold">Chat</h1>
+        </div>
+
+        <div
+          className="flex-1 overflow-y-auto p-4"
+          onScroll={handleScroll}
+          ref={chatContainerRef}
+        >
+          <ul className="space-y-4">
+            {messages.map((msg, index) => (
+              <li
+                key={index}
+                className={`flex ${msg.sender._id === userId ? "justify-end" : "justify-start"}`}
+              >
+                <div
+                  className={`max-w-xs p-3 rounded-lg ${msg.sender._id === userId ? "bg-blue-600" : "bg-gray-700"}`}
+                >
+                  <p className="font-semibold mb-1">
+                    {msg.sender._id === userId ? "You" : msg.sender.name}
+                  </p>
+                  <p>{msg.content}</p>
+                </div>
+              </li>
+            ))}
+            <div ref={messagesEndRef} />
+          </ul>
+        </div>
+
+        {/* Input */}
+        <div className="bg-gray-800 p-4">
+          <div className="flex items-center space-x-2">
+            <input
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Type a message..."
+              className="flex-1 bg-gray-700 text-white p-2 rounded-lg"
+            />
+            <button
+              className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
+              onClick={sendMessage}
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Chat;

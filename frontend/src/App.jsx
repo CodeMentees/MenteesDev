@@ -22,21 +22,23 @@ import Unauth from './Pages/Error/Unauth';
 import AdminRoutes from "./AdminRoute"
 import BlogPage from './Pages/BlogPage';
 import HomeSite from './Pages/Home/HomeSite';
+import CategoryList from './Pages/Course/CategoryList';
+import Chat from './Pages/Chat/Chat';
 function App() {
 
   return (
     <>
       <Router>
-      <Header/>
-       <div className="font-sans bg-gray-100   min-h-screen">
+        <Header />
+        <div className="font-sans bg-gray-100   min-h-screen">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/all-course" element={<AllCourse/>} />
-            <Route path="/course-details/:courseId" element={<CourseDetails/>} />
-            <Route path="/unauth" element={<Unauth/>} />
-            
+            <Route path="/all-course" element={<AllCourse />} />
+            <Route path="/course-details/:courseId" element={<CourseDetails />} />
+            <Route path="/unauth" element={<Unauth />} />
+
             <Route
               path="/about"
               element={
@@ -62,23 +64,33 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              path="/chat"
+              element={
+                <ProtectedRoute>
+                  <Chat/>
+                </ProtectedRoute>
+              }
+            />
           </Routes>
 
           <Routes>
-            <Route path="dashboard" element={<AdminRoutes><DashboardLayout /></AdminRoutes> }>
-              <Route path="add-site-data" element={<HomeSite/>} />
+            <Route path="dashboard" element={<AdminRoutes><DashboardLayout /></AdminRoutes>}>
+              <Route path="add-site-data" element={<HomeSite />} />
               <Route path="add-post" element={<AddPost />} />
               <Route path="post-list" element={<PostList />} />
-              <Route path="add-course" element={<AddCourse/>} />
-              <Route path="course-list" element={<CourseList/>} />
+              <Route path="add-course" element={<AddCourse />} />
+              <Route path="course-list" element={<CourseList />} />
               <Route path="courses/:courseId/details" element={<UpdateCourseDetails />} />
-              <Route path="add-category" element={<AddCourseCategory/>} />
-              <Route path="query-list" element={<QueryList/>} />
+              <Route path="add-category" element={<AddCourseCategory />} />
+              <Route path="category-list" element={<CategoryList />} />
+              <Route path="query-list" element={<QueryList />} />
             </Route>
           </Routes>
         </div>
       </Router>
-      <Footer/>
+      <Footer />
     </>
   )
 }
