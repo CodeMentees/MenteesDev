@@ -10,6 +10,8 @@ import courseRoutes from "./routes/courseRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import queryRoutes from "./routes/queryRoutes.js";
 import homeRoutes from "./routes/homeRoutes.js"
+import cron from "node-cron";
+import  BlockedIp  from "./middlewares/ipBlockMiddleware.js";
 import path from "path";
 const app = express();
 dotenv.config();
@@ -48,6 +50,13 @@ app.use(express.static(path.join(__dirname, "../frontend/dist")));
 // Fallback for all other routes to serve the index.html
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+});
+
+// Clear blocked IPs older than 24 hours
+cron.schedule("0 0 * * *", async () => {
+  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  await BlockedIp.deleteMany({ timestamp: { $lt: twentyFourHoursAgo } });
+  console.log("Cleared old blocked IPs.");
 });
 
 app.listen(process.env.PORT, () =>

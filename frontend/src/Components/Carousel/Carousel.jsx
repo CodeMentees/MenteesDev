@@ -44,7 +44,7 @@ function Carousel() {
   return (
     <div className="relative w-4/5 justify-center items-center mx-auto">
       {/* Carousel wrapper */}
-      <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
+      <div className="relative h-56 my-10  overflow-hidden rounded-lg md:h-96">
         {images.map((image, index) => (
           <div
             key={index}

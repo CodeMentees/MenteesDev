@@ -55,3 +55,5 @@ const checkBlockedIp = async (req, res, next) => {
 
 // Combine both middlewares into one reusable middleware
 export const ipBlockMiddleware = [checkBlockedIp, limiter];
+
+export default BlockedIp;
