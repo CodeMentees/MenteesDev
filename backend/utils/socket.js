@@ -1,6 +1,6 @@
 import { Server as SocketIo } from "socket.io";
-import Message from "../models/Message.js";
-import Group from "../models/Group.js";
+import Message from "../models/message.js";
+import Group from "../models/group.js";
 
 let io;
 
