@@ -1,4 +1,4 @@
-import Group from "../models/Group.js";
+import Group from "../models/group.js";
 
 export const handleJoinRequest = async (req, res) => {
   const { groupId, userId, action, adminId } = req.body;
