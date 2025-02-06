@@ -96,7 +96,7 @@ function Chat() {
 
   // Scroll to the bottom of the chat
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView();
   }, [messages]);
 
   const handleScroll = (e) => {
@@ -123,13 +123,21 @@ function Chat() {
   };
 
   const handleGroupClick = (groupId) => {
+    setMessages([])
     setGroupId(groupId);
     setPage(1); // Reset pagination when a new group is selected
     fetchMessages(groupId, 1); // Load the first set of messages
   };
 
+  const handlekeyUp = (e) => {
+    if (e.key === "Enter") {
+      sendMessage()
+    }
+  }
+
+
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen fixed top-0 w-full ">
       {/* Sidebar */}
       <div className="w-80 bg-gray-800 p-4 overflow-y-auto">
         <h2 className="text-2xl font-bold mb-4">Groups</h2>
@@ -137,17 +145,17 @@ function Chat() {
           {groups.map((group) => (
             <li
               key={group._id}
-              className="flex items-center p-3 mb-2 rounded-lg cursor-pointer hover:bg-gray-700"
+              className="flex items-center p-6 mb-1 rounded-lg cursor-pointer hover:bg-gray-700 dark:bg-blue-800"
               onClick={() => handleGroupClick(group._id)}
             >
-              <span>{group.name}</span>
+              <span className="dark:text-white">{group.name}</span>
             </li>
           ))}
         </ul>
       </div>
 
       {/* Chat UI */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col bg-blue-900" >
         <div className="bg-gray-800 p-4 flex items-center justify-between">
           <h1 className="text-xl font-bold">Chat</h1>
         </div>
@@ -186,6 +194,7 @@ function Chat() {
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Type a message..."
               className="flex-1 bg-gray-700 text-white p-2 rounded-lg"
+              onKeyUp={(e) => { handlekeyUp(e) }}
             />
             <button
               className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"

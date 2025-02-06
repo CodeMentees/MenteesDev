@@ -1,4 +1,5 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
@@ -34,6 +35,7 @@ const corsOptions = {
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,

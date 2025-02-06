@@ -76,8 +76,6 @@ const registerUser = async (req, res) => {
 const authUser = async (req, res) => {
   const { email, password, credential, client_id } = req.body;
 
-  console.log(credential);
-
   try {
     if (credential) {
       const ticket = await client.verifyIdToken({
@@ -88,46 +86,59 @@ const authUser = async (req, res) => {
       const payload = ticket.getPayload();
       const { email } = payload;
       const user = await User.findOne({ email: email });
-
-      console.log(user);
+      const token = generateToken(user);
 
       const data = {
         _id: user._id,
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
-        token: generateToken(user),
+        token: token,
       };
 
+      console.log("token is ",token)
+
       if (user) {
-        res.status(200).json({
-          data: data,
-          message: "User Sign In successfully",
-        });
+        return res
+          .status(200)
+          .cookie("token", token, {
+            maxAge: 1 * 24 * 60 * 60 * 1000,
+            httpsOnly: true,
+          })
+          .json({
+            data: data,
+            message: "User Sign In successfully",
+          });
       } else {
-        res.status(404).json({ message: "User not found!" });
+        return res.status(404).json({ message: "User not found!" });
       }
     } else {
       const user = await User.findOne({ email });
+      const token = generateToken(user);
       if (user && (await user.matchPassword(password))) {
         const data = {
           _id: user._id,
           name: user.name,
           email: user.email,
           isAdmin: user.isAdmin,
-          token: generateToken(user),
+          token: token,
         };
-        res.json({
-          data: data,
-          message: "User Sign In successfully",
-        });
+        return res
+          .json({
+            data: data,
+            message: "User Sign In successfully",
+          }).cookie("token", token, {
+            maxAge: 1 * 24 * 60 * 60 * 1000,
+            httpsOnly: true,
+          });
       } else {
-        res.status(401);
+        return res.status(401);
         throw new Error("Invalid email or password");
       }
     }
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.log(error)
+    return res.status(400).json({ message: error.message });
   }
 };
 

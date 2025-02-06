@@ -17,7 +17,7 @@ export const sendMessage = async (req, res) => {
 export const getMessages = async (req, res) => {
   const { groupId } = req.params;
   const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
-  const limit = 5; // Limit to 30 messages per page
+  const limit = 30; // Limit to 30 messages per page
 
   try {
     // Skip the messages based on the current page and limit

@@ -8,11 +8,9 @@ export const handleJoinRequest = async (req, res) => {
 
     // Check if the requester is an admin
     if (!group.admins.includes(adminId)) {
-      return res
-        .status(403)
-        .json({
-          message: "Unauthorized: Only admins can handle join requests",
-        });
+      return res.status(403).json({
+        message: "Unauthorized: Only admins can handle join requests",
+      });
     }
 
     if (action === "accept") {
@@ -31,12 +29,16 @@ export const handleJoinRequest = async (req, res) => {
 };
 
 export const createGroup = async (req, res) => {
-  const { name, adminId } = req.body;
+  const { name } = req.body;
   try {
+    console.log(req.userId)
+    const adminId = req.userId;
+    console.log(adminId)
     const group = new Group({ name, admins: [adminId], members: [adminId] });
     await group.save();
     res.status(201).json(group);
   } catch (err) {
+    console.log(err)
     res
       .status(500)
       .json({ message: "Error creating group", error: err.message });
@@ -90,4 +92,3 @@ export const removeAdmin = async (req, res) => {
       .json({ message: "Error removing admin", error: err.message });
   }
 };
-

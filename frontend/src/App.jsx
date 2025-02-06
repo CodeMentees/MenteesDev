@@ -24,6 +24,7 @@ import BlogPage from './Pages/BlogPage';
 import HomeSite from './Pages/Home/HomeSite';
 import CategoryList from './Pages/Course/CategoryList';
 import Chat from './Pages/Chat/Chat';
+import CreateGroup from './Pages/Chat/CreateGroup';
 function App() {
 
   return (
@@ -86,6 +87,7 @@ function App() {
               <Route path="add-category" element={<AddCourseCategory />} />
               <Route path="category-list" element={<CategoryList />} />
               <Route path="query-list" element={<QueryList />} />
+              <Route path="create-group" element={<CreateGroup />} />
             </Route>
           </Routes>
         </div>
