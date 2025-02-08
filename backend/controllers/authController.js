@@ -124,12 +124,13 @@ const authUser = async (req, res) => {
           token: token,
         };
         return res
+        .cookie("token", token, {
+          maxAge: 1 * 24 * 60 * 60 * 1000,
+          httpsOnly: true,
+        })
           .json({
             data: data,
             message: "User Sign In successfully",
-          }).cookie("token", token, {
-            maxAge: 1 * 24 * 60 * 60 * 1000,
-            httpsOnly: true,
           });
       } else {
         return res.status(401);

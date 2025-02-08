@@ -1,7 +1,16 @@
 import React from 'react';
 
 const ReusableTable = ({ headers, data, actions, isLoading }) => {
-    console.log(data)
+
+    if(!data){
+        return <>No data provide data </>
+    }
+    if(!headers){
+        return <>No data provide heaaders </>
+    }
+    if(!actions){
+        return <>No data provide actions </>
+    }
     return (
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
