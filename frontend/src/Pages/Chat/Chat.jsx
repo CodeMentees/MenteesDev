@@ -16,7 +16,7 @@ function Chat() {
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
-    const socketConnection = io("http://localhost:3000"); // Replace with your backend URL
+    const socketConnection = io("http://localhost:4000"); // Replace with your backend URL
     setSocket(socketConnection);
     setUserId(user._id);
 

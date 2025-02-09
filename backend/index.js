@@ -79,6 +79,6 @@ app.listen(process.env.PORT, () =>
   console.log(`BackedExpressAPIServer running on port ${process.env.PORT}`)
 );
 
-server.listen( 3000, () =>
-  console.log(`WesocketServer running on port ${3000}`)
+server.listen( 4000, () =>
+  console.log(`WesocketServer running on port ${4000}`)
 );
