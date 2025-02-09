@@ -64,9 +64,9 @@ init(server);
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 // Fallback for all other routes to serve the index.html
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+});
 
 // Clear blocked IPs older than 24 hours
 cron.schedule("0 0 * * *", async () => {
@@ -76,9 +76,9 @@ cron.schedule("0 0 * * *", async () => {
 });
 
 app.listen(process.env.PORT, () =>
-  console.log(`Server running on port ${process.env.PORT}`)
+  console.log(`BackedExpressAPIServer running on port ${process.env.PORT}`)
 );
 
 server.listen( 3000, () =>
-  console.log(`Server running on port ${process.env.PORT || 3000}`)
+  console.log(`WesocketServer running on port ${3000}`)
 );
