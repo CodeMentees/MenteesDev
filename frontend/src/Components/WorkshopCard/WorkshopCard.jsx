@@ -4,7 +4,7 @@ import { Designer } from "../../assets/mainPage";
 
 const WorkshopCard = ({ imageUrl, title, description, date, time, buttonText, buttonLink }) => {
   return (
-    <div data-aos="zoom-in" className="max-w-sm container p-4  bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div data-aos="zoom-in" className="max-w-sm container bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {/* Image Section */}
       <div
         className="w-full h-48 bg-cover bg-center"

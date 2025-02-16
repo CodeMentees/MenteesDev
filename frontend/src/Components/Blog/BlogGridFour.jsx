@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { fetchLatestBlogs } from '../../api/blogApi';
 
 function BlogGridFour() {
@@ -23,13 +23,14 @@ function BlogGridFour() {
     }
     return (
 
-        <>
+        <div className='container max-w-6xl mx-auto p-4 lg:p-12 my-10'>
+            <h2 className="mb-8 text-2xl font-bold text-gray-900 dark:text-white">
+                Related articles
+            </h2>
             {/* Related Articles */}
-            <aside aria-label="Related articles" className="py-8 lg:py-24 bg-gray-50 dark:bg-gray-800">
+            <aside aria-label="Related articles" className="bg-gray-50 dark:bg-gray-800  p-4">
                 <div className="px-4 mx-auto max-w-screen-xl">
-                    <h2 className="mb-8 text-2xl font-bold text-gray-900 dark:text-white">
-                        Related articles
-                    </h2>
+
                     <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
                         {latestBlogs.blogs.map((latest) => (
                             <article key={latest.id} className="max-w-xs">
@@ -40,7 +41,7 @@ function BlogGridFour() {
                                         alt={latest.title}
                                     />
                                 </a>
-                                <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
+                                <h2 className="mb-2 text-lg font-bold leading-tight text-gray-900 dark:text-white">
                                     <a href={`/blog/${latest._id}`}>{latest.title}</a>
                                 </h2>
                                 <p
@@ -59,7 +60,7 @@ function BlogGridFour() {
                     </div>
                 </div>
             </aside>
-        </>
+        </div>
     )
 }
 

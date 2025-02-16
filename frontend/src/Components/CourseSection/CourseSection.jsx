@@ -29,8 +29,8 @@ function CourseSection() {
     }
 
     return (
-        <section className="bg-white dark:bg-gray-900  container max-w-6xl mx-auto">
-            <div data-aos="fade-left" className="py-8 px-6 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+        <section className="bg-white dark:bg-gray-900 container max-w-6xl mx-auto p-4 lg:p-12 my-10">
+            <div data-aos="fade-left" className="mx-auto max-w-screen-xl ">
                 <h2 className="mb-4 lg:text-3xl tracking-tight font-extrabold text-gray-900 dark:text-white">Courses based on subjects</h2>
                 <p className="mb-4 dark:text-white">Learn and grow as a developer with our Result oriented pedagogy and project based learning..</p>
 

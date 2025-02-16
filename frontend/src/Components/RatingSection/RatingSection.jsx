@@ -2,7 +2,7 @@ import React from 'react'
 
 function RatingSection() {
     return (
-        <div data-aos="fade-right" className="  px-6 my-4 lg:my-10">
+        <div data-aos="fade-right" className="container max-w-6xl mx-auto p-4 lg:p-12 my-10">
             {/* Heading */}
             <div className="flex flex-col lg:flex-row gap-2 lg:gap-20 p-4">
                 <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100  mb-2 lg:mb-6">

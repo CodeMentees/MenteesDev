@@ -78,7 +78,6 @@ const updatePost = asyncHandler(async (req, res) => {
 //get posts
 const getPosts = asyncHandler(async (req, res) => {
   try {
-    console.log("hello i am here")
     let { page = 1, limit = 10 } = req.query;
     page = parseInt(page);
     limit = parseInt(limit);

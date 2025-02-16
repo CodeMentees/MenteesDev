@@ -60,6 +60,7 @@ function AllCourse() {
                                     onClick={() => handleTabClick(tab._id, tab.name, tab.description, tab.image)}
                                     aria-current={activeTab === tab._id ? 'page' : undefined}
                                 >
+                                    <img src={tab.image} alt="" className='h-10'/>
                                     {tab.name}
                                 </a>
                             </li>

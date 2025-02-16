@@ -56,7 +56,7 @@ function Learning() {
     const currentFeatures = featuresData[tabs[activeTab].key];
 
     return (
-        <section data-aos="fade-right" name="chooselearn" className=" container max-w-6xl mx-auto px-6 my-6  lg:my-10 tracking-tight font-extrabold">
+        <section data-aos="fade-right" name="chooselearn" className="tracking-tight font-extrabold container max-w-6xl mx-auto p-4 lg:p-4 my-10">
             <h2 className="mb-4  lg:text-3xl tracking-tight font-extrabold text-gray-900 dark:text-white">
                 Choose how you learn!
             </h2>
