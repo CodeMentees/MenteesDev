@@ -75,12 +75,10 @@ cron.schedule("0 0 * * *", async () => {
   console.log("Cleared old blocked IPs.");
 });
 
-// app.listen(process.env.PORT, () =>
-//   console.log(`Server running on port ${process.env.PORT}`)
-// );
+app.listen(process.env.PORT, () =>
+  console.log(`BackedExpressAPIServer running on port ${process.env.PORT}`)
+);
 
-// server.listen( 3000, () =>
-//   console.log(`Server running on port ${process.env.PORT || 3000}`)
-// );
-
-export default app;
+server.listen( 4000, () =>
+  console.log(`WesocketServer running on port ${4000}`)
+);
