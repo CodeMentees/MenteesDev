@@ -8,7 +8,6 @@ function BlogGridFour() {
         const fetchLatest = async () => {
             try {
                 const blogs = await fetchLatestBlogs();
-                console.log("hello is is ", blogs)
                 setLatestBlogs({ blogs: blogs.blogs, currentPages: blogs.currentPages, totalPages: blogs.totalPages });
             } catch (error) {
                 console.error("Error fetching latest blogs:", error);
@@ -17,8 +16,6 @@ function BlogGridFour() {
 
         fetchLatest();
     }, []);
-
-    console.log("latest blog is ", latestBlogs)
 
 
     if (!latestBlogs) {

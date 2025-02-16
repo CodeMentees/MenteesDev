@@ -25,9 +25,6 @@ function BlogPage() {
         return <>Loading....</>;
     }
 
-
-    console.log("single blog is ", blog)
-
     return (
         <>
             <main className="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white dark:bg-gray-900 antialiased">

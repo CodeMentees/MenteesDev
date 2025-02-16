@@ -27,7 +27,6 @@ function CourseDetails() {
                 .get(`/api/course/${courseId}`)
                 .then((response) => {
                     const fetchedDetails = response.data.data;
-                    console.log("opa", fetchedDetails)
                     setDetails(fetchedDetails); // Use the fetched details if available
                 })
                 .catch((err) => {

@@ -19,7 +19,6 @@ export const postSiteData = async (siteData) => {
       throw new Error("Invalid response from server");
     }
 
-    console.log("Site data posted successfully:", response.data);
     return response.data.data;
   } catch (error) {
     console.error("Error posting site data:", error.response?.data?.message || error.message);

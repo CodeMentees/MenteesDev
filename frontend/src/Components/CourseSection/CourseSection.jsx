@@ -13,7 +13,6 @@ function CourseSection() {
     const fetchCourseData = async (categoryId) => {
         setActiveTab(categoryId)
         const course = await fetchCourse(categoryId);
-        console.log("data is ",course)
         setCourseData(course);
     };
 
@@ -21,7 +20,6 @@ function CourseSection() {
         AOS.init(); // Initialize AOS outside the conditional block
 
         if (categoryData && categoryData[0]?._id) {
-            console.log(categoryData[0]._id)
             fetchCourseData(categoryData[0]._id);
         }
     }, [categoryData]); // Add categoryData as a dependency

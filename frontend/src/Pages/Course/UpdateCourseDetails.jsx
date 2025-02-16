@@ -21,7 +21,6 @@ const UpdateCourseDetails = () => {
         .get(`/api/course/${courseId}`)
         .then((response) => {
           const fetchedDetails = response.data.data.details; // Assuming the API returns the course details
-          console.log("feached deat", fetchedDetails)
           setDetails(fetchedDetails || []); // Set details if available, otherwise default to empty array
           setFeatures(response.data.data.features || [])
         })

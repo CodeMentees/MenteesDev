@@ -25,7 +25,6 @@ function AddCourse() {
             const response = await fetch("/api/category");
            
                 const data = await response.json();
-                console.log("data",data)
                 setCategories(data.data);
          
         } catch (error) {
