@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CourseCard from '../Components/Card/CourseCard';
 import { useEffect } from 'react';
 import {fetchCourse} from "../api/courseApi"
+import Loading from '../Components/Helpers/Loading';
 
 function AllCourse() {
     const [activeTab, setActiveTab] = useState(); // Set the first tab as active by default
@@ -73,7 +74,7 @@ function AllCourse() {
                     </div>
                 </div>
             </div>
-            : <>Loading....</>
+            : <Loading/>
     );
 }
 

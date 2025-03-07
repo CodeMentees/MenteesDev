@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { Link, Outlet } from "react-router-dom";
 
 import { initFlowbite } from "flowbite";
 
@@ -34,12 +34,29 @@ const menuItems = [
     id: 4,
     title: "Query",
     icon: "M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z",
+    subItems: [{ id: 41, title: "Queries", link: "/dashboard/query-list" }],
+  },
+  {
+    id: 5,
+    title: "Site",
+    icon: "M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z",
     subItems: [
-      { id: 41, title: "Queries", link: "/dashboard/query-list" },
+      { id: 51, title: "Update Site", link: "/dashboard/add-site-data" },
     ],
   },
+  {
+    id: 6,
+    title: "Chat",
+    icon: "M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z",
+    subItems: [{ id: 61, title: "Add Group", link: "/dashboard/create-group" }],
+  },
+  {
+    id: 7,
+    title: "Events",
+    icon: "M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z",
+    subItems: [{ id: 71, title: "Add Event", link: "/dashboard/create-event" }],
+  },
 ];
-
 
 function DashboardLayout() {
   useEffect(() => {
@@ -48,7 +65,6 @@ function DashboardLayout() {
 
   return (
     <div className="antialiased bg-gray-50 dark:bg-gray-900">
-
       {/* Sidebar */}
       <aside
         className="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
@@ -74,7 +90,11 @@ function DashboardLayout() {
                         viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path fillRule="evenodd" d={item.icon} clipRule="evenodd" />
+                        <path
+                          fillRule="evenodd"
+                          d={item.icon}
+                          clipRule="evenodd"
+                        />
                       </svg>
                       <span className="flex-1 ml-3 text-left whitespace-nowrap">
                         {item.title}
@@ -93,7 +113,10 @@ function DashboardLayout() {
                         />
                       </svg>
                     </button>
-                    <ul id={`dropdown-${item.id}`} className="hidden py-2 space-y-2">
+                    <ul
+                      id={`dropdown-${item.id}`}
+                      className="hidden py-2 space-y-2"
+                    >
                       {item.subItems.map((subItem) => (
                         <li key={subItem.id}>
                           <Link
@@ -118,7 +141,11 @@ function DashboardLayout() {
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <path fillRule="evenodd" d={item.icon} clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d={item.icon}
+                        clipRule="evenodd"
+                      />
                     </svg>
                     <span className="ml-3">{item.title}</span>
                   </a>
@@ -126,15 +153,12 @@ function DashboardLayout() {
               </li>
             ))}
           </ul>
-
         </div>
-
       </aside>
       <main className="p-4 md:ml-64 h-auto pt-0">
         <Outlet />
       </main>
     </div>
-
   );
 }
 

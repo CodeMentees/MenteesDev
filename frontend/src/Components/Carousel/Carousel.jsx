@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchSiteData } from "../../api/siteDataApi";
+import Loading from "../Helpers/Loading";
 
 function Carousel() {
   const [images, setImages] = useState([]);
@@ -38,7 +39,7 @@ function Carousel() {
     setActiveIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading/>
   }
 
   return (

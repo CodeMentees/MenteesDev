@@ -4,6 +4,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useSelector } from 'react-redux';
 import { fetchCourse } from '../../api/courseApi';
+import Loading from '../Helpers/Loading';
 
 function CourseSection() {
     const [activeTab, setActiveTab] = useState(0);
@@ -25,11 +26,11 @@ function CourseSection() {
     }, [categoryData]); // Add categoryData as a dependency
 
     if(!courseData){
-        return <>Loading...</>
+        return <Loading/>
     }
 
     return (
-        <section className="bg-white dark:bg-gray-900 container max-w-6xl mx-auto p-4 lg:p-12 my-10">
+        <section className="bg-dark-box container max-w-6xl mx-auto p-4 lg:p-12 my-10">
             <div data-aos="fade-left" className="mx-auto max-w-screen-xl ">
                 <h2 className="mb-4 lg:text-3xl tracking-tight font-extrabold text-gray-900 dark:text-white">Courses based on subjects</h2>
                 <p className="mb-4 dark:text-white">Learn and grow as a developer with our Result oriented pedagogy and project based learning..</p>
@@ -46,7 +47,7 @@ function CourseSection() {
                                             : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                                             } rounded-t-lg group`}
                                     >
-                                        <img src={tab.image} alt={tab.name} className="w-6 h-6 mr-2" />
+                                        <img src={tab.image} alt={tab.name} className="w-6 text-dark-text h-6 mr-2" />
                                         <p className="mt-2">{tab.name}</p>
                                     </button>
                                 </li>

@@ -2,15 +2,15 @@ import React from 'react'
 
 function RatingSection() {
     return (
-        <div data-aos="fade-right" className="container max-w-6xl mx-auto p-4 lg:p-12 my-10">
+        <div data-aos="fade-right" className="bg-dark-background border-blue-900 border shadow-sm shadow-indigo-700  text-dark-text container max-w-6xl mx-auto p-4 lg:p-12 my-10">
             {/* Heading */}
-            <div className="flex flex-col lg:flex-row gap-2 lg:gap-20 p-4">
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100  mb-2 lg:mb-6">
+            <div className="flex flex-col lg:flex-row gap-2 lg:gap-20 ">
+                <h2 className="text-2xl font-bold text-dark-primary  mb-2 lg:mb-6">
                     Talk to our Learning Consultant!
                 </h2>
                 <div className="mb:4 lg:mb-8">
                     <p className="text-gray-600 dark:text-gray-100 mb-2">Contact Number</p>
-                    <p className="text-3xl font-semibold text-blue-600">1800-274-4504</p>
+                    <p className="text-3xl font-semibold text-dark-primary">1800-274-4504</p>
                 </div>
             </div>
 
@@ -19,8 +19,8 @@ function RatingSection() {
                 <p className="text-gray-600 mb-4  dark:text-gray-100">
                     Get a free counselling session from our experts
                 </p>
-                <button className="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300">
-                    Let us call you &gt;
+                <button className="w-full sm:w-auto px-6 py-3 bg-dark-btn text-white font-semibold rounded-lg  transition duration-300">
+                    Let us call you
                 </button>
             </div>
             {/* Reviews Section */}

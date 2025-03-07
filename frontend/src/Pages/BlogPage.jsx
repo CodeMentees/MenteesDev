@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchBlog } from "../api/blogApi";
 import BlogGridFour from "../Components/Blog/BlogGridFour";
+import Loading from "../Components/Helpers/Loading";
 
 function BlogPage() {
     const { id } = useParams();
@@ -22,7 +23,7 @@ function BlogPage() {
 
 
     if (!blog) {
-        return <>Loading....</>;
+        return <Loading/>;
     }
 
     return (

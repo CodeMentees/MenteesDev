@@ -25,13 +25,14 @@ import HomeSite from './Pages/Home/HomeSite';
 import CategoryList from './Pages/Course/CategoryList';
 import Chat from './Pages/Chat/Chat';
 import CreateGroup from './Pages/Chat/CreateGroup';
+import AddEvent from './Pages/Event/AddEvent';
 function App() {
 
   return (
     <>
       <Router>
         <Header />
-        <div className="font-sans bg-gray-100   min-h-screen">
+        <div className="font-sans bg-gray-100 mt-16  min-h-screen">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -88,6 +89,7 @@ function App() {
               <Route path="category-list" element={<CategoryList />} />
               <Route path="query-list" element={<QueryList />} />
               <Route path="create-group" element={<CreateGroup />} />
+              <Route path="create-event" element={<AddEvent />} />
             </Route>
           </Routes>
         </div>

@@ -3,6 +3,7 @@ import generatePdf from "../utils/genrateCoursePdf";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import QueryForm from "../Components/Forms/QueryForm";
+import Loading from "../Components/Helpers/Loading";
 
 
 function CourseDetails() {
@@ -239,7 +240,7 @@ function CourseDetails() {
                     </div>
                 </div>
             </>
-            : <>Loading.......</>
+            : <Loading/>
     );
 }
 

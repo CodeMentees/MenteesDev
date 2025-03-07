@@ -13,6 +13,7 @@ import queryRoutes from "./routes/queryRoutes.js";
 import homeRoutes from "./routes/homeRoutes.js";
 import groupRoutes from "./routes/groupRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
+import eventRoutes from "./routes/eventRoutes.js";
 
 import cron from "node-cron";
 import BlockedIp from "./middlewares/ipBlockMiddleware.js";
@@ -55,6 +56,8 @@ app.use("/api/query", queryRoutes);
 //chats related
 app.use("/api/groups", groupRoutes);
 app.use("/api/messages", messageRoutes);
+
+app.use("/api/events", eventRoutes);
 
 // Create HTTP server to work with Socket.io
 const server = http.createServer(app);

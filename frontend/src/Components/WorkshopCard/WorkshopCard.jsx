@@ -4,7 +4,7 @@ import { Designer } from "../../assets/mainPage";
 
 const WorkshopCard = ({ imageUrl, title, description, date, time, buttonText, buttonLink }) => {
   return (
-    <div data-aos="zoom-in" className="max-w-sm container bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div data-aos="zoom-in" className="max-w-xs container bg-dark-background border border-blue-900 shadow-indigo-700  rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {/* Image Section */}
       <div
         className="w-full h-48 bg-cover bg-center"
@@ -20,7 +20,7 @@ const WorkshopCard = ({ imageUrl, title, description, date, time, buttonText, bu
         <p className="text-sm text-gray-800 dark:text-gray-300 mb-4 line-clamp-3">{description}</p>
 
         {/* Date and Time */}
-        <div className="flex items-center text-sm text-gray-600 mb-4">
+        <div className="flex items-center text-sm text-dark-text mb-4">
           <svg
             className="w-5 h-5 mr-2 text-gray-500"
             fill="none"
