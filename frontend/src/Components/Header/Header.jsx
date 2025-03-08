@@ -24,20 +24,15 @@ function Header() {
   return (
     <header className="bg-dark-background text-dark-text fixed top-0 z-50 w-full">
       <nav className="border-gray-200 px-4 lg:px-6 py-2.5">
-        <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-          <a href="/" className="flex items-center">
-            <img
-              style={{height:"50px"}}
-              src="/logo/logo4.png"
-              className="mr-3"
-              alt="Flowbite Logo"
-            />
+        <div className="flex flex-wrap justify-between mx-auto max-w-screen-xl">
+          <a href="/" className="flex items-left">
+            <p style={{color:"#CD0094",fontFamily: "Playwrite IT Moderna",fontWeight:"regular",fontSize:"25px",textShadow:""}}>Codementees</p>
           </a>
-          <div className="flex items-center lg:order-2">
+          <div className="flex items-start lg:order-2">
             {isAuthenticated ? (
               <button
                 onClick={() => dispatch(logout())}
-                className="text-dark-accent  bg-dark-secondary sm:visible   font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2  "
+                className="text-gray-900 shadow-indigo-700  shadow-sm   bg-dark-btn sm:visible   font-medium rounded-full  text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2  "
               >
                 Logout
               </button>
@@ -95,7 +90,7 @@ function Header() {
               menuOpen ? "block" : "hidden"
             } justify-between items-center w-full lg:flex lg:w-auto lg:order-1 transition-all duration-800 ease-in-out`} // Animation class
           >
-            <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+            <ul className="flex flex-col mt-4 font-medium lg:flex-row justify-items-start lg:space-x-6 lg:mt-0">
               {menuItems.map((item, index) => (
                 <li key={index}>
                   <Link

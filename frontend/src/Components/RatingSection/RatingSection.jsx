@@ -5,7 +5,7 @@ function RatingSection() {
         <div data-aos="fade-right" className="bg-dark-background border-blue-900 border shadow-sm shadow-indigo-700  text-dark-text container max-w-6xl mx-auto p-4 lg:p-12 my-10">
             {/* Heading */}
             <div className="flex flex-col lg:flex-row gap-2 lg:gap-20 ">
-                <h2 className="text-2xl font-bold text-dark-primary  mb-2 lg:mb-6">
+                <h2 className="lg:text-3xl tracking-tight font-extrabold text-dark-h  mb-2 lg:mb-6">
                     Talk to our Learning Consultant!
                 </h2>
                 <div className="mb:4 lg:mb-8">

@@ -116,7 +116,7 @@ function QueryForm({ courseName }) {
             >
                 <div className="relative p-4 w-full max-w-md max-h-full">
                     {/* Modal content */}
-                    <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                    <div className="relative bg-dark-box rounded-lg shadow-sm ">
                         {/* Modal header */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -232,7 +232,7 @@ function QueryForm({ courseName }) {
                             </div>
                             <button
                                 type="submit"
-                                className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                className="text-white inline-flex items-center bg-dark-btn font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                                 disabled={loading || error}
                             >
                                 Submit

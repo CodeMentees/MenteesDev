@@ -34,7 +34,7 @@ function WhyCodeMentees() {
       className="bg-dark-box text-dark-text container max-w-6xl mx-auto p-4 lg:p-12 my-10"
     >
       <div className="mb-1 lg:mb-1 grid lg:grid-cols-4 gap-4 md:grid-cols-2">
-        <h2 className="col-span-1 px-2 sm:col-span-1 mb-4  lg:text-3xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+        <h2 className="col-span-1 px-2 sm:col-span-1 mb-4  lg:text-3xl tracking-tight font-extrabold text-dark-h">
           Why CodeMentees?
         </h2>
         <div className="flex space-x-2 col-span-3">

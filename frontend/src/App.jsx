@@ -32,7 +32,7 @@ function App() {
     <>
       <Router>
         <Header />
-        <div className="font-sans bg-gray-100 mt-16  min-h-screen">
+        <div className="font-sans bg-gray-100 mt-12  min-h-screen">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<RegisterPage />} />

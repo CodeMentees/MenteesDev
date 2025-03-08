@@ -29,13 +29,13 @@ function BlogGridFour() {
     return <Loading />;
   }
   return (
-    <div className="bg-dark-box container max-w-6xl mx-auto p-4 lg:p-12 my-10 aos-init aos-animate">
-      <h2 className="mb-8 text-2xl font-bold text-gray-900 dark:text-white">
+    <div className="bg-dark-box  container max-w-6xl   mx-auto p-4 lg:p-12 my-10 aos-init aos-animate">
+      <h2 className="mb-8 text-left lg:text-3xl tracking-tight font-extrabold text-dark-h">
         Related articles
       </h2>
       {/* Related Articles */}
 
-      <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid  gap-12 sm:grid-cols-2 lg:grid-cols-4">
         {latestBlogs.blogs.map((latest) => (
           <article key={latest.id} className="max-w-xs">
             <a href={`/blog/${latest._id}`}>

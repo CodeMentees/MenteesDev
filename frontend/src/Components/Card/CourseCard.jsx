@@ -18,7 +18,7 @@ function CourseCard({ category,courses }) {
                                 <h2 className="text-sm font-semibold text-blue-800 mb-2">{course.name}</h2>
                                 <div className='flex gap-2 '>
                                     {course.tags.map((tag, tagIndex) => (
-                                        <span key={tagIndex} className="bg-red-100 px-3 text-green-800 text-sm">
+                                        <span key={tagIndex} className="border border-blue-900 rounded-full px-3 text-green-800 text-sm">
                                             {tag}
                                         </span>
                                     ))}

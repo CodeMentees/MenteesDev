@@ -17,13 +17,15 @@ export default {
           accent: "#49491d",
         },
         dark: {
-          text: "#E2E2B6",
+          text: "#ffffff",
+          h1:"#6eacda",
           background: "#021526",
           primary: "#6EACDA",
           box :"#031c35",
-          btn:  "#cd0094",
+          btn:  "#CD0094",
           secondary: "#03346E",
           accent: "#E2E2B6",
+          h:"#6eacda"
         },
       },
     },

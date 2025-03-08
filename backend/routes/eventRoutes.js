@@ -9,10 +9,10 @@ import {
 } from "../controllers/eventController.js";
 
 const router = express.Router();
-router.use(isAdmin)
-router.post("/", addEvent);
 router.get("/:id", getEvent);
 router.get("/", getAllEvents);
+router.use(isAdmin)
+router.post("/", addEvent);
 router.put("/:id", updateEvent);
 router.delete("/:id", deleteEvent);
 

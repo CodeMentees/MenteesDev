@@ -123,7 +123,7 @@ function Chat() {
   };
 
   const handleGroupClick = (groupId) => {
-    setMessages([])
+    setMessages([]);
     setGroupId(groupId);
     setPage(1); // Reset pagination when a new group is selected
     fetchMessages(groupId, 1); // Load the first set of messages
@@ -131,35 +131,47 @@ function Chat() {
 
   const handlekeyUp = (e) => {
     if (e.key === "Enter") {
-      sendMessage()
+      sendMessage();
     }
-  }
-
+  };
 
   return (
     <div className="flex h-screen fixed top-0 w-full ">
       {/* Sidebar */}
-      <div className="w-80 bg-gray-800 p-4 overflow-y-auto">
+      <div className="w-80 bg-dark-background p-4 overflow-y-auto">
         <h2 className="text-2xl font-bold mb-4">Groups</h2>
         <ul>
           {groups.map((group) => (
             <li
               key={group._id}
-              className="flex items-center p-6 mb-1 rounded-lg cursor-pointer hover:bg-gray-700 dark:bg-blue-800"
+              className="flex items-center p-2 mb-1 rounded-lg cursor-pointer bg-dark-box"
               onClick={() => handleGroupClick(group._id)}
             >
-              <span className="dark:text-white">{group.name}</span>
+              <img
+                className="h-12 w-12 rounded-full"
+                src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
+                alt=""
+              />
+
+              <span className="px-4 text-dark-text">{group.name}</span>
             </li>
           ))}
         </ul>
       </div>
 
       {/* Chat UI */}
-      <div className="flex-1 flex flex-col bg-blue-900" >
+      <div className="flex-1 flex flex-col bg-blue-900">
         <div className="bg-gray-800 p-4 flex items-center justify-between">
           <h1 className="text-xl font-bold">Chat</h1>
         </div>
-
+        <div className="w-full flex text-lg text-dark-text font-extrabold px-4 bg-dark-background py-4">
+          <img
+            className="h-12 w-12 rounded-full"
+            src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
+            alt=""
+          />
+          <p className="text-center flex items-center px-4">Web Development</p>
+        </div>
         <div
           className="flex-1 overflow-y-auto p-4"
           onScroll={handleScroll}
@@ -169,12 +181,16 @@ function Chat() {
             {messages.map((msg, index) => (
               <li
                 key={index}
-                className={`flex ${msg.sender._id === userId ? "justify-end" : "justify-start"}`}
+                className={`flex ${
+                  msg.sender._id === userId ? "justify-end" : "justify-start"
+                }`}
               >
                 <div
-                  className={`max-w-xs p-3 rounded-lg ${msg.sender._id === userId ? "bg-blue-600" : "bg-gray-700"}`}
+                  className={`max-w-xs p-3 rounded-lg ${
+                    msg.sender._id === userId ? "bg-blue-600" : "bg-gray-700"
+                  }`}
                 >
-                  <p className="font-semibold mb-1">
+                  <p className="font-semibold  mb-1">
                     {msg.sender._id === userId ? "You" : msg.sender.name}
                   </p>
                   <p>{msg.content}</p>
@@ -194,10 +210,12 @@ function Chat() {
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Type a message..."
               className="flex-1 bg-gray-700 text-white p-2 rounded-lg"
-              onKeyUp={(e) => { handlekeyUp(e) }}
+              onKeyUp={(e) => {
+                handlekeyUp(e);
+              }}
             />
             <button
-              className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
+              className="bg-dark-btn text-dark-accent py-2 px-4 rounded-lg hover:bg-blue-600"
               onClick={sendMessage}
             >
               Send
