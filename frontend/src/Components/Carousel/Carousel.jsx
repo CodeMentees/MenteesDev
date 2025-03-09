@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { fetchSiteData } from "../../api/siteDataApi";
 import Loading from "../Helpers/Loading";
+import { Link } from "react-router-dom";
 
 function Carousel() {
   const [images, setImages] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
   const [loading, setLoading] = useState(true);
-  const autoPlay = true;
-  const interval = 5000; // 3 seconds per slide
 
-  // Fetch images from API
   useEffect(() => {
     const fetchSite = async () => {
       try {
@@ -29,11 +26,11 @@ function Carousel() {
   }
 
   return (
-    <div style={{ height: "100vh" }}>
-      <section style={{ position: "static" }} className="bg-dark-background">
+    <div className="lg:h-screen">
+      <section name="main-hero" className="bg-dark-background">
         <div
-          style={{ position: "absolute", zIndex: 2, left: "86px" }}
-          className="grid max-w-6xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12"
+          name="left"
+          className="grid px-8 lg:px-16 max-w-6xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12"
         >
           <div className="mr-auto place-self-center lg:col-span-7">
             <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl text-white">
@@ -47,8 +44,8 @@ function Carousel() {
               applications, and join a community of passionate coders. Start
               your journey today!
             </p>
-            <a
-              href="#"
+            <Link
+              to={"/register"}
               className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
             >
               Get started
@@ -64,22 +61,25 @@ function Carousel() {
                   clipRule="evenodd"
                 />
               </svg>
-            </a>
+            </Link>
             <a
-              href="#"
+              href="tel:+918386963382"
               className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center border border-dark-btn text-gray-100 shadow-sm hover:bg-dark-btn shadow-purple-700"
             >
               Make a call
             </a>
           </div>
-          <div style={{position:"relative"}} className="lg:mt-0 lg:col-span-5 lg:flex">
-            {images?.[0] ? (
-              <img style={{position:"absolute",zIndex:10 ,left:50}} src={images[0]} alt="mockup" className="animate-float " />
-            ) : (
-              <p className="text-gray-500">Image not available</p>
-            )}
+          <div
+            style={{ position: "relative" }}
+            className="mt-6 lg:mt-0 lg:col-span-5 lg:flex"
+          >
+            <img
+              style={{ position: "absolute", zIndex: 10 }}
+              src={images[0]}
+              alt="mockup"
+              className="animate-float "
+            />
             <svg
-              style={{position:"absolute",top:"-60px"}}
               className="animate-float"
               id="sw-js-blob-svg"
               viewBox="0 0 100 100"
@@ -115,18 +115,7 @@ function Carousel() {
           </div>
         </div>
 
-        <style>
-        {`
-      @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-        100% { transform: translateY(0px); }
-      }
-      .animate-float {
-        animation: float 2s ease-in-out infinite;
-      }
-    `}
-      </style>
+
       </section>
     </div>
   );

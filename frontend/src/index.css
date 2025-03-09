@@ -2,4 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-  
+
+pre {
+  background-color: #000 !important; /* Black background */
+  color: #ffffff !important; /* White text */
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+  .animate-float {
+    animation: float 2s ease-in-out infinite;
+  }

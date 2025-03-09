@@ -166,7 +166,7 @@ function CourseDetails() {
             data-modal-toggle="crud-modal"
             className="text-white  bg-blue-900  hover:bg-dark-background shadow-lg font-medium rounded-full text-sm px-5 py-2.5 text-center"
           >
-            Choose Batch
+             Enroll
           </a>
         </div>
       </div>
