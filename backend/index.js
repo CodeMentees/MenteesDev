@@ -14,6 +14,7 @@ import homeRoutes from "./routes/homeRoutes.js";
 import groupRoutes from "./routes/groupRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import eventRoutes from "./routes/eventRoutes.js";
+import blogCategoryRoutes from "./routes/blogCategoryRoutes.js";
 
 import cron from "node-cron";
 import BlockedIp from "./middlewares/ipBlockMiddleware.js";
@@ -49,6 +50,7 @@ app.use("/api/home", homeRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
+app.use("/api/blog-categories", blogCategoryRoutes);
 app.use("/api/course", courseRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/query", queryRoutes);
@@ -82,6 +84,6 @@ app.listen(process.env.PORT, () =>
   console.log(`BackedExpressAPIServer running on port ${process.env.PORT}`)
 );
 
-server.listen( 4000, () =>
+server.listen(4000, () =>
   console.log(`WesocketServer running on port ${4000}`)
 );

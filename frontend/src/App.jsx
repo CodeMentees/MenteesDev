@@ -26,13 +26,14 @@ import CategoryList from './Pages/Course/CategoryList';
 import Chat from './Pages/Chat/Chat';
 import CreateGroup from './Pages/Chat/CreateGroup';
 import AddEvent from './Pages/Event/AddEvent';
+import BlogCategoryManager from './Components/Blog/BlogCategoryManger';
 function App() {
 
   return (
     <>
       <Router>
         <Header />
-        <div className="font-sans bg-gray-100 mt-12  min-h-screen">
+        <div className="font-sans bg-dark-box mt-12  min-h-screen">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -81,6 +82,8 @@ function App() {
             <Route path="dashboard" element={<AdminRoutes><DashboardLayout /></AdminRoutes>}>
               <Route path="add-site-data" element={<HomeSite />} />
               <Route path="add-post" element={<AddPost />} />
+              <Route path="add-post/:id" element={<AddPost />} />
+              <Route path="blog-category" element={<BlogCategoryManager/>} />
               <Route path="post-list" element={<PostList />} />
               <Route path="add-course" element={<AddCourse />} />
               <Route path="course-list" element={<CourseList />} />

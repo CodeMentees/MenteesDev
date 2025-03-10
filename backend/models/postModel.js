@@ -1,12 +1,14 @@
 import mongoose from "mongoose";
 
-const postSchema = new mongoose.Schema({
+const postSchema = new mongoose.Schema(
+  {
     title: String,
     content: String,
     image: String,
-    category: String,
-    date: { type: Date, default: Date.now },
-});
+    categories: [String],
+  },
+  { timestamps: true }
+);
 
 const Post = mongoose.model("Post", postSchema);
 

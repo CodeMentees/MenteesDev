@@ -8,7 +8,7 @@ const createPost = asyncHandler(async (req, res) => {
       title: req.body.title,
       content: req.body.content,
       image: req.body.image,
-      category: req.body.category,
+      categories: req.body.categories,
     });
     const createdPost = await post.save();
     res.status(201).json({
@@ -62,6 +62,8 @@ const updatePost = asyncHandler(async (req, res) => {
     if (post) {
       post.title = req.body.title || post.title;
       post.content = req.body.content || post.content;
+      post.categories = req.body.categories || post.categories;
+      post.image = req.body.image || post.image;
 
       const updatedPost = await post.save();
       res.json(updatedPost);

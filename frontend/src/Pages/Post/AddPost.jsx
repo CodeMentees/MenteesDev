@@ -1,129 +1,215 @@
-import { initFlowbite } from 'flowbite';
-import React, { useEffect, useState } from 'react';
-import RichTextEditor from '../../Components/RichTextEditor';
+import { initFlowbite } from "flowbite";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import RichTextEditor from "../../Components/RichTextEditor";
+import { fetchBlogCategories } from "../../api/blogCategoryApi";
 
 function AddPost() {
-    const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
-    const [postData, setPostData] = useState({
-        title: '',
-        category: '',
-        image: '',
-        content: ''
-    });
+  const { id } = useParams(); // Get post ID from URL
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        initFlowbite();
-    }, []);
+  const [toast, setToast] = useState({
+    visible: false,
+    message: "",
+    type: "success",
+  });
+  const [postData, setPostData] = useState({
+    title: "",
+    categories: [],
+    image: "",
+    content: "",
+  });
+  const [editorContent, setEditorContent] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
 
-    const [editorContent, setEditorContent] = useState('');
+  useEffect(() => {
+    initFlowbite();
+    loadCategories();
+    if (id) {
+      fetchPostDetails(id);
+      setIsEditing(true);
+    }
+  }, [id]);
 
-    // ✅ Fix: Correctly updating the content in postData
-    const handleEditorChange = (content) => {
-        setEditorContent(content);
-        setPostData((prev) => ({ ...prev, content })); // ✅ No stale state
-    };
+  const loadCategories = async () => {
+    const data = await fetchBlogCategories();
+    setCategories(data);
+  };
 
-    const handleChange = (e) => {
-        setPostData((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value
-        }));
-    };
+  const fetchPostDetails = async (postId) => {
+    try {
+      const response = await fetch(`/api/post/${postId}`);
+      const data = await response.json();
+      setPostData(data.data);
+      setEditorContent(data.data.content);
+    } catch (error) {
+      console.error("Error fetching post:", error);
+    }
+  };
 
-    const addPost = async () => {
-        try {
-            const response = await fetch("/api/post", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(postData)
-            });
+  const handleCategorySelect = (category) => {
+    if (!postData.categories.includes(category)) {
+      setPostData((prev) => ({
+        ...prev,
+        categories: [...prev.categories, category],
+      }));
+    }
+  };
 
-            if (response.ok) {
-                const data = await response.json();
-                setToast({ visible: true, message: data.message, type: "success" });
-                setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 5000);
-                setPostData({ title: '', category: '', image: '', content: '' });
-                setEditorContent(''); // ✅ Clear editor after posting
-            } else {
-                alert("Some error");
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
+  const handleCategoryRemove = (category) => {
+    setPostData((prev) => ({
+      ...prev,
+      categories: prev.categories.filter((c) => c !== category),
+    }));
+  };
 
-    return (
-        <section className="bg-white">
-            {toast.visible && (
-                <div className={`fixed top-5 right-5 p-4 space-x-2 text-sm font-medium rounded-lg 
-                    ${toast.type === "error" ? "text-red-500 bg-red-100" : "text-green-500 bg-green-100"}`}>
-                    ✅ <span>{toast.message}</span>
-                </div>
-            )}
-            <div className="py-2 px-4 mx-auto max-w-2xl lg:py-16">
-                <h2 className="mb-4 text-xl font-bold text-gray-900">Add a Blog</h2>
-                <form>
-                    <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                        <div className="sm:col-span-2">
-                            <label className="block mb-2 text-sm font-medium text-black-900">Title</label>
-                            <input
-                                type="text"
-                                name="title"
-                                onChange={handleChange}
-                                value={postData.title}
-                                className="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"
-                            />
-                        </div>
+  const handleEditorChange = (content) => {
+    setEditorContent(content);
+    setPostData((prev) => ({ ...prev, content }));
+  };
 
-                        <div className="sm:col-span-2">
-                            <label className="block mb-2 text-sm font-medium text-black-900">Image</label>
-                            <input
-                                type="text"
-                                name="image"
-                                onChange={handleChange}
-                                value={postData.image}
-                                className="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"
-                            />
-                        </div>
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setPostData((prev) => ({ ...prev, [name]: value }));
+  };
 
-                        <div className="sm:col-span-2">
-                            <label className="block mb-2 text-sm font-medium text-gray-900">Category</label>
-                            <select
-                                value={postData.category}
-                                onChange={handleChange}
-                                name='category'
-                                defaultValue=""
-                                className="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"
-                            >
-                                <option value="">Select category</option>
-                                <option value="TV">TV/Monitors</option>
-                                <option value="PC">PC</option>
-                                <option value="GA">Gaming/Console</option>
-                                <option value="PH">Phones</option>
-                            </select>
-                        </div>
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(`/api/post${isEditing ? `/${id}` : ""}`, {
+        method: isEditing ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(postData),
+      });
 
-                        <div className="sm:col-span-2">
-                            <label className="block mb-2 text-sm font-medium text-gray-900">Description</label>
-                            <RichTextEditor
-                                value={editorContent}
-                                onChange={handleEditorChange}
-                                placeholder="Write your content here..."
-                            />
-                        </div>
-                    </div>
+      if (response.ok) {
+        const data = await response.json();
+        setToast({ visible: true, message: data.message, type: "success" });
 
-                    <button
-                        type="button"
-                        onClick={addPost}
-                        className="px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-black bg-yellow-500"
-                    >
-                        Add Post
-                    </button>
-                </form>
+        setTimeout(() => {
+          setToast({ visible: false, message: "", type: "success" });
+          navigate("/dashboard/post-list");
+        }, 2000);
+      } else {
+        setToast({
+          visible: true,
+          message: "Something went wrong!",
+          type: "error",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      setToast({ visible: true, message: "Network error", type: "error" });
+    }
+  };
+
+  return (
+    <section className="bg-gray-900 text-white min-h-screen p-6">
+      {toast.visible && (
+        <div
+          className={`fixed z-50 top-5 right-5 p-4 rounded-lg shadow-md ${
+            toast.type === "error"
+              ? "bg-red-700 text-red-200"
+              : "bg-green-700 text-green-200"
+          }`}
+        >
+          ✅ <span>{toast.message}</span>
+        </div>
+      )}
+
+      <div className="max-w-3xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold text-white mb-6">
+          {isEditing ? "✏️ Edit Blog Post" : "📝 Add a Blog Post"}
+        </h2>
+
+        <form>
+          <div className="grid gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-400">
+                Title
+              </label>
+              <input
+                type="text"
+                name="title"
+                onChange={handleChange}
+                value={postData.title}
+                className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5"
+                placeholder="Enter post title"
+              />
             </div>
-        </section>
-    );
+
+            <div>
+              <label className="block text-sm font-medium text-gray-400">
+                Image URL
+              </label>
+              <input
+                type="text"
+                name="image"
+                onChange={handleChange}
+                value={postData.image}
+                className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5"
+                placeholder="Enter image URL"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-400">
+                Categories
+              </label>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {postData.categories.map((category) => (
+                  <span
+                    key={category}
+                    className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm flex items-center gap-2"
+                  >
+                    {category}
+                    <button
+                      onClick={() => handleCategoryRemove(category)}
+                      className="text-gray-200 hover:text-gray-50"
+                    >
+                      ✖
+                    </button>
+                  </span>
+                ))}
+              </div>
+
+              <select
+                onChange={(e) => handleCategorySelect(e.target.value)}
+                className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5"
+              >
+                <option value="">Select category</option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-400">
+                Content
+              </label>
+              <RichTextEditor
+                value={editorContent}
+                onChange={handleEditorChange}
+                placeholder="Write your content here..."
+                className="bg-gray-700 text-white"
+              />
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="w-full mt-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition"
+          >
+            {isEditing ? "✏️ Update Post" : "➕ Add Post"}
+          </button>
+        </form>
+      </div>
+    </section>
+  );
 }
 
 export default AddPost;
