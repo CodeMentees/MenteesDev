@@ -13,7 +13,7 @@ const menuItems = [
     subItems: [
       { id: 21, title: "Add Post", link: "/dashboard/add-post" },
       { id: 22, title: "Post List", link: "/dashboard/post-list" },
-      { id: 23, title: "Calendar", link: "#" },
+      { id: 23, title: "Categories", link: "/dashboard/blog-category" },
     ],
   },
   {

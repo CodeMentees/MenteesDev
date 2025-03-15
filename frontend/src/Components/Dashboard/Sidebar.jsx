@@ -16,7 +16,7 @@ const Sidebar = ({ menuItems }) => {
   };
 
   return (
-    <div className="overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <div className="overflow-y-auto py-5 px-3 h-full bg-dark-box border-r border-gray-200 ">
       <ul className="space-y-2">
         {menuItems.map((item, index) => (
           <li key={index}>

@@ -31,11 +31,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const corsOptions = {
-  origin: "https://codementees.com",
+  origin: "*",
   credentials: true,
 };
 
-app.use(cors());
+// app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -84,6 +84,6 @@ app.listen(process.env.PORT, () =>
   console.log(`BackedExpressAPIServer running on port ${process.env.PORT}`)
 );
 
-server.listen(4000, () =>
-  console.log(`WesocketServer running on port ${4000}`)
-);
+// server.listen(4000, () =>
+//   console.log(`WesocketServer running on port ${4000}`)
+// );
