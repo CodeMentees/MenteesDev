@@ -36,7 +36,7 @@ function Carousel() {
             <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl text-white">
               Master Coding with Ease!
             </h1>
-            <p className="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">
+            <p className="max-w-2xl mb-6 font-light text-gray-400 lg:mb-8 md:text-lg lg:text-xl">
               Whether you're a beginner or an experienced developer, our
               platform offers expert-led tutorials, real-world projects, and
               interactive coding challenges to help you sharpen your skills.

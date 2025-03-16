@@ -1,83 +1,197 @@
 import Post from "../models/postModel.js";
 import asyncHandler from "express-async-handler";
 
-//create post
+/**
+ * @swagger
+ * tags:
+ *   name: Posts
+ *   description: API endpoints for managing posts
+ */
+
+/**
+ * @swagger
+ * /api/posts:
+ *   post:
+ *     summary: Create a new post
+ *     tags: [Posts]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               content:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *               categories:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       201:
+ *         description: Post created successfully
+ *       400:
+ *         description: Error creating post
+ */
 const createPost = asyncHandler(async (req, res) => {
   try {
-    const post = new Post({
-      title: req.body.title,
-      content: req.body.content,
-      image: req.body.image,
-      categories: req.body.categories,
-    });
+    const { title, content, image, categories } = req.body;
+
+    if (!title || !content) {
+      return res.status(400).json({ message: "Title and content are required" });
+    }
+
+    const post = new Post({ title, content, image, categories });
     const createdPost = await post.save();
-    res.status(201).json({
-      data: createdPost,
-      message: "Post created successfully",
-    });
+
+    res.status(201).json({ data: createdPost, message: "Post created successfully" });
   } catch (error) {
-    res.status(400);
-    throw new Error(error);
+    res.status(400).json({ message: error.message });
   }
 });
 
-//delete post
+/**
+ * @swagger
+ * /api/posts/{id}:
+ *   delete:
+ *     summary: Delete a post by ID
+ *     tags: [Posts]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Post removed successfully
+ *       404:
+ *         description: Post not found
+ */
 const deletePost = asyncHandler(async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (post) {
-      await post.deleteOne();
-      res.json({ message: "Post removed" });
-    } else {
-      res.status(404);
-      throw new Error("Post not found");
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
     }
+
+    await post.deleteOne();
+    res.json({ message: "Post removed successfully" });
   } catch (error) {
-    res.status(400);
-    throw new Error(error);
+    res.status(400).json({ message: error.message });
   }
 });
 
-//get post
+/**
+ * @swagger
+ * /api/posts/{id}:
+ *   get:
+ *     summary: Get a single post by ID
+ *     tags: [Posts]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Post fetched successfully
+ *       404:
+ *         description: Post not found
+ */
 const getPost = asyncHandler(async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (post) {
-      res.json({ data: post, message: "post fetch successfully" });
-    } else {
-      res.status(404);
-      throw new Error("Post not found");
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
     }
+
+    res.json({ data: post, message: "Post fetched successfully" });
   } catch (error) {
-    res.status(400);
-    throw new Error(error);
+    res.status(400).json({ message: error.message });
   }
 });
 
-//update post
-
+/**
+ * @swagger
+ * /api/posts/{id}:
+ *   put:
+ *     summary: Update a post by ID
+ *     tags: [Posts]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               content:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *               categories:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Post updated successfully
+ *       404:
+ *         description: Post not found
+ */
 const updatePost = asyncHandler(async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (post) {
-      post.title = req.body.title || post.title;
-      post.content = req.body.content || post.content;
-      post.categories = req.body.categories || post.categories;
-      post.image = req.body.image || post.image;
-
-      const updatedPost = await post.save();
-      res.json(updatedPost);
-    } else {
-      res.status(404);
-      throw new Error("Post not found");
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
     }
+
+    post.title = req.body.title || post.title;
+    post.content = req.body.content || post.content;
+    post.image = req.body.image || post.image;
+    post.categories = req.body.categories || post.categories;
+
+    const updatedPost = await post.save();
+    res.json({ data: updatedPost, message: "Post updated successfully" });
   } catch (error) {
-    res.status(400);
-    throw new Error(error);
+    res.status(400).json({ message: error.message });
   }
 });
 
-//get posts
+/**
+ * @swagger
+ * /api/posts:
+ *   get:
+ *     summary: Get a paginated list of posts
+ *     tags: [Posts]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: The page number for pagination (default is 1)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: The number of posts per page (default is 10)
+ *     responses:
+ *       200:
+ *         description: Posts fetched successfully
+ */
 const getPosts = asyncHandler(async (req, res) => {
   try {
     let { page = 1, limit = 10 } = req.query;
@@ -92,7 +206,7 @@ const getPosts = asyncHandler(async (req, res) => {
 
     const totalPosts = await Post.countDocuments(); // Total post count for pagination info
 
-    return res.json({
+    res.json({
       data: posts,
       currentPage: page,
       totalPages: Math.ceil(totalPosts / limit),
@@ -100,7 +214,7 @@ const getPosts = asyncHandler(async (req, res) => {
       message: "Posts fetched successfully",
     });
   } catch (error) {
-    return res.status(400).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 

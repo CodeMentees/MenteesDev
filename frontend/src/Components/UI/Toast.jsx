@@ -1,6 +1,6 @@
 import React from "react";
 
-const Toast = ({ visible, message, type = "success" }) => {
+const Toast = ({ visible = true, message="I am toast, fix me", type = "success" }) => {
   if (!visible) return null;
 
   const toastStyles = {
@@ -10,7 +10,7 @@ const Toast = ({ visible, message, type = "success" }) => {
 
   return (
     <div
-      className={`fixed z-500 top-10 right-10 inline-flex items-center p-4 space-x-2 text-sm font-medium rounded-lg ${toastStyles[type]}`}
+      className={`fixed z-50 top-20 right-10 inline-flex items-center p-4 space-x-2 text-sm font-medium rounded-lg ${toastStyles[type]}`}
     >
       <svg
         className="w-5 h-5"

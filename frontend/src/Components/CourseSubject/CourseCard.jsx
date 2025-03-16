@@ -9,7 +9,7 @@ function CourseCard({ course }) {
                 </span>
             ))}
 
-            <div className="items-baseline text-gray-900 dark:text-white">
+            <div className="items-baseline text-white">
                 <img className='mt-2' style={{ height: "40px" }} src={course.image} alt={course.name} />
                 <span className="text-lg font-semibold">{course.name}</span>
             </div>

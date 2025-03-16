@@ -1,150 +1,145 @@
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
-import axios from "axios";
 import { OAuth2Client } from "google-auth-library";
+import asyncHandler from "express-async-handler";
 
 const client = new OAuth2Client();
 
-const registerUser = async (req, res) => {
+/**
+ * @swagger
+ * tags:
+ *   name: User
+ *   description: API for user authentication and management
+ */
+
+/**
+ * @swagger
+ * /api/users/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               credential:
+ *                 type: string
+ *               client_id:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: User registered successfully
+ *       400:
+ *         description: User already exists or invalid data
+ */
+export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, credential, client_id } = req.body;
 
-  try {
-    if (credential) {
-      const ticket = await client.verifyIdToken({
-        idToken: credential,
-        audience: client_id,
-      });
-      const payload = ticket.getPayload();
-      const { email, given_name, family_name } = payload;
-      const existingUser = await User.findOne({ email });
-      if (existingUser)
-        return res.status(400).json({ message: "User already exist!" });
-      const user = await User.create({
-        email: email,
-        name: `${given_name} ${family_name}`,
-      });
+  if (credential) {
+    const ticket = await client.verifyIdToken({ idToken: credential, audience: client_id });
+    const payload = ticket.getPayload();
+    const { email, given_name, family_name } = payload;
 
-      const data = {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        token: generateToken(user),
-      };
+    let user = await User.findOne({ email });
+    if (user) return res.status(400).json({ message: "User already exists" });
 
-      res.status(200).json({
-        data: data,
-        message: "User Sign Up  successfully",
-      });
-    } else {
-      const userExists = await User.findOne({ email });
-
-      if (userExists) {
-        res.status(400);
-        throw new Error("User already exists");
-      }
-
-      const user = await User.create({
-        name,
-        email,
-        password,
-      });
-
-      const data = {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        token: generateToken(user),
-      };
-
-      if (user) {
-        res.status(201).json({
-          data: data,
-          message: "User created successfully",
-        });
-      } else {
-        res.status(400);
-        throw new Error("Invalid user data");
-      }
-    }
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+    user = await User.create({ email, name: `${given_name} ${family_name}` });
+  } else {
+    let user = await User.findOne({ email });
+    if (user) return res.status(400).json({ message: "User already exists" });
+    user = await User.create({ name, email, password });
   }
-};
 
-const authUser = async (req, res) => {
+  res.status(201).json({
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    token: generateToken(user),
+    message: "User registered successfully",
+  });
+});
+
+/**
+ * @swagger
+ * /api/users/login:
+ *   post:
+ *     summary: Authenticate user and return token
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               credential:
+ *                 type: string
+ *               client_id:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User authenticated successfully
+ *       401:
+ *         description: Invalid email or password
+ *       404:
+ *         description: User not found
+ */
+export const authUser = asyncHandler(async (req, res) => {
   const { email, password, credential, client_id } = req.body;
 
-  try {
-    if (credential) {
-      const ticket = await client.verifyIdToken({
-        idToken: credential,
-        audience: client_id,
-      });
-
-      const payload = ticket.getPayload();
-      const { email } = payload;
-      const user = await User.findOne({ email: email });
-      const token = generateToken(user);
-
-      const data = {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        token: token,
-      };
-
-      console.log("token is ",token)
-
-      if (user) {
-        return res
-          .status(200)
-          .cookie("token", token, {
-            maxAge: 1 * 24 * 60 * 60 * 1000,
-            httpsOnly: true,
-          })
-          .json({
-            data: data,
-            message: "User Sign In successfully",
-          });
-      } else {
-        return res.status(404).json({ message: "User not found!" });
-      }
-    } else {
-      const user = await User.findOne({ email });
-      const token = generateToken(user);
-      if (user && (await user.matchPassword(password))) {
-        const data = {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          isAdmin: user.isAdmin,
-          token: token,
-        };
-        return res
-        .cookie("token", token, {
-          maxAge: 1 * 24 * 60 * 60 * 1000,
-          httpsOnly: true,
-        })
-          .json({
-            data: data,
-            message: "User Sign In successfully",
-          });
-      } else {
-        return res.status(401);
-        throw new Error("Invalid email or password");
-      }
+  let user;
+  if (credential) {
+    const ticket = await client.verifyIdToken({ idToken: credential, audience: client_id });
+    const payload = ticket.getPayload();
+    user = await User.findOne({ email: payload.email });
+  } else {
+    user = await User.findOne({ email });
+    if (!user || !(await user.matchPassword(password))) {
+      res.status(401);
+      throw new Error("Invalid email or password");
     }
-  } catch (error) {
-    console.log(error)
-    return res.status(400).json({ message: error.message });
   }
-};
 
-const googleCallback = async (req, res) => {
-  res.json({ message: "Google callback" });
-};
+  if (!user) {
+    res.status(404).json({ message: "User not found" });
+    return;
+  }
 
-export { registerUser, authUser, googleCallback };
+  res.cookie("token", generateToken(user), { maxAge: 86400000, httpOnly: true })
+    .json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user),
+      message: "User signed in successfully",
+    });
+});
+
+/**
+ * @swagger
+ * /api/users/google/callback:
+ *   get:
+ *     summary: Google OAuth callback endpoint
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: Google callback successful
+ */
+export const googleCallback = asyncHandler(async (req, res) => {
+  res.json({ message: "Google callback successful" });
+});

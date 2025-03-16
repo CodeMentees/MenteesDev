@@ -33,18 +33,18 @@ function CourseSection() {
         <section className="bg-dark-box container max-w-6xl mx-auto p-4 lg:p-12 my-10">
             <div data-aos="fade-left" className="mx-auto max-w-screen-xl ">
                 <h2 className="mb-4 lg:text-3xl tracking-tight font-extrabold text-dark-h">Courses based on subjects</h2>
-                <p className="mb-4 dark:text-white">Learn and grow as a developer with our Result oriented pedagogy and project based learning..</p>
+                <p className="mb-4 text-white">Learn and grow as a developer with our Result oriented pedagogy and project based learning..</p>
 
                 <div>
-                    <div className="border-b border-gray-200 dark:border-gray-700">
-                        <ul className="flex flex-nowrap overflow-x-auto gap-8 -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+                    <div className="border-b border-gray-700 ">
+                        <ul className="flex flex-nowrap overflow-x-auto gap-8 -mb-px text-sm font-medium text-center text-gray-400">
                             {categoryData.map((tab) => (
                                 <li key={tab._id} className="me-2">
                                     <button
                                         onClick={() => fetchCourseData(tab._id)}
                                         className={`m items-center justify-center flex  p-1 lg:p-4 border-b-2 ${activeTab === tab._id
                                             ? "border-blue-500 text-blue-600"
-                                            : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                                            : "border-transparent hover:text-gray-600 hover:border-gray-300"
                                             } rounded-t-lg group`}
                                     >
                                         <img src={tab.image} alt={tab.name} className="w-6 text-dark-text h-6 mr-2" />

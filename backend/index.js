@@ -4,29 +4,17 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import userRoutes from "./routes/usersRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
-import postRoutes from "./routes/postRoutes.js";
-import courseRoutes from "./routes/courseRoutes.js";
-import categoryRoutes from "./routes/categoryRoutes.js";
-import queryRoutes from "./routes/queryRoutes.js";
-import homeRoutes from "./routes/homeRoutes.js";
-import groupRoutes from "./routes/groupRoutes.js";
-import messageRoutes from "./routes/messageRoutes.js";
-import eventRoutes from "./routes/eventRoutes.js";
-import blogCategoryRoutes from "./routes/blogCategoryRoutes.js";
-
 import cron from "node-cron";
 import BlockedIp from "./middlewares/ipBlockMiddleware.js";
 import path from "path";
 import { init } from "./utils/socket.js";
 import http from "http";
+import routes from "./routes/index.js"
+import swaggerRoutes from "./swagger.js";
 const app = express();
 dotenv.config();
 
 import { fileURLToPath } from "url";
-
-// Derive __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -46,29 +34,12 @@ mongoose.connect(process.env.MONGODB_URI, {
 mongoose.connection.on("error", (error) => console.error(error));
 mongoose.connection.on("open", () => console.log("Connected to database"));
 
-app.use("/api/home", homeRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/post", postRoutes);
-app.use("/api/blog-categories", blogCategoryRoutes);
-app.use("/api/course", courseRoutes);
-app.use("/api/category", categoryRoutes);
-app.use("/api/query", queryRoutes);
-
-//chats related
-app.use("/api/groups", groupRoutes);
-app.use("/api/messages", messageRoutes);
-
-app.use("/api/events", eventRoutes);
-
 // Create HTTP server to work with Socket.io
 const server = http.createServer(app);
-// Socket.io
 init(server);
-
+app.use("/api",routes)
+app.use("/api", swaggerRoutes);
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-// Fallback for all other routes to serve the index.html
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
@@ -83,7 +54,3 @@ cron.schedule("0 0 * * *", async () => {
 app.listen(process.env.PORT, () =>
   console.log(`BackedExpressAPIServer running on port ${process.env.PORT}`)
 );
-
-// server.listen(4000, () =>
-//   console.log(`WesocketServer running on port ${4000}`)
-// );

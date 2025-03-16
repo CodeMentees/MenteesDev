@@ -3,9 +3,53 @@ import CourseCategory from "../models/courseCategory.js";
 import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
 
-// Create Course
+/**
+ * @swagger
+ * tags:
+ *   name: Course
+ *   description: API for managing courses
+ */
+
+/**
+ * @swagger
+ * /api/courses:
+ *   post:
+ *     summary: Create a new course
+ *     tags: [Course]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               module:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               price:
+ *                 type: number
+ *     responses:
+ *       201:
+ *         description: Course created successfully
+ *       400:
+ *         description: Invalid input data
+ */
 const createCourse = asyncHandler(async (req, res) => {
   const { name, image, category, description, module, price } = req.body;
+
+  if (!name || !category) {
+    res.status(400);
+    throw new Error("Name and category are required");
+  }
 
   const course = new Course({
     name,
@@ -24,7 +68,24 @@ const createCourse = asyncHandler(async (req, res) => {
   });
 });
 
-// Get Single Course
+/**
+ * @swagger
+ * /api/courses/{id}:
+ *   get:
+ *     summary: Get a single course by ID
+ *     tags: [Course]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Course fetched successfully
+ *       404:
+ *         description: Course not found
+ */
 const getCourse = asyncHandler(async (req, res) => {
   const course = await Course.findById(req.params.id).populate("category");
 
@@ -36,13 +97,60 @@ const getCourse = asyncHandler(async (req, res) => {
   res.json({ data: course, message: "Course fetched successfully" });
 });
 
-// Get All Courses
+/**
+ * @swagger
+ * /api/courses:
+ *   get:
+ *     summary: Get all courses
+ *     tags: [Course]
+ *     responses:
+ *       200:
+ *         description: Courses fetched successfully
+ */
 const getCourses = asyncHandler(async (req, res) => {
   const courses = await Course.find().populate("category").limit(10);
   res.json({ data: courses, message: "Courses fetched successfully" });
 });
 
-// Update Course
+/**
+ * @swagger
+ * /api/courses/{id}:
+ *   put:
+ *     summary: Update an existing course
+ *     tags: [Course]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               module:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               price:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Course updated successfully
+ *       404:
+ *         description: Course not found
+ */
 const updateCourse = asyncHandler(async (req, res) => {
   const course = await Course.findById(req.params.id);
 
@@ -62,7 +170,24 @@ const updateCourse = asyncHandler(async (req, res) => {
   res.json({ data: updatedCourse, message: "Course updated successfully" });
 });
 
-// Delete Course
+/**
+ * @swagger
+ * /api/courses/{id}:
+ *   delete:
+ *     summary: Delete a course by ID
+ *     tags: [Course]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Course deleted successfully
+ *       404:
+ *         description: Course not found
+ */
 const deleteCourse = asyncHandler(async (req, res) => {
   const course = await Course.findById(req.params.id);
 
@@ -75,7 +200,16 @@ const deleteCourse = asyncHandler(async (req, res) => {
   res.json({ data: null, message: "Course deleted successfully" });
 });
 
-// Get Course Category
+/**
+ * @swagger
+ * /api/course-categories:
+ *   get:
+ *     summary: Get all course categories
+ *     tags: [CourseCategory]
+ *     responses:
+ *       200:
+ *         description: Course categories fetched successfully
+ */
 const getCourseCategory = asyncHandler(async (req, res) => {
   const coursesCategory = await CourseCategory.find({}).limit(10);
   res.json({
@@ -84,7 +218,37 @@ const getCourseCategory = asyncHandler(async (req, res) => {
   });
 });
 
-// Update Course Details
+/**
+ * @swagger
+ * /api/courses/{courseId}/details:
+ *   put:
+ *     summary: Update course details
+ *     tags: [Course]
+ *     parameters:
+ *       - name: courseId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               details:
+ *                 type: string
+ *               features:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Course details updated successfully
+ *       404:
+ *         description: Course not found
+ */
 const updateCourseDetails = asyncHandler(async (req, res) => {
   const { courseId } = req.params;
   const { details, features } = req.body;
@@ -103,7 +267,22 @@ const updateCourseDetails = asyncHandler(async (req, res) => {
   res.status(200).json(updatedCourse);
 });
 
-// Get Courses By Category
+/**
+ * @swagger
+ * /api/courses/category/{categoryId}:
+ *   get:
+ *     summary: Get courses by category
+ *     tags: [Course]
+ *     parameters:
+ *       - name: categoryId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Courses fetched successfully
+ */
 const getCoursesByCategory = asyncHandler(async (req, res) => {
   let { categoryId } = req.params;
   const courses = await Course.find({
