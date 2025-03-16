@@ -28,3 +28,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+package.json
+package.json
+frontend/vite.config.js
+frontend/src/api/constants.js
