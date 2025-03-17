@@ -10,7 +10,7 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false); // Track menu state
 
   const menuItems = [
-    { label: "All Courses", link: "/all-course" },
+    { label: "All Courses", link: "/courses" },
     { label: "Programs", link: "#" },
     { label: "Live Courses", link: "#" },
     { label: "Schooling Coding", link: "#" },

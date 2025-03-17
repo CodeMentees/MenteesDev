@@ -25,23 +25,26 @@ import HomeSite from './Pages/Home/HomeSite';
 import CategoryList from './Pages/Course/CategoryList';
 import Chat from './Pages/Chat/Chat';
 import CreateGroup from './Pages/Chat/CreateGroup';
-import AddEvent from './Pages/Event/AddEvent';
+import {EventManager, CreateEvent} from './Pages/Event/AddEvent';
 import BlogCategoryManager from './Components/Blog/BlogCategoryManger';
+import NotFound from './Pages/Error/NotFound';
 function App() {
 
   return (
     <>
       <Router>
         <Header />
-        <div className="font-sans bg-dark-box mt-12  min-h-screen">
+        <div className="font-sans bg-dark-box mt-12 min-h-screen">
           <Routes>
+            {/* Public Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/all-course" element={<AllCourse />} />
-            <Route path="/course-details/:courseId" element={<CourseDetails />} />
-            <Route path="/unauth" element={<Unauth />} />
+            <Route path="/courses" element={<AllCourse />} />
+            <Route path="/courses/:courseId" element={<CourseDetails />} />
+            <Route path="/unauthorized" element={<Unauth />} />
 
+            {/* Protected Routes */}
             <Route
               path="/about"
               element={
@@ -60,7 +63,7 @@ function App() {
               }
             />
             <Route
-              path="/blog/:id"
+              path="/blogs/:id"
               element={
                 <ProtectedRoute>
                   <BlogPage />
@@ -72,30 +75,49 @@ function App() {
               path="/chat"
               element={
                 <ProtectedRoute>
-                  <Chat/>
+                  <Chat />
                 </ProtectedRoute>
               }
             />
-          </Routes>
 
-          <Routes>
-            <Route path="dashboard" element={<AdminRoutes><DashboardLayout /></AdminRoutes>}>
-              <Route path="add-site-data" element={<HomeSite />} />
-              <Route path="add-post" element={<AddPost />} />
-              <Route path="add-post/:id" element={<AddPost />} />
-              <Route path="blog-category" element={<BlogCategoryManager/>} />
-              <Route path="post-list" element={<PostList />} />
-              <Route path="add-course" element={<AddCourse />} />
-              <Route path="course-list" element={<CourseList />} />
-              <Route path="courses/:courseId/details" element={<UpdateCourseDetails />} />
-              <Route path="add-category" element={<AddCourseCategory />} />
-              <Route path="category-list" element={<CategoryList />} />
-              <Route path="query-list" element={<QueryList />} />
-              <Route path="create-group" element={<CreateGroup />} />
-              <Route path="create-event" element={<AddEvent />} />
+            {/* Admin Routes (Dashboard) */}
+            <Route
+              path="/admin"
+              element={
+                <AdminRoutes>
+                  <DashboardLayout />
+                </AdminRoutes>
+              }
+            >
+              <Route path="site-settings" element={<HomeSite />} />
+
+              {/* Post Management */}
+              <Route path="posts/create" element={<AddPost />} />
+              <Route path="posts/edit/:id" element={<AddPost />} />
+              <Route path="posts/categories" element={<BlogCategoryManager />} />
+              <Route path="posts" element={<PostList />} />
+
+              {/* Course Management */}
+              <Route path="courses/create" element={<AddCourse />} />
+              <Route path="courses/edit/:id" element={<AddCourse />} />
+              <Route path="courses" element={<CourseList />} />
+              <Route path="courses/:id/edit" element={<UpdateCourseDetails />} />
+
+              {/* Category Management */}
+              <Route path="categories/create" element={<AddCourseCategory />} />
+              <Route path="categories" element={<CategoryList />} />
+
+              {/* Queries, Groups & Events */}
+              <Route path="queries" element={<QueryList />} />
+              <Route path="groups/create" element={<CreateGroup />} />
+              <Route path="events" element={<EventManager />} />
+              <Route path="events/create" element={<CreateEvent />} />
+              <Route path="events/edit/:id" element={<CreateEvent />} />
             </Route>
+            <Route path="*" element={<NotFound/>} />
           </Routes>
         </div>
+
       </Router>
       <Footer />
     </>

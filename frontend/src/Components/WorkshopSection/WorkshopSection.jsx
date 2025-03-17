@@ -9,7 +9,6 @@ function WorkshopSection() {
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchEvents();
-      console.log("event data", data.events);
       setEvents(data.events);
     };
     fetchData();
@@ -21,17 +20,17 @@ function WorkshopSection() {
       <h2 className="col-span-1  sm:col-span-1 mb-4  lg:text-3xl tracking-tight font-extrabold text-dark-h">
         Events
       </h2>
-      <div className=" flex lg:flex-row flex-col items-center flex-nowrap  mx-auto">
+      <div className=" flex lg:flex-row flex-col  gap-10 items-center flex-nowrap  mx-auto">
         {Events.map((event) => {
           return (
             <WorkshopCard
-              imageUrl="https://via.placeholder.com/800x400"
+              imageUrl={event.image}
               title={event.title}
               description={event.description}
               date={new Date(event.startDate).toISOString().split("T")[0]}
               time={event.time}
               buttonText="Register Now"
-              buttonLink="#"
+              buttonLink={event.link ?? "#"}
             />
           );
         })}

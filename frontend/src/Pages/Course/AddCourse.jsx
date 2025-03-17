@@ -1,9 +1,11 @@
 import { initFlowbite } from "flowbite";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { createCourse, fetchCourse, fetchCourses, updateCourse } from "../../api/courseApi";
+import { fetchBlogCategories } from "../../api/blogCategoryApi";
 
 function AddCourse() {
-  const { courseId } = useParams();
+  const { id } = useParams();
   const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
   const [courseData, setCourseData] = useState({
     name: "",
@@ -20,27 +22,21 @@ function AddCourse() {
   useEffect(() => {
     initFlowbite();
     fetchCategories();
-    if (courseId) fetchCourseDetails();
-  }, [courseId]);
+    if (id) fetchCourseDetails();
+  }, [id]);
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("/api/category");
-      const data = await response.json();
-      setCategories(data.data);
+      const data = await fetchBlogCategories()
+      setCategories(data);
     } catch (error) {
       console.log("Error fetching categories:", error);
     }
   };
 
   const fetchCourseDetails = async () => {
-    try {
-      const response = await fetch(`/api/course/${courseId}`);
-      const data = await response.json();
-      setCourseData(data);
-    } catch (error) {
-      console.log("Error fetching course details:", error);
-    }
+    const data =  await fetchCourse(id)
+    setCourseData(data)
   };
 
   const handleChange = (e) => {
@@ -48,25 +44,11 @@ function AddCourse() {
   };
 
   const handleSubmit = async () => {
-    const url = courseId ? `/api/course/${courseId}` : "/api/course";
-    const method = courseId ? "PUT" : "POST";
-
-    try {
-      const response = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(courseData),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setToast({ visible: true, message: data.message, type: "success" });
-        setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 5000);
-      } else {
-        alert("Some error occurred");
-      }
-    } catch (error) {
-      console.log(error);
+    if(id){
+      updateCourse(id,courseData)
+    }
+    else{
+      createCourse(courseData)
     }
   };
 
@@ -83,7 +65,7 @@ function AddCourse() {
       )}
       <div className="py-2 px-4">
         <h2 className="mb-4 text-2xl font-bold text-gray-100">
-          {courseId ? "Update Course" : "Create a Course"}
+          {id ? "Update Course" : "Create a Course"}
         </h2>
         <form className="grid gap-4 sm:grid-cols-2">
           <input
@@ -136,7 +118,7 @@ function AddCourse() {
           onClick={handleSubmit}
           className="mt-4 px-4 py-2 bg-dark-btn text-black font-semibold rounded-lg hover:bg-yellow-400 transition w-full"
         >
-          {courseId ? "Update Course" : "Create Course"}
+          {id ? "Update Course" : "Create Course"}
         </button>
       </div>
     </section>

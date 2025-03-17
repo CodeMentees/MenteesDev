@@ -21,7 +21,7 @@ router.get("/", getCourses);
 router.use(isAdmin)
 router.post("/", createCourse);
 router.put("/:id", updateCourse);
+router.put("/:id/details", updateCourseDetails);
 router.delete("/:id", deleteCourse);
-router.put("/:courseId/details", updateCourseDetails);
 
 export default router;

@@ -20,7 +20,7 @@ export const fetchEvent = async (id) => {
     }
 };
 
-export const fetchEvents = async (page = 1, limit = 10) => {
+export const fetchEvents = async (page = 1, limit = 6) => {
     try {
         const response = await api.get(`/events?page=${page}&limit=${limit}`);
         if (!response.data || !response.data.data) {

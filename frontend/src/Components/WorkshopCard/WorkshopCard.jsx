@@ -8,16 +8,16 @@ const WorkshopCard = ({ imageUrl, title, description, date, time, buttonText, bu
       {/* Image Section */}
       <div
         className="w-full h-48 bg-cover bg-center"
-        style={{ backgroundImage: `url(${Designer})` }}
+        style={{ backgroundImage: `url(${imageUrl})` ?? `url(${Designer})` }}
       ></div>
 
       {/* Content Section */}
       <div className="p-6">
         {/* Title */}
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">{title}</h2>
+        <h2 className="text-xl font-semibold text-gray-100 mb-2">{title}</h2>
 
         {/* Description */}
-        <p className="text-sm text-gray-800 dark:text-gray-300 mb-4 line-clamp-3">{description}</p>
+        <p className="text-sm text-gray-300 mb-4 line-clamp-3">{description}</p>
 
         {/* Date and Time */}
         <div className="flex items-center text-sm text-dark-text mb-4">

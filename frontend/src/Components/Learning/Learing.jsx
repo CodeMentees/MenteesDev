@@ -89,11 +89,6 @@ function Learning() {
             {/* Tab Content */}
             <div className="my-4">
                 <div className="gap-6 items-center py-4  px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-4 py-16  lg:py-4 lg:px-0  ">
-                    <img
-                        className="w-full dark:block col-span-1"
-                        src="https://cdn.pixabay.com/photo/2024/12/28/01/27/ai-generated-9295105_1280.jpg"
-                        alt="Dashboard Mockup"
-                    />
                     <div className="mt-4 md:mt-0 col-span-3">
                         <FeatureGrid features={currentFeatures} />
                     </div>

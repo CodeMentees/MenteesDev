@@ -9,14 +9,14 @@ function RatingSection() {
                     Talk to our Learning Consultant!
                 </h2>
                 <div className="mb:4 lg:mb-8">
-                    <p className="text-gray-600 dark:text-gray-100 mb-2">Contact Number</p>
+                    <p className="text-gray-100 mb-2">Contact Number</p>
                     <p className="text-3xl font-semibold text-dark-primary">1800-274-4504</p>
                 </div>
             </div>
 
             {/* Call-to-Action Section */}
             <div className="mb-8">
-                <p className="text-gray-600 mb-4  dark:text-gray-100">
+                <p className=" mb-4  text-gray-100">
                     Get a free counselling session from our experts
                 </p>
                 <button className="w-full sm:w-auto px-6 py-3 bg-dark-btn text-white font-semibold rounded-lg  transition duration-300">
@@ -24,7 +24,7 @@ function RatingSection() {
                 </button>
             </div>
             {/* Reviews Section */}
-            <div className="border-t pt-8 text-gray-800 dark:text-gray-100">
+            <div className="border-t pt-8 text-gray-100">
                 <h3 className="text-xl font-bold  mb-4">Our Reviews</h3>
                 <p className="mb-4">
                     We love our students as much as they love us!

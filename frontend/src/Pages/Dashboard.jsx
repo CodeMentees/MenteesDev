@@ -5,52 +5,62 @@ import { FaHome, FaFileAlt, FaBook, FaQuestionCircle, FaGlobe, FaComments, FaCal
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
 const menuItems = [
-  { id: 1, title: "Overview", icon: <FaHome />, link: "#" },
+  { id: 1, title: "Overview", icon: <FaHome />, link: "/admin" },
+
   {
     id: 2,
-    title: "Post",
+    title: "Posts",
     icon: <FaFileAlt />,
     subItems: [
-      { id: 21, title: "Add Post", link: "/dashboard/add-post" },
-      { id: 22, title: "Post List", link: "/dashboard/post-list" },
-      { id: 23, title: "Categories", link: "/dashboard/blog-category" },
+      { id: 21, title: "Create Post", link: "/admin/posts/create" },
+      { id: 22, title: "Post List", link: "/admin/posts" },
+      { id: 23, title: "Categories", link: "/admin/posts/categories" },
     ],
   },
+
   {
     id: 3,
-    title: "Course",
+    title: "Courses",
     icon: <FaBook />,
     subItems: [
-      { id: 31, title: "Add Course", link: "/dashboard/add-course" },
-      { id: 32, title: "Course List", link: "/dashboard/course-list" },
-      { id: 33, title: "Add Category", link: "/dashboard/add-category" },
+      { id: 31, title: "Create Course", link: "/admin/courses/create" },
+      { id: 32, title: "Course List", link: "/admin/courses" },
+      { id: 33, title: "Create Category", link: "/admin/categories/create" },
     ],
   },
+
   {
     id: 4,
-    title: "Query",
+    title: "Queries",
     icon: <FaQuestionCircle />,
-    subItems: [{ id: 41, title: "Queries", link: "/dashboard/query-list" }],
+    subItems: [{ id: 41, title: "Query List", link: "/admin/queries" }],
   },
+
   {
     id: 5,
     title: "Site",
     icon: <FaGlobe />,
-    subItems: [{ id: 51, title: "Update Site", link: "/dashboard/add-site-data" }],
+    subItems: [{ id: 51, title: "Update Site", link: "/admin/site-settings" }],
   },
+
   {
     id: 6,
     title: "Chat",
     icon: <FaComments />,
-    subItems: [{ id: 61, title: "Add Group", link: "/dashboard/create-group" }],
+    subItems: [{ id: 61, title: "Create Group", link: "/admin/groups/create" }],
   },
+
   {
     id: 7,
     title: "Events",
     icon: <FaCalendarAlt />,
-    subItems: [{ id: 71, title: "Add Event", link: "/dashboard/create-event" }],
+    subItems: [{ id: 71, title: "Create Event", link: "/admin/events/create" },
+    { id: 71, title: "Events", link: "/admin/events" }
+    ],
   },
 ];
+
+
 
 function DashboardLayout() {
   const [openDropdowns, setOpenDropdowns] = useState({});

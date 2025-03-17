@@ -87,8 +87,8 @@ const createCourse = asyncHandler(async (req, res) => {
  *         description: Course not found
  */
 const getCourse = asyncHandler(async (req, res) => {
+  console.log(req.params.id)
   const course = await Course.findById(req.params.id).populate("category");
-
   if (!course) {
     res.status(404).json({ data: null, message: "Course not found" });
     return;
@@ -101,16 +101,52 @@ const getCourse = asyncHandler(async (req, res) => {
  * @swagger
  * /api/courses:
  *   get:
- *     summary: Get all courses
+ *     summary: Get all courses with pagination
  *     tags: [Course]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Number of courses per page
  *     responses:
  *       200:
  *         description: Courses fetched successfully
  */
+
 const getCourses = asyncHandler(async (req, res) => {
-  const courses = await Course.find().populate("category").limit(10);
-  res.json({ data: courses, message: "Courses fetched successfully" });
+  try {
+    let { page = 1, limit = 10 } = req.query;
+    page = parseInt(page);
+    limit = parseInt(limit);
+    const skip = (page - 1) * limit;
+
+    // Fetch paginated courses
+    const courses = await Course.find()
+      .populate("category")
+      .skip(skip)
+      .limit(limit);
+
+    // Get total courses count
+    const totalCourses = await Course.countDocuments();
+
+    res.json({
+      data: courses,
+      currentPage: page,
+      totalPages: Math.ceil(totalCourses / limit),
+      totalCourses,
+      message: "Courses fetched successfully",
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 });
+
 
 /**
  * @swagger
@@ -250,11 +286,10 @@ const getCourseCategory = asyncHandler(async (req, res) => {
  *         description: Course not found
  */
 const updateCourseDetails = asyncHandler(async (req, res) => {
-  const { courseId } = req.params;
+  const { id } = req.params;
   const { details, features } = req.body;
-
   const updatedCourse = await Course.findByIdAndUpdate(
-    courseId,
+    id,
     { $set: { details, features } },
     { new: true, runValidators: true }
   );

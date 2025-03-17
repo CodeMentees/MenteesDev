@@ -3,7 +3,7 @@ import CourseCard from '../CourseSubject/CourseCard';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useSelector } from 'react-redux';
-import { fetchCourse } from '../../api/courseApi';
+import { fetchCourse, fetchCourseByCategory } from '../../api/courseApi';
 import Loading from '../Helpers/Loading';
 
 function CourseSection() {
@@ -13,7 +13,7 @@ function CourseSection() {
 
     const fetchCourseData = async (categoryId) => {
         setActiveTab(categoryId)
-        const course = await fetchCourse(categoryId);
+        const course = await fetchCourseByCategory(categoryId);
         setCourseData(course);
     };
 

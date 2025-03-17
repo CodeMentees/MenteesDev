@@ -51,12 +51,6 @@ const BlogCategoryManager = () => {
     <div className={`${darkMode ? "dark" : ""}`}>
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-6">
         <div className="max-w-3xl mx-auto">
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="bg-gray-800 text-white px-4 py-2 rounded mb-4"
-          >
-            {darkMode ? "Light Mode" : "Dark Mode"}
-          </button>
 
           <h2 className="text-2xl font-bold mb-4">Manage Blog Categories</h2>
 

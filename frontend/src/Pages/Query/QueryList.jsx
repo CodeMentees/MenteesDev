@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom"
 import useDelete from '../../Components/API/useDelete';
 import ReusableTable from '../../Components/Table/Table';
+import { fetchQueries } from '../../api/queryApi';
 function QueryList() {
 
     const [Queries, setQueries] = useState([]);
     const { deleteItem, message, isSuccess, isLoading } = useDelete();
-
-
+    const [currentPage , setCurrentPage] =  useState(1);
+    const [totalPages, setTotalPages] = useState(10)
 
     const handleDelete = (id) => {
         deleteItem(id, "/api/query");
@@ -20,25 +21,17 @@ function QueryList() {
         { label: 'Delete', handler: handleDelete },
     ];
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch("/api/query", {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': "application/json"
-                    }
-                });
-                const data = await response.json();
-                console.log("dara",data)
-                setQueries(data.data); 
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
+    const fetchData = async () => {
+        const data = await fetchQueries(currentPage)
+        console.log("quety is",data)
+        setQueries(data.queries)
+        setCurrentPage(data.currentPage)
+        setTotalPages(data.totalPages)
+    };
 
+    useEffect(() => {
         fetchData();
-    }, []);
+    }, [currentPage]);
 
     // Reinitialize Flowbite dropdowns when Queries change
     useEffect(() => {

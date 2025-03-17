@@ -12,7 +12,7 @@ export const fetchBlog = async (id) => {
 };
 
 // Fetch the latest blog posts with pagination
-export const fetchLatestBlogs = async (page = 1, limit = 10) => {
+export const fetchLatestBlogs = async (page = 1, limit = 8) => {
   try {
     const response = await api.get(`/post?page=${page}&limit=${limit}`);
 

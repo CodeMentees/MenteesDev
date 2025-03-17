@@ -40,17 +40,21 @@ import Event from "../models/event.js";
  *         description: Invalid input data
  */
 export const addEvent = asyncHandler(async (req, res) => {
-  const { title, description, time, startDate, endDate } = req.body;
+  const { title, description, time, startDate, endDate,link,image } = req.body;
+  console.log("oppps")
 
-  if (!title || !startDate || !endDate) {
+  if (!title || !startDate || !endDate || !link || !image) {
     res.status(400);
-    throw new Error("Title, Start Date, and End Date are required");
+    throw new Error("Title, Start Date, and End Date,  link, Image are required");
   }
 
+  console.log("hello")
   const newEvent = new Event({
     title,
     description,
     time,
+    link,
+    image,
     startDate,
     endDate,
   });
@@ -172,7 +176,7 @@ export const getAllEvents = asyncHandler(async (req, res) => {
  *         description: Event not found
  */
 export const updateEvent = asyncHandler(async (req, res) => {
-  const { title, description, time, startDate, endDate } = req.body;
+  const { title, description, time, startDate, endDate, link, image } = req.body;
 
   const event = await Event.findById(req.params.id);
 
@@ -184,6 +188,8 @@ export const updateEvent = asyncHandler(async (req, res) => {
   event.title = title || event.title;
   event.description = description || event.description;
   event.time = time || event.time;
+  event.link = link || event.link;
+  event.image = image || event.image;
   event.startDate = startDate || event.startDate;
   event.endDate = endDate || event.endDate;
 

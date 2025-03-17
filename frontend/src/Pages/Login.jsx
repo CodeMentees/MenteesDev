@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { login, logout } from "../Slices/authSlice";
 import { GoogleLogin } from "@react-oauth/google";
 import { Link } from "react-router-dom";
+import {loginUser} from "../api/authApi"
 
 function LoginPage() {
   const dispatch = useDispatch();
@@ -41,41 +42,17 @@ function LoginPage() {
         client_id: googleResponse.clientId,
       }),
     };
-
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedFormData),
-      });
-      const data = await response.json();
-
-      if (data.error) {
-        alert(data.error);
-      } else {
-        localStorage.setItem("token", data.data.token);
-        dispatch(login(data.data));
+    const userData = await loginUser(updatedFormData)
+    if(userData){
+      localStorage.setItem("token", userData.token);
+        dispatch(login(userData));
         setToast({ visible: true, message: data.message, type: "success" });
         setTimeout(() => {
           setToast({ visible: false, message: "", type: "success" });
         }, 5000);
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
-      setToast({
-        visible: true,
-        message: "Invalid password or Email",
-        type: "error",
-      });
-      setTimeout(() => {
-        setToast({
-          visible: false,
-          message: "Invalid password or Email",
-          type: "error",
-        });
-      }, 5000);
+    }
+    else{
+      alert("Error : User could not login")
     }
   };
 
@@ -119,12 +96,7 @@ function LoginPage() {
         <div className="mt-8 sm:mx-auto sm:w-full smax-w-md lg:w-2/3">
           <div className="py-8 px-4 shadow sm:rounded-lg sm:px-10 bg-transparent">
             <form
-              className="space-y-6"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleLoginSubmit();
-              }}
-            >
+              className="space-y-6">
               <div>
                 <label
                   htmlFor="email"
@@ -189,7 +161,8 @@ function LoginPage() {
               </div>
               <div>
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={handleLoginSubmit}
                   className="w-max shadow-xl py-3 px-6 text-sm text-gray-900 font-semibold rounded bg-dark-btn"
                 >
                   Sign in

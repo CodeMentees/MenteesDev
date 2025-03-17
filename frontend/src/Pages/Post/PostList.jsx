@@ -4,10 +4,13 @@ import { initFlowbite } from "flowbite";
 import ReusableTable from "../../Components/Table/Table";
 import useDelete from "../../Components/API/useDelete";
 import { fetchLatestBlogs } from "../../api/blogApi";
+import Pagination from "../../Components/UI/Pagination"
 
 function PostList() {
   const navigate = useNavigate();
   const [Posts, setPosts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(10)
   const { deleteItem, message, isSuccess, isLoading } = useDelete();
   const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
 
@@ -19,7 +22,6 @@ function PostList() {
     if (isSuccess) {
       setToast({ visible: true, message: "Post deleted successfully!", type: "success" });
       setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 3000);
-      
       // Refetch posts after deletion
       fetchLatestBlogs().then((data) => setPosts(data.blogs)).catch((error) => console.error("Error fetching data:", error));
     }
@@ -30,12 +32,14 @@ function PostList() {
       try {
         const data = await fetchLatestBlogs();
         setPosts(data.blogs);
+        setTotalPages(data.totalPages)
+        setCurrentPage(data.currentPage)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     initFlowbite();
@@ -44,7 +48,7 @@ function PostList() {
   const headers = ["title", "createdAt", "categories"];
   const actions = [
     { label: "Show", handler: (id) => console.log(`Show item with ID: ${id}`) },
-    { label: "Edit", handler: (id) => navigate(`/dashboard/add-post/${id}`) },
+    { label: "Edit", handler: (id) => navigate(`/admin/posts/edit/${id}`) },
     { label: "Delete", handler: handleDelete },
   ];
 
@@ -81,6 +85,7 @@ function PostList() {
             </div>
             <div className="overflow-x-auto">
               <ReusableTable headers={headers} data={Posts} actions={actions} isLoading={isLoading} />
+              <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
             </div>
           </div>
         </div>
