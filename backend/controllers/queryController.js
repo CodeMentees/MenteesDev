@@ -36,8 +36,10 @@ import asyncHandler from "express-async-handler";
  *         description: Error creating query
  */
 const createQuery = asyncHandler(async (req, res) => {
+  console.log("ynha se ")
   try {
     const { name, email, phoneNumber, courseName } = req.body;
+    console.log("hello from here",req.body)
 
     if (!name || !email || !phoneNumber || !courseName) {
       return res.status(400).json({ message: "All fields are required" });

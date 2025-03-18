@@ -6,7 +6,7 @@ import WorkshopCard from "../Components/WorkshopCard/WorkshopCard";
 import BlogGridFour from "../Components/Blog/BlogGridFour";
 import CourseSection from "../Components/CourseSection/CourseSection";
 import RatingSection from "../Components/RatingSection/RatingSection";
-import { fetchCategory } from "../api/categoryApi";
+import { fetchCategories } from "../api/categoryApi";
 import { setCategory } from "../Slices/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../Components/Helpers/Loading";
@@ -18,7 +18,7 @@ function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchCategory();
+      const data = await fetchCategories();
       dispatch(setCategory(data));
     };
 

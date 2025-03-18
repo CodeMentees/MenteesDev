@@ -39,15 +39,15 @@ function BlogGridFour() {
       <div className="grid  gap-12 sm:grid-cols-2 lg:grid-cols-4">
         {latestBlogs.blogs.map((latest) => (
           <article key={latest.id} className="max-w-xs">
-            <a href={`/blog/${latest._id}`}>
+            <a href={`/blogs/${latest._id}`}>
               <img
                 src={latest.image || "https://via.placeholder.com/300"}
                 className="mb-5 rounded-lg"
                 alt={latest.title}
               />
             </a>
-            <h2 className="mb-2 text-lg font-bold leading-tight text-gray-900 dark:text-white">
-              <a href={`/blog/${latest._id}`}>{latest.title}</a>
+            <h2 className="mb-2 text-lg font-bold leading-tight text-white">
+              <a href={`/blogs/${latest._id}`}>{latest.title}</a>
             </h2>
             <p
               className="mb-4 text-dark-accent"
@@ -57,7 +57,7 @@ function BlogGridFour() {
             ></p>
 
             <a
-              href={`/blog/${latest._id}`}
+              href={`/blogs/${latest._id}`}
               className="inline-flex items-center font-medium underline underline-offset-4 text-dark-btn hover:no-underline"
             >
               Read More

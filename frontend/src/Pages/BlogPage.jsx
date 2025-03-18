@@ -32,7 +32,7 @@ function BlogPage() {
   }
 
   return (
-    <main className="pt-8 max-w-6xl mx-auto pb-16 lg:pt-16 lg:pb-24 bg antialiased">
+    <main className="pt-8 px-8 max-w-6xl mx-auto pb-16 lg:pt-16 lg:pb-24 bg-gray-100 antialiased">
       <div className="flex flex-col lg:flex-row justify-between px-4 mx-auto max-w-screen-xl">
         {/* ✅ Left Side: Blog Content */}
         <article className="w-full lg:w-3/4 lg:pr-8">

@@ -28,6 +28,9 @@ import CreateGroup from './Pages/Chat/CreateGroup';
 import {EventManager, CreateEvent} from './Pages/Event/AddEvent';
 import BlogCategoryManager from './Components/Blog/BlogCategoryManger';
 import NotFound from './Pages/Error/NotFound';
+import About from './Pages/About/About';
+import Contact from './Pages/Contact/Contact';
+import FAQ from './Pages/FAQ/FAQ';
 function App() {
 
   return (
@@ -42,7 +45,10 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/courses" element={<AllCourse />} />
             <Route path="/courses/:courseId" element={<CourseDetails />} />
+            <Route path='/about' element={<About/>}/>
             <Route path="/unauthorized" element={<Unauth />} />
+            <Route path="/contact" element={<Contact/>}/>
+            <Route path='/faq' element={<FAQ/>} />
 
             {/* Protected Routes */}
             <Route

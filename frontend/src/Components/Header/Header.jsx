@@ -11,7 +11,7 @@ function Header() {
 
   const menuItems = [
     { label: "All Courses", link: "/courses" },
-    { label: "Programs", link: "#" },
+    { label: "Blogs", link: "/blogs" },
     { label: "Live Courses", link: "#" },
     { label: "Schooling Coding", link: "#" },
     { label: "Placement Support", link: "#" },

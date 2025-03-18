@@ -26,6 +26,7 @@ const corsOptions = {
 // app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.set("trust proxy", 1);
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,

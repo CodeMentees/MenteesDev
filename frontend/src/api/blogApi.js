@@ -3,7 +3,7 @@ import api from "./api";
 // Fetch a single blog post by ID
 export const fetchBlog = async (id) => {
   try {
-    const response = await api.get(`/post/${id}`);
+    const response = await api.get(`/posts/${id}`);
     return response.data.data;
   } catch (error) {
     console.error("Error fetching post data:", error);
@@ -14,7 +14,7 @@ export const fetchBlog = async (id) => {
 // Fetch the latest blog posts with pagination
 export const fetchLatestBlogs = async (page = 1, limit = 8) => {
   try {
-    const response = await api.get(`/post?page=${page}&limit=${limit}`);
+    const response = await api.get(`/posts?page=${page}&limit=${limit}`);
 
     if (!response.data || !response.data.data) {
       throw new Error("Invalid response from server");
