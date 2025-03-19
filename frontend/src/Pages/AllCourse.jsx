@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";  // ✅ Updated import
 import CourseCard from "../Components/Card/CourseCard";
 import Loading from "../Components/Helpers/Loading";
 import { useCourse } from "../api/courseApi";
@@ -51,14 +51,20 @@ function AllCourse() {
 
   return (
     <div className="container max-w-6xl mx-auto p-4 my-10">
-      {/* ✅ SEO Meta Tags */}
-      <Helmet>
-        <title>{activeTabData ? `${activeTabData.name} Courses` : "All Courses"} | Codementees</title>
-        <meta name="description" content={activeTabData?.description || "Explore our wide range of coding courses."} />
-        <meta property="og:title" content={activeTabData ? `${activeTabData.name} Courses` : "All Courses"} />
-        <meta property="og:description" content={activeTabData?.description || "Explore our wide range of coding courses."} />
-        <meta property="og:image" content={activeTabData?.image || "/default-course-image.jpg"} />
-        <meta property="og:type" content="website" />
+      <Helmet>  {/* ✅ Using react-helmet-async */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Course",
+            "name": activeTabData?.name || "All Courses",
+            "description": activeTabData?.description || "Explore our wide range of coding courses.",
+            "provider": {
+              "@type": "Organization",
+              "name": "Codementees",
+              "url": "https://codementees.com"
+            }
+          })}
+        </script>
       </Helmet>
 
       <div className="md:flex">
