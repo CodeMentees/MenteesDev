@@ -31,6 +31,7 @@ import NotFound from './Pages/Error/NotFound';
 import About from './Pages/About/About';
 import Contact from './Pages/Contact/Contact';
 import FAQ from './Pages/FAQ/FAQ';
+import UserList from './Pages/User/UserList';
 function App() {
 
   return (
@@ -111,6 +112,7 @@ function App() {
 
               {/* Category Management */}
               <Route path="categories/create" element={<AddCourseCategory />} />
+              <Route path="categories/edit/:id" element={<AddCourseCategory />} />
               <Route path="categories" element={<CategoryList />} />
 
               {/* Queries, Groups & Events */}
@@ -119,6 +121,10 @@ function App() {
               <Route path="events" element={<EventManager />} />
               <Route path="events/create" element={<CreateEvent />} />
               <Route path="events/edit/:id" element={<CreateEvent />} />
+
+              {/* users  */}
+              <Route path="users" element={<UserList/>} />
+
             </Route>
             <Route path="*" element={<NotFound/>} />
           </Routes>

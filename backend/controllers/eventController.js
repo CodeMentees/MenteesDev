@@ -41,14 +41,11 @@ import Event from "../models/event.js";
  */
 export const addEvent = asyncHandler(async (req, res) => {
   const { title, description, time, startDate, endDate,link,image } = req.body;
-  console.log("oppps")
-
   if (!title || !startDate || !endDate || !link || !image) {
     res.status(400);
     throw new Error("Title, Start Date, and End Date,  link, Image are required");
   }
 
-  console.log("hello")
   const newEvent = new Event({
     title,
     description,
@@ -130,7 +127,7 @@ export const getAllEvents = asyncHandler(async (req, res) => {
   const events = await Event.find().skip(skip).limit(limit);
 
   res.json({
-    data: events,
+    events: events,
     currentPage: page,
     totalPages: Math.ceil(totalEvents / limit),
     totalEvents,

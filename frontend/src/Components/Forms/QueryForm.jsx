@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
 import Toast from "../UI/Toast";
-import { createQuery } from "../../api/queryApi";
+
+import { useQueryAPI } from "../../api/queryApi";
 
 function QueryForm({ courseName, setQuery }) {
+    const {createQuery} = useQueryAPI()
     const [formData, setFormData] = useState({ name: "", email: "", phoneNumber: "", courseName: courseName });
     const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
 

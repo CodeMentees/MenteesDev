@@ -1,10 +1,14 @@
 import { initFlowbite } from "flowbite";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { createCourse, fetchCourse, fetchCourses, updateCourse } from "../../api/courseApi";
-import { fetchBlogCategories } from "../../api/blogCategoryApi";
+import { useCourse } from "../../api/courseApi";
+import { useBlogCategory } from "../../api/blogCategoryApi";
+import Toast from "../../Components/UI/Toast";
+
 
 function AddCourse() {
+  const { createCourse, fetchCourse, updateCourse } = useCourse();
+  const { fetchBlogCategories } = useBlogCategory();
   const { id } = useParams();
   const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
   const [courseData, setCourseData] = useState({
@@ -27,15 +31,15 @@ function AddCourse() {
 
   const fetchCategories = async () => {
     try {
-      const data = await fetchBlogCategories()
-      setCategories(data);
+      const blogCategories = await fetchBlogCategories()
+      setCategories(blogCategories.data);
     } catch (error) {
       console.log("Error fetching categories:", error);
     }
   };
 
   const fetchCourseDetails = async () => {
-    const data =  await fetchCourse(id)
+    const data = await fetchCourse(id)
     setCourseData(data)
   };
 
@@ -44,25 +48,24 @@ function AddCourse() {
   };
 
   const handleSubmit = async () => {
-    if(id){
-      updateCourse(id,courseData)
+    if (id) {
+      let updated = updateCourse(id, courseData)
+      if(updated){
+        setToast(true)
+      }
+
     }
-    else{
+    else {
       createCourse(courseData)
+      setToast(true)
+
     }
   };
 
   return (
     <section className="bg-gray-900 text-white p-6 rounded-lg shadow-lg max-w-3xl mx-auto">
-      {toast.visible && (
-        <div
-          className={`fixed top-5 right-5 p-4 text-sm font-medium rounded-lg shadow-md ${
-            toast.type === "error" ? "text-red-400 bg-gray-800 border border-red-500" : "text-green-400 bg-gray-800 border border-green-500"
-          }`}
-        >
-          {toast.message}
-        </div>
-      )}
+
+      <Toast visible={toast} message="Sucess Updated" />
       <div className="py-2 px-4">
         <h2 className="mb-4 text-2xl font-bold text-gray-100">
           {id ? "Update Course" : "Create a Course"}

@@ -87,7 +87,6 @@ const createCourse = asyncHandler(async (req, res) => {
  *         description: Course not found
  */
 const getCourse = asyncHandler(async (req, res) => {
-  console.log(req.params.id)
   const course = await Course.findById(req.params.id).populate("category");
   if (!course) {
     res.status(404).json({ data: null, message: "Course not found" });
@@ -226,7 +225,6 @@ const updateCourse = asyncHandler(async (req, res) => {
  */
 const deleteCourse = asyncHandler(async (req, res) => {
   const course = await Course.findById(req.params.id);
-
   if (!course) {
     res.status(404).json({ data: null, message: "Course not found" });
     return;
@@ -234,24 +232,6 @@ const deleteCourse = asyncHandler(async (req, res) => {
 
   await course.deleteOne();
   res.json({ data: null, message: "Course deleted successfully" });
-});
-
-/**
- * @swagger
- * /api/course-categories:
- *   get:
- *     summary: Get all course categories
- *     tags: [CourseCategory]
- *     responses:
- *       200:
- *         description: Course categories fetched successfully
- */
-const getCourseCategory = asyncHandler(async (req, res) => {
-  const coursesCategory = await CourseCategory.find({}).limit(10);
-  res.json({
-    data: coursesCategory,
-    message: "Courses category fetched successfully",
-  });
 });
 
 /**
@@ -335,7 +315,6 @@ export {
   getCourses,
   updateCourse,
   deleteCourse,
-  getCourseCategory,
   updateCourseDetails,
   getCoursesByCategory,
 };

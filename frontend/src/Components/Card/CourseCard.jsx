@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom"
 function CourseCard({ category, courses }) {
-    console.log("course ", courses)
     return (
         <div className='container bg-black-500'>
 

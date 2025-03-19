@@ -3,7 +3,6 @@ import {
   createCourse,
   deleteCourse,
   getCourse,
-  getCourseCategory,
   getCourses,
   getCoursesByCategory,
   updateCourse,
@@ -14,7 +13,6 @@ import isAdmin from "../middlewares/isAdmin.js";
 const router = Router();
 
 router.get("/:id", getCourse);
-router.get("/course-category", getCourseCategory);
 router.get("/:categoryId/category", getCoursesByCategory);
 router.get("/", getCourses);
 

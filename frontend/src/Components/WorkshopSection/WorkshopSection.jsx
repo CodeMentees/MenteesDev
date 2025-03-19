@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import WorkshopCard from "../WorkshopCard/WorkshopCard";
-import { fetchEvents } from "../../api/eventApi";
-import Event from "../../../../backend/models/event";
 import Loading from "../Helpers/Loading";
+import { useEvent } from "../../api/eventApi";
 
 function WorkshopSection() {
+  const { fetchEvents } = useEvent();
   const [Events, setEvents] = useState([]);
   useEffect(() => {
     const fetchData = async () => {

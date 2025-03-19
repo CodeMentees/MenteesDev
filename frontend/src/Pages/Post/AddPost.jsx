@@ -2,9 +2,10 @@ import { initFlowbite } from "flowbite";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import RichTextEditor from "../../Components/RichTextEditor";
-import { fetchBlogCategories } from "../../api/blogCategoryApi";
+import { useBlogCategory } from "../../api/blogCategoryApi";
 
 function AddPost() {
+  const { fetchBlogCategories } = useBlogCategory();
   const { id } = useParams(); // Get post ID from URL
   const navigate = useNavigate();
 
@@ -33,13 +34,13 @@ function AddPost() {
   }, [id]);
 
   const loadCategories = async () => {
-    const data = await fetchBlogCategories();
-    setCategories(data);
+    const categories = await fetchBlogCategories();
+    setCategories(categories.data);
   };
 
   const fetchPostDetails = async (postId) => {
     try {
-      const response = await fetch(`/api/post/${postId}`);
+      const response = await fetch(`/api/posts/${postId}`);
       const data = await response.json();
       setPostData(data.data);
       setEditorContent(data.data.content);
@@ -76,7 +77,7 @@ function AddPost() {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch(`/api/post${isEditing ? `/${id}` : ""}`, {
+      const response = await fetch(`/api/posts${isEditing ? `/${id}` : ""}`, {
         method: isEditing ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(postData),
@@ -88,7 +89,7 @@ function AddPost() {
 
         setTimeout(() => {
           setToast({ visible: false, message: "", type: "success" });
-          navigate("/dashboard/post-list");
+          navigate("/admin/posts");
         }, 2000);
       } else {
         setToast({

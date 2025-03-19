@@ -146,12 +146,12 @@ const getUsers = asyncHandler(async (req, res) => {
     const skip = (page - 1) * limit;
 
     // Exclude passwords from response
-    const users = await User.find({ isActive: true })
+    const users = await User.find()
       .select("-password")
       .skip(skip)
       .limit(limit);
 
-    const totalUsers = await User.countDocuments({ isActive: true });
+    const totalUsers = await User.countDocuments();
 
     res.json({
       data: users,

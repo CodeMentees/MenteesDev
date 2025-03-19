@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchBlog } from "../api/blogApi";
-import { fetchBlogCategories } from "../api/blogCategoryApi";
+import { useBlog } from "../api/blogApi";
+
+import { useBlogCategory } from "../api/blogCategoryApi";
 import BlogGridFour from "../Components/Blog/BlogGridFour";
 import Loading from "../Components/Helpers/Loading";
 
 function BlogPage() {
+  const {fetchBlog} = useBlog()
+  const {fetchBlogCategories} = useBlogCategory()
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -15,10 +18,10 @@ function BlogPage() {
     const fetchData = async () => {
       try {
         const blogData = await fetchBlog(id);
-        setBlog(blogData);
+        setBlog(blogData.data);
 
         const categoriesData = await fetchBlogCategories();
-        setCategories(categoriesData);
+        setCategories(categoriesData.data);
       } catch (error) {
         console.error("Error fetching blog or categories:", error);
       }

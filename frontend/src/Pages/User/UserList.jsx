@@ -3,41 +3,42 @@ import { Link, useNavigate } from "react-router-dom";
 import { initFlowbite } from "flowbite";
 import ReusableTable from "../../Components/Table/Table";
 import useDelete from "../../Components/API/useDelete";
-import { useBlog } from "../../api/blogApi";
+import { useUserAPI } from "../../api/userApi";
+import Pagination from "../../Components/UI/Pagination";
 
-import Pagination from "../../Components/UI/Pagination"
-
-function PostList() {
-  const { fetchLatestBlogs } = useBlog();
+function UserList() {
+  const { fetchUsers } = useUserAPI();
   const navigate = useNavigate();
-  const [Posts, setPosts] = useState([]);
+  const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10)
-  const { deleteItem, message, isSuccess, isLoading } = useDelete();
+  const [totalPages, setTotalPages] = useState(1);
+  const { deleteItem, isSuccess, isLoading } = useDelete();
   const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
 
   const handleDelete = async (id) => {
-    await deleteItem(id, "/api/posts");
+    await deleteItem(id, "/api/users");
   };
 
   useEffect(() => {
     if (isSuccess) {
-      setToast({ visible: true, message: "Post deleted successfully!", type: "success" });
+      setToast({ visible: true, message: "User deleted successfully!", type: "success" });
       setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 3000);
-      // Refetch posts after deletion
-      fetchLatestBlogs().then((data) => setPosts(data.blogs.data)).catch((error) => console.error("Error fetching data:", error));
+      fetchUsers(currentPage, 10).then((data) => {
+        console.log("data is ",data)
+        setUsers(data.users);
+        setTotalPages(data.totalPages);
+      });
     }
   }, [isSuccess]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const blogs = await fetchLatestBlogs();
-        setPosts(blogs.data);
-        setTotalPages(blogs.totalPages)
-        setCurrentPage(blogs.currentPage)
+        const users = await fetchUsers(currentPage, 10);
+        setUsers(users.data);
+        setTotalPages(users.totalPages);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching users:", error);
       }
     };
     fetchData();
@@ -45,19 +46,19 @@ function PostList() {
 
   useEffect(() => {
     initFlowbite();
-  }, [Posts]);
+  }, [users]);
 
-  const headers = ["title", "createdAt", "categories"];
+  const headers = ["name", "email"];
   const actions = [
-    { label: "Show", handler: (id) => console.log(`Show item with ID: ${id}`) },
-    { label: "Edit", handler: (id) => navigate(`/admin/posts/edit/${id}`) },
+    { label: "Show", handler: (id) => console.log(`Show user with ID: ${id}`) },
+    { label: "Edit", handler: (id) => navigate(`/admin/users/edit/${id}`) },
     { label: "Delete", handler: handleDelete },
   ];
 
   return (
     <div className="mx-auto max-w-screen-xl px-2 py-10">
       {toast.visible && (
-        <div className="fixed z-50 top-5 right-5 p-4  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
+        <div className="fixed z-50 top-5 right-5 p-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
           {toast.message}
         </div>
       )}
@@ -66,7 +67,7 @@ function PostList() {
           <div className="relative shadow-md sm:rounded-lg overflow-hidden">
             <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
               <Link
-                to={"/dashboard/add-post"}
+                to={"/dashboard/add-user"}
                 className="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
               >
                 <svg
@@ -82,11 +83,11 @@ function PostList() {
                     d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                   />
                 </svg>
-                Add Post
+                Add User
               </Link>
             </div>
             <div className="overflow-x-auto">
-              <ReusableTable headers={headers} data={Posts} actions={actions} isLoading={isLoading} />
+              <ReusableTable headers={headers} data={users} actions={actions} isLoading={isLoading} />
               <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
             </div>
           </div>
@@ -96,4 +97,4 @@ function PostList() {
   );
 }
 
-export default PostList;
+export default UserList;

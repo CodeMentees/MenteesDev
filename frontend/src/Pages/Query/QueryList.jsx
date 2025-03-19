@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom"
-import useDelete from '../../Components/API/useDelete';
 import ReusableTable from '../../Components/Table/Table';
-import { fetchQueries } from '../../api/queryApi';
+import { useQueryAPI } from '../../api/queryApi';
 import Pagination from "../../Components/UI/Pagination"
 function QueryList() {
-
+    
+    const {fetchQueries, deleteQuery} = useQueryAPI()
     const [Queries, setQueries] = useState([]);
-    const { deleteItem, message, isSuccess, isLoading } = useDelete();
     const [currentPage , setCurrentPage] =  useState(1);
     const [totalPages, setTotalPages] = useState(10)
 
-    const handleDelete = (id) => {
-        deleteItem(id, "/api/queries");
-        fetchData(currentPage)
+    const handleDelete = async(id) => {
+        deleteQuery(id);
+        await fetchData(currentPage)
     };
 
     const headers = ['name', 'email', 'Date', 'courseName'];
@@ -24,11 +23,10 @@ function QueryList() {
     ];
 
     const fetchData = async () => {
-        const data = await fetchQueries(currentPage)
-        console.log("quety is",data)
-        setQueries(data.queries)
-        setCurrentPage(data.currentPage)
-        setTotalPages(data.totalPages)
+        const queries = await fetchQueries(currentPage)
+        setQueries(queries.data)
+        setCurrentPage(queries.currentPage)
+        setTotalPages(queries.totalPages)
     };
 
     useEffect(() => {
@@ -44,14 +42,6 @@ function QueryList() {
         <div className="mx-auto max-w-screen-xl px-2 py-10">
             <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
                 <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-                    <div>
-                        <button onClick={handleDelete} disabled={isLoading}>
-                            {isLoading ? 'Deleting...' : 'Delete Item'}
-                        </button>
-                        {message && (
-                            <p style={{ color: isSuccess ? 'green' : 'red' }}>{message}</p>
-                        )}
-                    </div>
                     {/* Start coding here */}
                     <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                         <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -279,7 +269,7 @@ function QueryList() {
                                 headers={headers}
                                 data={Queries}
                                 actions={actions}
-                                isLoading={isLoading}
+                                isLoading={false}
                             />
                         </div>
                         <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage}/>

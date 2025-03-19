@@ -1,35 +1,38 @@
 import React, { useState } from 'react';
 import CourseCard from '../Components/Card/CourseCard';
 import { useEffect } from 'react';
-import { fetchCourseByCategory} from "../api/courseApi"
 import Loading from '../Components/Helpers/Loading';
-import { fetchCategories } from '../api/categoryApi';
+
+import { useCourse } from "../api/courseApi";
+import { useCategoryAPI } from "../api/categoryApi";
 
 function AllCourse() {
+    const { fetchCourseByCategory } = useCourse();
+    const { fetchCategories } = useCategoryAPI();
     const [activeTab, setActiveTab] = useState(); // Set the first tab as active by default
     const [activeTabData, setActiveTabData] = useState();
+    const [tabs, setTabs] = useState([]);
+    const [courses, setCourses] = useState([]);
+
 
 
     const handleTabClick = async(tabId, name, description, image) => {
         setActiveTab(tabId);
         setActiveTabData({ name: name, description: description, image: image })
         const fetchedCourse =  await fetchCourseByCategory(tabId)
-        setCourses(fetchedCourse)
+        setCourses(fetchedCourse.data)
     };
-
-    const [tabs, setTabs] = useState([]);
-    const [courses, setCourses] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             const data = await fetchCategories()
-            setTabs(data)
-            let activeTabData = data[0];
+            setTabs(data.categories)
+            let activeTabData = data.categories[0];
             setActiveTab(activeTabData._id)
             setActiveTabData({ name: activeTabData.name, description: activeTabData.description, image: activeTabData.image })
             if (activeTabData._id) {
                 const fetchedCourse = await fetchCourseByCategory(activeTabData._id)
-                setCourses(fetchedCourse)
+                setCourses(fetchedCourse.data)
             }
         }
         fetchData()

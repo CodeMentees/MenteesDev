@@ -3,9 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { login, logout } from "../Slices/authSlice";
 import { GoogleLogin } from "@react-oauth/google";
 import { Link } from "react-router-dom";
-import {loginUser} from "../api/authApi"
+
+import { useAuth } from "../api/authApi";
 
 function LoginPage() {
+  const { loginUser } = useAuth();
   const dispatch = useDispatch();
   const [toast, setToast] = useState({
     visible: false,

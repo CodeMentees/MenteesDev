@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import useDelete from '../../Components/API/useDelete';
 import ReusableTable from '../../Components/Table/Table';
 import Pagination from '../../Components/UI/Pagination';
 import Toast from '../../Components/UI/Toast';
-import { fetchCourses } from '../../api/courseApi';
-function CourseList() {
 
-    const [Courses, setCourses] = useState([]);
+import { useCourse } from '../../api/courseApi';
+function CourseList() {
+    
+    const {fetchCourses,deleteCourse} = useCourse()
+    const [Courses, setCourses ] = useState([]);
     const [isToast,setToast] = useState(false)
     const { deleteItem, message, isSuccess, isLoading } = useDelete();
     const [currentPage, setCurrentPage] = useState(1);
@@ -15,7 +17,7 @@ function CourseList() {
     const navigate = useNavigate();
 
     const handleDelete = async (id) => {
-        deleteItem(id, "/api/courses");
+        await deleteCourse(id);
         setToast(true)
         await fetchData()
     };
@@ -28,20 +30,20 @@ function CourseList() {
         { label: 'Delete', handler: handleDelete },
     ];
 
-    const fetchData = async () => {
-        let data = await fetchCourses(currentPage)
-        setCourses(data.courses)
-        setCurrentPage(data.currentPage)
-        setTotalPages(data.totalPages)
-    }
+    const fetchData = async (page = currentPage) => {
+        let courses = await fetchCourses(page,10);
+        setCourses(courses.data);
+        setTotalPages(courses.totalPages);
+    };
+    
     useEffect(() => {
-        fetchData()
+        fetchData(currentPage);
     }, [currentPage]);
 
     // Reinitialize Flowbite dropdowns when Queries change
     useEffect(() => {
         initFlowbite();
-    }, [Courses]);
+    }, [Courses,]);
 
     return (
         <div className="mx-auto max-w-screen-xl px-2 py-10">

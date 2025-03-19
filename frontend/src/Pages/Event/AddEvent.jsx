@@ -4,9 +4,10 @@ import { initFlowbite } from "flowbite";
 import ReusableTable from "../../Components/Table/Table";
 import useDelete from "../../Components/API/useDelete";
 import Pagination from "../../Components/UI/Pagination";
-import { addEvent, fetchEvents, updateEvent, deleteEvent } from "../../api/eventApi";
+import { useEvent } from "../../api/eventApi";
 
 const EventManager = () => {
+  const {addEvent, fetchEvents, updateEvent } = useEvent()
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -74,6 +75,7 @@ const EventManager = () => {
 };
 
 const CreateEvent = () => {
+  const {createEvent, fetchEvents, updateEvent } = useEvent()
   const { id } = useParams();
   const navigate = useNavigate();
   const [eventData, setEventData] = useState({ title: "", description: "", time: "", startDate: "", endDate: "", link: "",image:""});
@@ -101,7 +103,7 @@ const CreateEvent = () => {
     if (isEditing) {
       await updateEvent(id, eventData);
     } else {
-      await addEvent(eventData);
+      await createEvent(eventData);
     }
     navigate("/admin/events");
   };

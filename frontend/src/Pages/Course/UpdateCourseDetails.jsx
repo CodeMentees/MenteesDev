@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { fetchCourse, updateCourseDetails } from "../../api/courseApi";
+import { useCourse } from "../../api/courseApi";
 
 const UpdateCourseDetails = () => {
+  const {fetchCourse, updateCourseDetails} = useCourse()
   const { id } = useParams(); 
   const [courseName, setCourseName] = useState("");
   const [details, setDetails] = useState([

@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
-import {
-  fetchBlogCategories,
-  createBlogCategory,
-  updateBlogCategory,
-  deleteBlogCategory,
-} from "../../api/blogCategoryApi";
+import { useBlogCategory } from "../../api/blogCategoryApi";
+
 import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
 
 const BlogCategoryManager = () => {
+  const {fetchBlogCategories,createBlogCategory,updateBlogCategory,deleteBlogCategory} = useBlogCategory()
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState("");
   const [editingId, setEditingId] = useState(null);
@@ -18,8 +15,8 @@ const BlogCategoryManager = () => {
   }, []);
 
   const loadCategories = async () => {
-    const data = await fetchBlogCategories();
-    setCategories(data);
+    const categoires = await fetchBlogCategories();
+    setCategories(categoires.data);
   };
 
   const handleSubmit = async (e) => {
@@ -48,7 +45,7 @@ const BlogCategoryManager = () => {
   };
 
   return (
-    <div className={`${darkMode ? "dark" : ""}`}>
+    <div>
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-6">
         <div className="max-w-3xl mx-auto">
 

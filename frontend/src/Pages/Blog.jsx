@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import PostCard from '../Components/Post/PostCard'
-import { fetchLatestBlogs } from '../api/blogApi';
 import Loading from '../Components/Helpers/Loading';
 import { Link } from 'react-router-dom';
 
+import { useBlog } from "../api/blogApi";
+
 function Blog() {
+  const { fetchLatestBlogs } = useBlog();
   const [posts,setPosts] = useState([]);
 
   const fetchData = async()=>{
-    const data = await  fetchLatestBlogs(1,10)
-    if(data){
-      setPosts(data.blogs)
+    const postsData = await  fetchLatestBlogs(1,10)
+    if(postsData){
+      setPosts(postsData.data)
     }
 
   }
