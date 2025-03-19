@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useCourse } from "../../api/courseApi";
 
 const UpdateCourseDetails = () => {
-  const {fetchCourse, updateCourseDetails} = useCourse()
+  const {fetchCourse, updateDetails} = useCourse()
   const { id } = useParams(); 
   const [courseName, setCourseName] = useState("");
   const [details, setDetails] = useState([
@@ -18,11 +18,11 @@ const UpdateCourseDetails = () => {
   const [error, setError] = useState("");
 
   const fetchCourseDetails = async () => {
-    const data = await fetchCourse(id)
-    console.log("course detail",data)
-    setCourseName(data.name)
-    setFeatures(data.features)
-    setDetails(data.details)
+    const course = await fetchCourse(id)
+    setCourseName(course.data.name)
+    setFeatures(course.data.features)
+    console.log("data details length",course)
+    setDetails(course.data.details)
   }
 
   useEffect(() => {
@@ -85,7 +85,10 @@ const UpdateCourseDetails = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    const data = await updateCourseDetails(id,{details,features})
+    const data = await updateDetails(id,{details,features})
+    if(data){
+      setLoading(false)
+    }
     if(!data){
       alert("Error")
     }

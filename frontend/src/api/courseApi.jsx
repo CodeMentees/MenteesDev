@@ -12,6 +12,17 @@ export const fetchCourseByCategory = async (id) => {
   }
 };
 
+export const updateDetails = async (id,updateData) => {
+  try {
+    const { data } = await api.put(`/courses/${id}/details`,updateData);
+    return data;
+  } catch (error) {
+    console.error("Error fetching course by category:", error);
+    return [];
+  }
+};
+
+
 const courseAPI = "/courses";
 export const useCourse = () => {
   const { getItems, getItemById, createItem, updateItem, deleteItem } = useCRUD(courseAPI);
@@ -22,6 +33,7 @@ export const useCourse = () => {
     createCourse: (data) => createItem(data),
     updateCourse: (id, data) => updateItem(id, data),
     deleteCourse: (id) => deleteItem(id),
-    fetchCourseByCategory, // ✅ Correct way to include it
+    fetchCourseByCategory,
+    updateDetails,
   };
 };
