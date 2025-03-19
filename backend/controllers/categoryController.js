@@ -169,7 +169,6 @@ const updateCategory = asyncHandler(async (req, res) => {
  */
 const deleteCategory = asyncHandler(async (req, res) => {
   const category = await CourseCategory.findById(req.params.id);
-
   if (category) {
     await category.deleteOne();
     res.status(200).json({ message: "Category deleted successfully" });

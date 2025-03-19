@@ -22,8 +22,8 @@ import AdminRoutes from "./AdminRoute"
 import BlogPage from './Pages/BlogPage';
 import HomeSite from './Pages/Home/HomeSite';
 import CategoryList from './Pages/Course/CategoryList';
-import Chat from './Pages/Chat/Chat';
-import CreateGroup from './Pages/Chat/CreateGroup';
+// import Chat from './Pages/Chat/Chat';
+// import CreateGroup from './Pages/Chat/CreateGroup';
 import {EventManager, CreateEvent} from './Pages/Event/AddEvent';
 import BlogCategoryManager from './Components/Blog/BlogCategoryManger';
 import NotFound from './Pages/Error/NotFound';
@@ -68,14 +68,14 @@ function App() {
               }
             />
 
-            <Route
+            {/* <Route
               path="/chat"
               element={
                 <ProtectedRoute>
                   <Chat />
                 </ProtectedRoute>
               }
-            />
+            /> */}
 
             {/* Admin Routes (Dashboard) */}
             <Route
@@ -107,7 +107,7 @@ function App() {
 
               {/* Queries, Groups & Events */}
               <Route path="queries" element={<QueryList />} />
-              <Route path="groups/create" element={<CreateGroup />} />
+              {/* <Route path="groups/create" element={<CreateGroup />} /> */}
               <Route path="events" element={<EventManager />} />
               <Route path="events/create" element={<CreateEvent />} />
               <Route path="events/edit/:id" element={<CreateEvent />} />
