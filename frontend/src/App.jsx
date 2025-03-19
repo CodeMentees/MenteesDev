@@ -3,7 +3,6 @@ import React from 'react';
 import Home from './Pages/Home';
 import LoginPage from './Pages/Login';
 import RegisterPage from './Pages/Register';
-import AboutPage from './Pages/About';
 import Header from './Components/Header/Header';
 import ProtectedRoute from './ProtectedRoute';
 import Blog from './Pages/Blog';
@@ -51,15 +50,6 @@ function App() {
             <Route path="/contact" element={<Contact/>}/>
             <Route path='/faq' element={<FAQ/>} />
 
-            {/* Protected Routes */}
-            <Route
-              path="/about"
-              element={
-                <ProtectedRoute>
-                  <AboutPage />
-                </ProtectedRoute>
-              }
-            />
 
             <Route
               path="/blogs"

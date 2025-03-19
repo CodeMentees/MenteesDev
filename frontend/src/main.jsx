@@ -5,13 +5,16 @@ import App from './App.jsx'
 import { Provider } from 'react-redux'
 import store from './store'
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { HelmetProvider } from "react-helmet-async";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <GoogleOAuthProvider clientId="1008240831535-kkhfvl42jeglpkabcuodsipqgb1k1dfl.apps.googleusercontent.com"  // Use your own client ID
     >
       <Provider store={store}>
-        <App />
+        <HelmetProvider>
+          <App />
+        </HelmetProvider>
       </Provider>
     </GoogleOAuthProvider>
 

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { useBlog } from "../api/blogApi";
-
 import { useBlogCategory } from "../api/blogCategoryApi";
 import BlogGridFour from "../Components/Blog/BlogGridFour";
 import Loading from "../Components/Helpers/Loading";
 
 function BlogPage() {
-  const {fetchBlog} = useBlog()
-  const {fetchBlogCategories} = useBlogCategory()
+  const { fetchBlog } = useBlog();
+  const { fetchBlogCategories } = useBlogCategory();
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -17,10 +17,11 @@ function BlogPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const blogData = await fetchBlog(id);
+        const [blogData, categoriesData] = await Promise.all([
+          fetchBlog(id),
+          fetchBlogCategories(),
+        ]);
         setBlog(blogData.data);
-
-        const categoriesData = await fetchBlogCategories();
         setCategories(categoriesData.data);
       } catch (error) {
         console.error("Error fetching blog or categories:", error);
@@ -36,6 +37,18 @@ function BlogPage() {
 
   return (
     <main className="pt-8 px-8 max-w-6xl mx-auto pb-16 lg:pt-16 lg:pb-24 bg-gray-100 antialiased">
+      {/* ✅ SEO with Helmet */}
+      <Helmet>
+        <title>{blog.title} | Codementees</title>
+        <meta name="description" content={blog.content.substring(0, 150)} />
+        <meta name="keywords" content="blog, coding, development, technology" />
+        <meta property="og:title" content={blog.title} />
+        <meta property="og:description" content={blog.content.substring(0, 150)} />
+        <meta property="og:image" content={blog.image || "https://codementees.com/default-blog.jpg"} />
+        <meta property="og:url" content={`https://codementees.com/blogs/${id}`} />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+
       <div className="flex flex-col lg:flex-row justify-between px-4 mx-auto max-w-screen-xl">
         {/* ✅ Left Side: Blog Content */}
         <article className="w-full lg:w-3/4 lg:pr-8">
@@ -45,10 +58,7 @@ function BlogPage() {
             </h1>
           </header>
           <section>
-            <p
-              className="text-gray-700 dark:text-gray-300"
-              dangerouslySetInnerHTML={{ __html: blog.content }}
-            />
+            <p className="text-gray-700 dark:text-gray-300" dangerouslySetInnerHTML={{ __html: blog.content }} />
           </section>
         </article>
 
@@ -66,9 +76,7 @@ function BlogPage() {
                       : "bg-gray-700 hover:bg-gray-600 text-gray-300"
                   }`}
                   onClick={() =>
-                    setSelectedCategory(
-                      selectedCategory === category.name ? null : category.name
-                    )
+                    setSelectedCategory(selectedCategory === category.name ? null : category.name)
                   }
                 >
                   {category.name}

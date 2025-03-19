@@ -1,75 +1,104 @@
-import React, { useState } from 'react';
-import CourseCard from '../Components/Card/CourseCard';
-import { useEffect } from 'react';
-import Loading from '../Components/Helpers/Loading';
-
+import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
+import CourseCard from "../Components/Card/CourseCard";
+import Loading from "../Components/Helpers/Loading";
 import { useCourse } from "../api/courseApi";
 import { useCategoryAPI } from "../api/categoryApi";
 
 function AllCourse() {
-    const { fetchCourseByCategory } = useCourse();
-    const { fetchCategories } = useCategoryAPI();
-    const [activeTab, setActiveTab] = useState(); // Set the first tab as active by default
-    const [activeTabData, setActiveTabData] = useState();
-    const [tabs, setTabs] = useState([]);
-    const [courses, setCourses] = useState([]);
+  const { fetchCourseByCategory } = useCourse();
+  const { fetchCategories } = useCategoryAPI();
 
+  const [activeTab, setActiveTab] = useState(null);
+  const [activeTabData, setActiveTabData] = useState(null);
+  const [tabs, setTabs] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-
-    const handleTabClick = async(tabId, name, description, image) => {
-        setActiveTab(tabId);
-        setActiveTabData({ name: name, description: description, image: image })
-        const fetchedCourse =  await fetchCourseByCategory(tabId)
-        setCourses(fetchedCourse.data)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchCategories();
+        if (data.categories.length > 0) {
+          setTabs(data.categories);
+          handleTabClick(data.categories[0]._id, data.categories[0]); // Auto-select the first category
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await fetchCategories()
-            setTabs(data.categories)
-            let activeTabData = data.categories[0];
-            setActiveTab(activeTabData._id)
-            setActiveTabData({ name: activeTabData.name, description: activeTabData.description, image: activeTabData.image })
-            if (activeTabData._id) {
-                const fetchedCourse = await fetchCourseByCategory(activeTabData._id)
-                setCourses(fetchedCourse.data)
-            }
-        }
-        fetchData()
-    }, [])
+    fetchData();
+  }, []);
 
-    return (
-        (activeTabData) ?
-            <div className='container max-w-6xl mx-auto p-4 my-10'>
-                <div className="md:flex">
-                    {/* Tab List */}
-                    <ul className="flex-column space-y space-y-2 text-sm font-medium text-gray-400 md:me-4 mb-4 md:mb-0">
-                        {tabs.map((tab) => (
-                            <li key={tab._id}>
-                                <a
-                                    href="#"
-                                    className={`inline-flex items-center px-4 py-3 rounded-lg w-full lg:w-64 ${activeTab === tab._id
-                                        ? 'text-white bg-blue-600'
-                                        : 'bg-gray-800 hover:bg-gray-700 hover:text-white'
-                                        }`}
-                                    onClick={() => handleTabClick(tab._id, tab.name, tab.description, tab.image)}
-                                    aria-current={activeTab === tab._id ? 'page' : undefined}
-                                >
-                                    <img src={tab.image} alt="" className='h-10'/>
-                                    {tab.name}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
+  const handleTabClick = async (tabId, tabData) => {
+    setActiveTab(tabId);
+    setActiveTabData(tabData);
+    setLoading(true);
+    try {
+      const fetchedCourse = await fetchCourseByCategory(tabId);
+      setCourses(fetchedCourse.data);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                    {/* Tab Content */}
-                    <div className="py-2 px-3 lg:p-6  text-medium text-gray-400 bg-gray-800 rounded-lg w-full">
-                        <CourseCard category={activeTabData} courses={courses} />
-                    </div>
-                </div>
-            </div>
-            : <Loading/>
-    );
+  if (loading) return <Loading />;
+
+  return (
+    <div className="container max-w-6xl mx-auto p-4 my-10">
+      {/* ✅ SEO Meta Tags */}
+      <Helmet>
+        <title>{activeTabData ? `${activeTabData.name} Courses` : "All Courses"} | Codementees</title>
+        <meta name="description" content={activeTabData?.description || "Explore our wide range of coding courses."} />
+        <meta property="og:title" content={activeTabData ? `${activeTabData.name} Courses` : "All Courses"} />
+        <meta property="og:description" content={activeTabData?.description || "Explore our wide range of coding courses."} />
+        <meta property="og:image" content={activeTabData?.image || "/default-course-image.jpg"} />
+        <meta property="og:type" content="website" />
+      </Helmet>
+
+      <div className="md:flex">
+        {/* ✅ Tab List */}
+        <aside className="w-full md:w-1/4">
+          <h2 className="text-lg font-bold text-white mb-3">Course Categories</h2>
+          <ul className="flex flex-col space-y-2 text-sm font-medium text-gray-400 md:me-4 mb-4 md:mb-0">
+            {tabs.map((tab) => (
+              <li key={tab._id}>
+                <button
+                  className={`flex items-center px-4 py-3 rounded-lg w-full lg:w-64 transition ${
+                    activeTab === tab._id
+                      ? "text-white bg-blue-600"
+                      : "bg-gray-800 hover:bg-gray-700 hover:text-white"
+                  }`}
+                  onClick={() => handleTabClick(tab._id, tab)}
+                  aria-current={activeTab === tab._id ? "page" : undefined}
+                >
+                  {tab.image && <img src={tab.image} alt={tab.name} className="h-10 mr-2" loading="lazy" />}
+                  {tab.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </aside>
+
+        {/* ✅ Tab Content */}
+        <section className="w-full md:w-3/4 py-2 px-3 lg:p-6 text-medium text-gray-400 bg-gray-800 rounded-lg">
+          {activeTabData ? (
+            <>
+              <h1 className="text-2xl font-bold text-white mb-4">{activeTabData.name} Courses</h1>
+              <CourseCard category={activeTabData} courses={courses} />
+            </>
+          ) : (
+            <p className="text-center text-gray-500">No category selected.</p>
+          )}
+        </section>
+      </div>
+    </div>
+  );
 }
 
 export default AllCourse;

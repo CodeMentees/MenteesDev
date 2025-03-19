@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
 import generatePdf from "../utils/genrateCoursePdf";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import QueryForm from "../Components/Forms/QueryForm";
 import Loading from "../Components/Helpers/Loading";
 import { useCourse } from "../api/courseApi";
 
 function CourseDetails() {
+  <Helmet>
+    <title>Course Details - Codementees</title>
+    <meta name="description" content={`Explore details about Course ${courseId} at Codementees.`} />
+  </Helmet>
+
   const { fetchCourse } = useCourse();
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);
@@ -123,9 +129,8 @@ function CourseDetails() {
 
               {/* Section Content (Expandable) */}
               <div
-                className={`transition-all duration-300 ease-in-out ${
-                  activeSection === index ? "max-h-screen opacity-100 p-6 bg-gray-900" : "max-h-0 opacity-0 overflow-hidden"
-                }`}
+                className={`transition-all duration-300 ease-in-out ${activeSection === index ? "max-h-screen opacity-100 p-6 bg-gray-900" : "max-h-0 opacity-0 overflow-hidden"
+                  }`}
               >
                 <ul className="space-y-4">
                   {section.content.map((item, idx) => (
