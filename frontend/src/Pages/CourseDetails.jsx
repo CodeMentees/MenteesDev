@@ -7,16 +7,14 @@ import Loading from "../Components/Helpers/Loading";
 import { useCourse } from "../api/courseApi";
 
 function CourseDetails() {
-  <Helmet>
-    <title>Course Details - Codementees</title>
-    <meta name="description" content={`Explore details about Course ${courseId} at Codementees.`} />
-  </Helmet>
+
 
   const { fetchCourse } = useCourse();
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);
   const [showQuery, setShowQuery] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
+
 
   useEffect(() => {
     if (!courseId) return;
@@ -31,8 +29,13 @@ function CourseDetails() {
 
   if (!course) return <Loading />;
 
+
   return (
     <div className="bg-dark-background pb-10 overflow-x-hidden">
+      <Helmet>
+        <title>Course Details - Codementees</title>
+        <meta name="description" content={`Explore details about Course ${courseId} at Codementees.`} />
+      </Helmet>
       {showQuery && <QueryForm setQuery={setShowQuery} courseName={course.name} />}
 
       <div className="flex flex-col lg:flex-row gap-6 p-6 lg:p-12 mx-auto max-w-6xl bg-dark-background">
