@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Link,useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import ReusableTable from '../../Components/Table/Table';
 import Pagination from "../../Components/UI/Pagination"
 import { useCategoryAPI } from '../../api/categoryApi';
 function CategoryList() {
-    const {fetchCategories,deleteCategory} = useCategoryAPI()
+    const { fetchCategories, deleteCategory } = useCategoryAPI()
     const navigate = useNavigate();
     const [Categories, setCategories] = useState([]);
-    const [currentPage,setCurrentPage] = useState(1);
-    const [totalPage,setTotalPage] = useState(10)
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(10)
 
-    const handleDelete = (id) => {
-        deleteCategory(id)
+    const handleDelete = async (id) => {
+        console.log("here is id",id)
+        await deleteCategory(id)
         fetchCategories()
     };
 
@@ -19,15 +20,15 @@ function CategoryList() {
     const actions = [
         { label: 'Show', handler: (id) => console.log(`Show item with ID: ${id}`) },
         { label: 'Edit', handler: (id) => navigate(`/admin/categories/edit/${id}`) },
-        { label: 'Delete', handler: (id)=>handleDelete(id) },
+        { label: 'Delete', handler: (id) => handleDelete(id) },
     ];
 
     const fetchData = async () => {
-        const data =   await fetchCategories();
+        const data = await fetchCategories();
         setCategories(data.categories)
         setTotalPage(data.totalPage)
         setCurrentPage(data.currentPage)
-     };
+    };
 
     useEffect(() => {
         fetchData();
@@ -44,7 +45,7 @@ function CategoryList() {
                     {/* Start coding here */}
                     <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                         <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-                      
+
                             <div className="w-full md:w-auto text-gray-100        flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                                 <Link
                                     to={"/admin/categories/create"}
@@ -76,7 +77,7 @@ function CategoryList() {
                                 isLoading={false}
                             />
                         </div>
-                      <Pagination currentPage={currentPage} totalPages={totalPage} onPageChange={setCurrentPage} />
+                        <Pagination currentPage={currentPage} totalPages={totalPage} onPageChange={setCurrentPage} />
                     </div>
                 </div>
             </section>
