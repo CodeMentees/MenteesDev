@@ -17,7 +17,7 @@ function RegisterPage() {
       </Helmet>
 
       {/* ✅ Centered Form with Styling */}
-      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+      <div className="bg-white p-6 rounded-lg shadow-md w-full ">
         <Register />
       </div>
     </div>
