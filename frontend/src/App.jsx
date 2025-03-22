@@ -54,17 +54,13 @@ function App() {
             <Route
               path="/blogs"
               element={
-                <ProtectedRoute>
                   <Blog />
-                </ProtectedRoute>
               }
             />
             <Route
               path="/blogs/:id"
               element={
-                <ProtectedRoute>
                   <BlogPage />
-                </ProtectedRoute>
               }
             />
 
