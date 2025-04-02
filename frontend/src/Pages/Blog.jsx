@@ -38,7 +38,7 @@ function Blog() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Latest Blog Posts | Codementees" />
         <meta name="twitter:description" content="Read insightful blogs on coding, tech, and development." />
-        <meta name="twitter:image" content="https://codementees.com/default-blog.jpg" />
+        <meta name="twitter:image" content="/images/default-blog.png" />
       </Helmet>
 
       <aside aria-label="Recent Posts" className="mx-auto mt-2 max-w-screen-xl py-1">
@@ -56,7 +56,7 @@ function Blog() {
               <article key={post._id} className="flex flex-col items-center gap-4 md:flex-row lg:gap-6">
                 <Link to={`/blogs/${post._id}`} className="group shrink-0 relative block h-56 w-full self-start overflow-hidden rounded-lg bg-gray-100 shadow-lg md:h-24 md:w-24 lg:h-40 lg:w-40">
                   <img
-                    src={post.image || "https://images.unsplash.com/photo-1476362555312-ab9e108a0b7e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"}
+                    src={post.image ?? "/images/default-blog.png"}
                     loading="lazy"
                     alt={post.title}
                     className="group-hover:scale-110 absolute inset-0 h-full w-full object-cover object-center transition duration-200"
