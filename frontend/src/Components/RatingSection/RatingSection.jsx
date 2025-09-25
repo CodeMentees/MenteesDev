@@ -10,7 +10,7 @@ function RatingSection() {
                 </h2>
                 <div className="mb:4 lg:mb-8">
                     <p className="text-gray-100 mb-2">Contact Number</p>
-                    <p className="text-3xl font-semibold text-dark-primary">1800-274-4504</p>
+                    <p className="text-3xl font-semibold text-dark-primary">8386963382</p>
                 </div>
             </div>
 
