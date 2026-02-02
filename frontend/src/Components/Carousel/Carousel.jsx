@@ -26,7 +26,7 @@ function Carousel() {
   }
 
   return (
-    <div className="lg:h-screen">
+    <div className="lg:pb-12">
       <section name="main-hero" className="bg-dark-background">
         <div
           name="left"

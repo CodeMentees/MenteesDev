@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useBlog } from "../api/blogApi";
 import { useBlogCategory } from "../api/blogCategoryApi";
@@ -36,7 +36,7 @@ function BlogPage() {
   }
 
   return (
-    <main className="pt-8 px-8 max-w-6xl mx-auto pb-16 lg:pt-16 lg:pb-24 bg-gray-100 antialiased">
+    <main className="min-h-screen bg-white antialiased">
       {/* ✅ SEO with Helmet */}
       <Helmet>
         <title>{blog.title} | Codementees</title>
@@ -49,45 +49,89 @@ function BlogPage() {
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
 
-      <div className="flex flex-col lg:flex-row justify-between px-4 mx-auto max-w-screen-xl">
-        {/* ✅ Left Side: Blog Content */}
-        <article className="w-full lg:w-3/4 lg:pr-8">
-          <header className="mb-4 lg:mb-6">
-            <h1 className="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">
-              {blog.title}
-            </h1>
-          </header>
-          <section>
-            <p className="text-gray-700 dark:text-gray-300" dangerouslySetInnerHTML={{ __html: blog.content }} />
-          </section>
-        </article>
+      <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row gap-12 px-6 py-12">
+        {/* ✅ Left Sidebar: Categories Navigation */}
+        <aside className="w-full lg:w-64 shrink-0">
+          <div className="sticky top-24">
+            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 pl-9">
+              Browse Categories
+            </h3>
+            <div className="max-h-[calc(100vh-400px)] overflow-y-auto custom-scrollbar pr-2">
+              <nav className="flex flex-col space-y-1">
+                {categories.map((category) => (
+                  <button
+                    key={category._id}
+                    onClick={() => setSelectedCategory(selectedCategory === category.name ? null : category.name)}
+                    className={`group flex items-center px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 ${selectedCategory === category.name
+                      ? "bg-pink-50 text-pink-600 border border-pink-100"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                      }`}
+                  >
+                    <span className={`w-1.5 h-1.5 rounded-full mr-3 transition-all duration-200 ${selectedCategory === category.name ? "bg-pink-500 scale-100" : "bg-transparent scale-0"
+                      }`} />
+                    {category.name}
+                  </button>
+                ))}
+              </nav>
+            </div>
 
-        {/* ✅ Right Sidebar: Categories as Chips */}
-        <aside className="w-full lg:w-1/4 mt-8 lg:mt-0">
-          <div className="bg-gray-800 text-white p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-4">📌 Categories</h3>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((category) => (
-                <button
-                  key={category._id}
-                  className={`px-3 py-1 rounded-full text-sm font-medium transition ${
-                    selectedCategory === category.name
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-700 hover:bg-gray-600 text-gray-300"
-                  }`}
-                  onClick={() =>
-                    setSelectedCategory(selectedCategory === category.name ? null : category.name)
-                  }
-                >
-                  {category.name}
-                </button>
-              ))}
+            <div className="mt-12 p-6 bg-gradient-to-br from-pink-500 to-rose-600 rounded-2xl text-white shadow-xl shadow-pink-200">
+              <h4 className="font-bold mb-2">Want to level up?</h4>
+              <p className="text-xs text-pink-100 mb-4 leading-relaxed">Join our expert-led sessions and master development.</p>
+              <Link to="/contact" className="w-full py-2 bg-white text-pink-600 rounded-lg text-xs font-bold hover:bg-pink-50 transition block text-center">
+                Start Learning
+              </Link>
             </div>
           </div>
         </aside>
+
+        {/* ✅ Main Content Area */}
+        <div className="flex-1 max-w-4xl mx-auto w-full">
+          <article className="w-full">
+            <header className="mb-12">
+              <div className="flex items-center space-x-2 text-sm text-pink-500 font-semibold mb-4 uppercase tracking-wider">
+                <span>Article</span>
+                <span>•</span>
+                <span className="text-gray-500">{new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 leading-[1.1] mb-8">
+                {blog.title}
+              </h1>
+
+              {blog.image && (
+                <div className="rounded-3xl overflow-hidden shadow-2xl mb-12 aspect-[21/9]">
+                  <img
+                    src={blog.image}
+                    alt={blog.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+            </header>
+
+            <section className="article-content" dangerouslySetInnerHTML={{ __html: blog.content }} />
+          </article>
+
+          <footer className="mt-16 pt-12 border-t border-gray-100">
+            <div className="bg-gray-50 rounded-3xl p-8 flex flex-col md:flex-row items-center gap-6">
+              <div className="w-20 h-20 bg-pink-500 rounded-2xl shrink-0 flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-pink-100">
+                CM
+              </div>
+              <div>
+                <h4 className="text-xl font-bold text-gray-900 mb-1">Codementees Team</h4>
+                <p className="text-gray-600 text-sm leading-relaxed">Expert developers sharing insights and guides to help you master modern technology and engineering practices.</p>
+              </div>
+            </div>
+          </footer>
+        </div>
       </div>
 
-      <BlogGridFour />
+      <div className="bg-gray-50 py-24 mt-24">
+        <div className="max-w-screen-xl mx-auto px-6">
+          <h3 className="text-3xl font-bold text-gray-900 mb-12 text-center">Suggested for you</h3>
+          <BlogGridFour />
+        </div>
+      </div>
     </main>
   );
 }

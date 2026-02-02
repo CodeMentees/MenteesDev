@@ -22,7 +22,7 @@ const ReusableTable = ({ headers, data, actions, isLoading }) => {
                     <tr key={rowIndex} className="border-b dark:border-gray-700">
                         {headers.map((header, colIndex) => (
                             <td key={colIndex} className="px-4 py-3">
-                                {header.toLowerCase() === "createdat" ? ( // Format createdAt
+                                {["createdat", "date", "updatedat"].includes(header.toLowerCase()) ? ( // Format dates
                                     new Date(item[header]).toLocaleString("en-US", {
                                         year: "numeric",
                                         month: "short",

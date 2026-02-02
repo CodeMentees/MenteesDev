@@ -10,7 +10,8 @@ import { useCategoryAPI } from "../api/categoryApi";
 import { setCategory } from "../Slices/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../Components/Helpers/Loading";
-import WorkshopSection from "../Components/WorkshopSection/WorkshopSection";
+import ComprehensiveTraining from "../Components/Training/ComprehensiveTraining";
+import UpcomingEvents from "../Components/Event/UpcomingEvents";
 
 function Home() {
 
@@ -69,11 +70,13 @@ function Home() {
         })}
       </script>
 
+
       <Carousel />
-      <WhyCodeMentees />
+      <UpcomingEvents />
+      <ComprehensiveTraining />
       <CourseSection />
       <Learning />
-      <WorkshopSection />
+      <WhyCodeMentees />
       <BlogGridFour />
       <RatingSection />
     </main>

@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Toast from "../UI/Toast";
 
 function Register() {
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -11,11 +15,35 @@ function Register() {
     client_id: "",
   });
 
+  const [toast, setToast] = useState({
+    visible: false,
+    message: "",
+    type: "success",
+  });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setToast({
+        visible: true,
+        message: "You are already logged in.",
+        type: "success",
+      });
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    }
+  }, [isAuthenticated, navigate]);
+
   const setFormDataHandler = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const showToast = (message, type = "success") => {
+    setToast({ visible: true, message, type });
+    setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 3000);
   };
 
   const signUpHandler = async (googleResponse) => {
@@ -35,16 +63,30 @@ function Register() {
       });
 
       const data = await response.json();
-      alert(data.message);
-      window.location.href = "/login";
+
+      if (response.ok) {
+        showToast(data.message || "User registered successfully!", "success");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      } else {
+        showToast(data.message || "Registration failed.", "error");
+      }
     } catch (error) {
       console.error("Error during registration:", error);
-      alert("An error occurred. Please try again.");
+      showToast("An error occurred. Please try again.", "error");
     }
   };
 
   return (
     <div className="font-[sans-serif] bg-cream md:h-screen">
+      {toast.visible && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          visible={toast.visible}
+        />
+      )}
       <div
         style={{
           backgroundImage: `url("/images/register-bg.svg")`,
@@ -59,7 +101,7 @@ function Register() {
           />
         </div>
         <div className="flex items-center md:p-8 p-6 bg-[#0C172C] h-full lg:w-11/12 lg:ml-auto bg-dark-background">
-          <form className="max-w-lg w-full mx-auto">
+          <form className="max-w-lg w-full mx-auto" onSubmit={(e) => e.preventDefault()}>
             <div className="mb-8">
               <h3 className="text-2xl font-bold text-dark-h">
                 Create an account
@@ -127,7 +169,7 @@ function Register() {
             <div className="mt-8">
               <button
                 type="button"
-                onClick={() => signUpHandler({})} // Placeholder for manual signup
+                onClick={() => signUpHandler({})}
                 className="w-max shadow-xl py-3 px-6 text-sm text-gray-900 font-semibold rounded bg-dark-btn"
               >
                 Register
@@ -145,7 +187,7 @@ function Register() {
             <div className="mt-4">
               <GoogleLogin
                 onSuccess={signUpHandler}
-                onError={() => console.error("Google Login Failed")}
+                onError={() => showToast("Google Login Failed", "error")}
               />
             </div>
           </form>

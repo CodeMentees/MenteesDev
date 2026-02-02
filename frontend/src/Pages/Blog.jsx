@@ -24,7 +24,7 @@ function Blog() {
   }
 
   return (
-    <div>
+    <div className="bg-white min-h-screen py-16">
       {/* Helmet for SEO */}
       <Helmet>
         <title>Latest Blog Posts | Codementees</title>
@@ -41,46 +41,66 @@ function Blog() {
         <meta name="twitter:image" content="/images/default-blog.png" />
       </Helmet>
 
-      <aside aria-label="Recent Posts" className="mx-auto mt-2 max-w-screen-xl py-1">
-        <div className="mx-auto max-w-screen-xl px-4 md:px-8">
-          {/* Heading */}
-          <div className="mb-10 md:mb-16">
-            <h2 className="mb-4 text-center text-2xl font-bold text-white md:mb-6 lg:text-3xl">
-              Most Recent Blogs
-            </h2>
-          </div>
-
-          {/* Blog Posts List */}
-          <div className="grid gap-8 sm:grid-cols-2 sm:gap-12 lg:grid-cols-2 xl:grid-cols-2 xl:gap-16">
-            {posts.map((post) => (
-              <article key={post._id} className="flex flex-col items-center gap-4 md:flex-row lg:gap-6">
-                <Link to={`/blogs/${post._id}`} className="group shrink-0 relative block h-56 w-full self-start overflow-hidden rounded-lg bg-gray-100 shadow-lg md:h-24 md:w-24 lg:h-40 lg:w-40">
-                  <img
-                    src={post.image ?? "/images/default-blog.png"}
-                    loading="lazy"
-                    alt={post.title}
-                    className="group-hover:scale-110 absolute inset-0 h-full w-full object-cover object-center transition duration-200"
-                  />
-                </Link>
-                <div className="flex flex-col gap-2">
-                  <span className="text-sm text-gray-400">{new Date(post.createdAt).toDateString()}</span>
-                  <h2 className="text-xl font-bold text-white">
-                    <Link to={`/blogs/${post._id}`} className="active:text-rose-600 transition duration-100 hover:text-rose-500">
-                      {post.title}
-                    </Link>
-                  </h2>
-                  <p className="text-gray-500" dangerouslySetInnerHTML={{ __html: post.content.substring(0, 100) + "..." }} />
-                  <div>
-                    <Link to={`/blogs/${post._id}`} className="active:text-rose-700 font-semibold text-white transition duration-100 hover:text-rose-600">
-                      Read more
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+      <div className="max-w-screen-xl mx-auto px-6">
+        {/* Header Section */}
+        <div className="mb-20 text-center">
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+            Insights & Guides
+          </h2>
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto">
+            Explore the latest in software engineering, architecture, and development culture.
+          </p>
+          <div className="w-24 h-1.5 bg-pink-500 mx-auto mt-8 rounded-full shadow-lg shadow-pink-100"></div>
         </div>
-      </aside>
+
+        {/* Blog Posts Grid */}
+        <div className="grid gap-12 sm:grid-cols-2">
+          {posts.map((post) => (
+            <article key={post._id} className="group flex flex-col items-center gap-6 md:flex-row">
+              <Link
+                to={`/blogs/${post._id}`}
+                className="shrink-0 relative block h-64 w-full md:h-48 md:w-48 lg:h-56 lg:w-56 overflow-hidden rounded-3xl bg-gray-100 shadow-xl transition-transform duration-500 group-hover:-translate-y-2"
+              >
+                <img
+                  src={post.image ?? "/images/default-blog.png"}
+                  loading="lazy"
+                  alt={post.title}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+              </Link>
+
+              <div className="flex flex-col flex-1">
+                <div className="flex items-center space-x-3 text-xs font-bold text-pink-500 uppercase tracking-widest mb-3">
+                  <span>{new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                </div>
+
+                <h2 className="text-2xl font-extrabold text-gray-900 mb-3 leading-tight group-hover:text-pink-600 transition-colors">
+                  <Link to={`/blogs/${post._id}`}>
+                    {post.title}
+                  </Link>
+                </h2>
+
+                <p
+                  className="text-gray-500 text-sm mb-4 line-clamp-2 leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: post.content.substring(0, 120) + "..." }}
+                />
+
+                <div>
+                  <Link
+                    to={`/blogs/${post._id}`}
+                    className="inline-flex items-center text-sm font-black text-gray-900 group-hover:text-pink-600 transition-colors"
+                  >
+                    READ ARTICLE
+                    <svg className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </Link>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

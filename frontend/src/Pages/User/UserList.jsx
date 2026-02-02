@@ -5,6 +5,7 @@ import ReusableTable from "../../Components/Table/Table";
 import useDelete from "../../Components/API/useDelete";
 import { useUserAPI } from "../../api/userApi";
 import Pagination from "../../Components/UI/Pagination";
+import DeleteConfirmModal from "../../Components/UI/DeleteConfirmModal";
 
 function UserList() {
   const { fetchUsers } = useUserAPI();
@@ -15,8 +16,28 @@ function UserList() {
   const { deleteItem, isSuccess, isLoading } = useDelete();
   const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
 
-  const handleDelete = async (id) => {
-    await deleteItem(id, "/api/users");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = (id) => {
+    const user = users.find(u => u._id === id);
+    setUserToDelete(user);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!userToDelete) return;
+    setIsDeleting(true);
+    try {
+      await deleteItem(userToDelete._id, "/api/users");
+      setIsDeleteModalOpen(false);
+      setUserToDelete(null);
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   useEffect(() => {
@@ -24,8 +45,8 @@ function UserList() {
       setToast({ visible: true, message: "User deleted successfully!", type: "success" });
       setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 3000);
       fetchUsers(currentPage, 10).then((data) => {
-        console.log("data is ",data)
-        setUsers(data.users);
+        console.log("data is ", data)
+        setUsers(data.data);
         setTotalPages(data.totalPages);
       });
     }
@@ -67,7 +88,7 @@ function UserList() {
           <div className="relative shadow-md sm:rounded-lg overflow-hidden">
             <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
               <Link
-                to={"/dashboard/add-user"}
+                to={"/admin/users/create"}
                 className="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
               >
                 <svg
@@ -93,6 +114,14 @@ function UserList() {
           </div>
         </div>
       </section>
+
+      <DeleteConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        itemName={userToDelete?.name}
+        isLoading={isDeleting}
+      />
     </div>
   );
 }
