@@ -3,19 +3,20 @@ import { Link } from "react-router-dom"
 import ReusableTable from '../../Components/Table/Table';
 import { useQueryAPI } from '../../api/queryApi';
 import Pagination from "../../Components/UI/Pagination"
+import { initFlowbite } from 'flowbite';
 function QueryList() {
-    
-    const {fetchQueries, deleteQuery} = useQueryAPI()
+
+    const { fetchQueries, deleteQuery } = useQueryAPI()
     const [Queries, setQueries] = useState([]);
-    const [currentPage , setCurrentPage] =  useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(10)
 
-    const handleDelete = async(id) => {
+    const handleDelete = async (id) => {
         deleteQuery(id);
         await fetchData(currentPage)
     };
 
-    const headers = ['name', 'email', 'Date', 'courseName'];
+    const headers = ['name', 'email', 'phoneNumber', 'courseName', 'message', 'date'];
     const actions = [
         { label: 'Show', handler: (id) => console.log(`Show item with ID: ${id}`) },
         { label: 'Edit', handler: (id) => console.log(`Edit item with ID: ${id}`) },
@@ -272,7 +273,7 @@ function QueryList() {
                                 isLoading={false}
                             />
                         </div>
-                        <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage}/>
+                        <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
                     </div>
                 </div>
             </section>

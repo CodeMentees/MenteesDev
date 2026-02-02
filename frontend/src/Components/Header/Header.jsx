@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { logout } from "../../Slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { initFlowbite } from "flowbite";
-import { FaUserCircle ,FaTimes,FaBars} from "react-icons/fa";
+import { FaUserCircle, FaTimes, FaBars } from "react-icons/fa";
 
 function Header() {
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const menuItems = [
@@ -54,10 +54,28 @@ function Header() {
 
             <div>
               {/* Auth Buttons */}
-              <div className="hidden lg:flex  gap-2">
+              <div className="hidden lg:flex items-center gap-4">
+                {user?.isAdmin && (
+                  <Link
+                    to="/admin"
+                    className="text-text hover:underline font-medium text-sm"
+                  >
+                    Dashboard
+                  </Link>
+                )}
                 {isAuthenticated ? (
                   <button
-                    onClick={() => dispatch(logout())}
+                    onClick={async () => {
+                      try {
+                        const response = await fetch('/api/auth/logout', { method: 'POST' });
+                        if (response.ok) {
+                          dispatch(logout());
+                        }
+                      } catch (error) {
+                        console.error('Logout failed:', error);
+                        dispatch(logout()); // Force client-side logout anyway
+                      }
+                    }}
                     className="text-gray-900 shadow-md bg-dark-btn font-medium rounded-full text-sm px-4 py-2 hover:bg-dark-btn-hover transition-colors"
                   >
                     Logout
@@ -117,8 +135,27 @@ function Header() {
             )}
             {isAuthenticated && (
               <div className="flex flex-col gap-2 mt-4">
+                {user?.isAdmin && (
+                  <Link
+                    to="/admin"
+                    className="block py-2 px-3 border-b lg:border-0 text-text hover:underline"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                )}
                 <button
-                  onClick={() => dispatch(logout())}
+                  onClick={async () => {
+                    try {
+                      const response = await fetch('/api/auth/logout', { method: 'POST' });
+                      if (response.ok) {
+                        dispatch(logout());
+                      }
+                    } catch (error) {
+                      console.error('Logout failed:', error);
+                      dispatch(logout());
+                    }
+                  }}
                   className="text-gray-900 shadow-md bg-dark-btn font-medium rounded-full text-sm px-4 py-2 hover:bg-dark-btn-hover transition-colors"
                 >
                   Logout

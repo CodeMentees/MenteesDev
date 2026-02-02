@@ -30,15 +30,17 @@ import About from './Pages/About/About';
 import Contact from './Pages/Contact/Contact';
 import FAQ from './Pages/FAQ/FAQ';
 import UserList from './Pages/User/UserList';
+import AddEditUser from './Pages/User/AddEditUser';
+import DashboardOverview from './Pages/DashboardOverview';
 
 // HelmetWrapper component to handle SEO meta tags
-const HelmetWrapper = ({ 
-  title, 
-  description, 
-  canonical, 
-  noindex = false, 
-  nofollow = false, 
-  children 
+const HelmetWrapper = ({
+  title,
+  description,
+  canonical,
+  noindex = false,
+  nofollow = false,
+  children
 }) => {
   return (
     <>
@@ -46,19 +48,19 @@ const HelmetWrapper = ({
         <title>{title}</title>
         <meta name="description" content={description} />
         <link rel="canonical" href={`https://codementees.com${canonical}`} />
-        
+
         {noindex || nofollow ? (
           <meta name="robots" content={`${noindex ? 'noindex' : ''}${nofollow ? ',nofollow' : ''}`} />
         ) : (
           <meta name="robots" content="index, follow" />
         )}
-        
+
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`https://codementees.com${canonical}`} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        
+
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content={`https://codementees.com${canonical}`} />
@@ -72,6 +74,7 @@ const HelmetWrapper = ({
 
 // Admin routes configuration
 const adminRoutes = [
+  { path: "", title: "Overview", element: <DashboardOverview /> },
   { path: "site-settings", title: "Site Settings", element: <HomeSite /> },
   { path: "posts/create", title: "Create Post", element: <AddPost /> },
   { path: "posts/edit/:id", title: "Edit Post", element: <AddPost /> },
@@ -88,7 +91,9 @@ const adminRoutes = [
   { path: "events", title: "Events", element: <EventManager /> },
   { path: "events/create", title: "Create Event", element: <CreateEvent /> },
   { path: "events/edit/:id", title: "Edit Event", element: <CreateEvent /> },
-  { path: "users", title: "Users", element: <UserList /> }
+  { path: "users", title: "Users", element: <UserList /> },
+  { path: "users/create", title: "Add User", element: <AddEditUser /> },
+  { path: "users/edit/:id", title: "Edit User", element: <AddEditUser /> }
 ];
 
 function App() {
@@ -155,7 +160,7 @@ function App() {
               path="/courses/:courseId"
               element={
                 <HelmetWrapper
-                  title= {`CodeMentees course`}
+                  title={`CodeMentees course`}
                   description={`Learn  with our comprehensive course`}
                   canonical="/courses/:courseId"
                 >

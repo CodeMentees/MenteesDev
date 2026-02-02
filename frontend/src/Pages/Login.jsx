@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { login, logout } from "../Slices/authSlice";
 import { GoogleLogin } from "@react-oauth/google";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import Toast from "../Components/UI/Toast";
 
 import { useAuth } from "../api/authApi";
 
 function LoginPage() {
   const { loginUser } = useAuth();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [toast, setToast] = useState({
     visible: false,
@@ -18,9 +20,9 @@ function LoginPage() {
 
   useEffect(() => {
     if (auth) {
-      window.location.href = "/";
+      navigate("/");
     }
-  }, [auth]);
+  }, [auth, navigate]);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -36,6 +38,13 @@ function LoginPage() {
     });
   };
 
+  const showToast = (message, type = "success") => {
+    setToast({ visible: true, message, type });
+    setTimeout(() => {
+      setToast({ visible: false, message: "", type: "success" });
+    }, 3000);
+  };
+
   const handleLoginSubmit = async (googleResponse = null) => {
     const updatedFormData = {
       ...formData,
@@ -44,17 +53,21 @@ function LoginPage() {
         client_id: googleResponse.clientId,
       }),
     };
-    const userData = await loginUser(updatedFormData)
-    if(userData){
-      localStorage.setItem("token", userData.token);
+    try {
+      const userData = await loginUser(updatedFormData);
+      if (userData) {
+        localStorage.setItem("token", userData.token);
         dispatch(login(userData));
-        setToast({ visible: true, message: data.message, type: "success" });
+        showToast(userData.message || "Logged in successfully!", "success");
         setTimeout(() => {
-          setToast({ visible: false, message: "", type: "success" });
-        }, 5000);
-    }
-    else{
-      alert("Error : User could not login")
+          navigate("/");
+        }, 2000);
+      } else {
+        showToast("Invalid credentials or login failed.", "error");
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      showToast(error.message || "An error occurred during login.", "error");
     }
   };
 
@@ -63,24 +76,11 @@ function LoginPage() {
       <div className="min-h-screen bg-dark-background flex flex-col justify-center py-8 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           {toast.visible && (
-            <div
-              className={`fixed z-50 top-5 right-5 inline-flex items-center p-4 space-x-2 text-sm font-medium text-green-500 bg-green-100 rounded-lg ${
-                toast.type === "error"
-                  ? "text-red-500 bg-red-100"
-                  : "text-green-500 bg-green-100"
-              }`}
-            >
-              <svg
-                className="w-5 h-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-              </svg>
-              <span>{toast.message}</span>
-            </div>
+            <Toast
+              message={toast.message}
+              type={toast.type}
+              visible={toast.visible}
+            />
           )}
           <h2 className="mt-6 text-center text-3xl font-extrabold text-dark-h">
             Sign in to your account

@@ -37,13 +37,13 @@ import asyncHandler from "express-async-handler";
  */
 const createQuery = asyncHandler(async (req, res) => {
   try {
-    const { name, email, phoneNumber, courseName } = req.body;
+    const { name, email, phoneNumber, courseName, message } = req.body;
 
-    if (!name || !email || !phoneNumber || !courseName) {
+    if (!name || !email || !phoneNumber || !courseName || !message) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const query = new Query({ name, email, phoneNumber, courseName });
+    const query = new Query({ name, email, phoneNumber, courseName, message });
     const createdQuery = await query.save();
 
     res.status(201).json({ data: createdQuery, message: "Query created successfully" });

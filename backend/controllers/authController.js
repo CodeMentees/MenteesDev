@@ -43,18 +43,22 @@ const client = new OAuth2Client();
  */
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, credential, client_id } = req.body;
+  let user;
 
   if (credential) {
-    const ticket = await client.verifyIdToken({ idToken: credential, audience: client_id });
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: client_id,
+    });
     const payload = ticket.getPayload();
     const { email, given_name, family_name } = payload;
 
-    let user = await User.findOne({ email });
+    user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
 
     user = await User.create({ email, name: `${given_name} ${family_name}` });
   } else {
-    let user = await User.findOne({ email });
+    user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
     user = await User.create({ name, email, password });
   }
@@ -143,3 +147,21 @@ export const authUser = asyncHandler(async (req, res) => {
 export const googleCallback = asyncHandler(async (req, res) => {
   res.json({ message: "Google callback successful" });
 });
+
+/**
+ * @swagger
+ * /api/users/logout:
+ *   post:
+ *     summary: Logout user and clear jwt cookie
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: Logged out successfully
+ */
+export const logoutUser = (req, res) => {
+  res.cookie('token', '', {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.status(200).json({ message: 'Logged out successfully' });
+};
