@@ -1,15 +1,21 @@
 {
-    "builds": [
-      {
-        "src": "backend/index.js",
-        "use": "@vercel/node"
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/index.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "frontend/dist/**"
+        ]
       }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "backend/index.js"
-      }
-    ],
-    "buildCommand": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend"
-  }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "backend/index.js"
+    }
+  ],
+  "buildCommand": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend"
+}
