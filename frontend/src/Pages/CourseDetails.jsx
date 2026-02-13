@@ -72,8 +72,9 @@ function CourseDetails() {
         {/* Right Section */}
         <div className="mx-6 px-6 py-10 lg:w-1/3 text-center bg-gray-800 rounded-lg border-2 border-dark-btn shadow-lg">
           <p className="text-gray-400 text-lg text-left">Starting from</p>
-          <div className="flex items-baseline mt-2">
-            <span className="mr-2 text-3xl font-extrabold text-white">₹5000</span>
+          <div className="flex items-baseline flex-wrap mt-2">
+            <span className="mr-2 text-xl line-through text-gray-400">₹2500/month</span>
+            <span className="mr-2 text-3xl font-extrabold text-white">₹1599</span>
             <span className="text-blue-400">/month</span>
           </div>
 

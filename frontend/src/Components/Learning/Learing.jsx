@@ -62,7 +62,7 @@ function Learning() {
             </h2>
             <p className="mb-4 text-dark-text">
                 Each learner has their own manner of learning, and one model of teaching does not fit all.
-                At Coding Blocks, we realize this and therefore deliver programs in Classroom, Live interactive,
+                At CodeMentees, we realize this and therefore deliver programs in Classroom, Live interactive,
                 and Online guided learning models.
             </p>
 
