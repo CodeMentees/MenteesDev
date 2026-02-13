@@ -1,2 +1,2 @@
 # MenteesDev
-#added version-2.0.0
+#pushed pricing changes
