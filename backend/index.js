@@ -41,7 +41,11 @@ const server = http.createServer(app);
 init(server);
 app.use("/api", routes)
 app.use("/api", swaggerRoutes);
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+// Serve static files from the frontend/dist directory
+const frontendDistPath = path.join(process.cwd(), "frontend", "dist");
+
+app.use(express.static(frontendDistPath));
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
