@@ -43,7 +43,7 @@ function Header() {
                 <Link
                   key={index}
                   to={item.link}
-                  className="text-text hover:underline font-medium text-sm"
+                  className="text-dark-text hover:underline font-medium text-sm"
                 >
                   {item.label}
                 </Link>
@@ -58,7 +58,7 @@ function Header() {
                 {user?.isAdmin && (
                   <Link
                     to="/admin"
-                    className="text-text hover:underline font-medium text-sm"
+                    className="text-dark-text hover:underline font-medium text-sm"
                   >
                     Dashboard
                   </Link>
@@ -82,17 +82,17 @@ function Header() {
                   </button>
                 ) : (
                   <>
-                    <Link to="/login" className="text-text hover:bg-gray-50 font-medium rounded-lg text-sm px-4 py-2 transition-colors">
+                    <Link to="/login" className="text-dark-text hover:text-gray-300 font-medium rounded-lg text-sm px-4 py-2 transition-colors">
                       Log in
                     </Link>
-                    <Link to="/register" className="text-text bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 py-2 transition-colors">
+                    <Link to="/register" className="text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 py-2 transition-colors">
                       Get started
                     </Link>
                   </>
                 )}
                 {/* User Icon */}
                 <div className="relative">
-                  <FaUserCircle className="text-3xl cursor-pointer text-text hover:text-gray-400 transition-colors" />
+                  <FaUserCircle className="text-3xl cursor-pointer text-dark-text hover:text-gray-400 transition-colors" />
                 </div>
               </div>
 
@@ -118,17 +118,17 @@ function Header() {
           <ul className="flex flex-col mt-4 lg:flex-row lg:space-x-6 lg:mt-0">
             {menuItems.map((item, index) => (
               <li key={index}>
-                <Link to={item.link} className="block py-2 px-3 border-b lg:border-0 text-text hover:underline">
+                <Link to={item.link} className="block py-2 px-3 border-b lg:border-0 text-dark-text hover:underline">
                   {item.label}
                 </Link>
               </li>
             ))}
             {!isAuthenticated && (
               <div className="flex flex-col gap-2 mt-4">
-                <Link to="/login" className="text-text hover:bg-gray-50 font-medium rounded-lg text-sm px-4 py-2 transition-colors">
+                <Link to="/login" className="text-dark-text hover:text-gray-300 transition-colors">
                   Log in
                 </Link>
-                <Link to="/register" className="text-text bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 py-2 transition-colors">
+                <Link to="/register" className="text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 py-2 transition-colors">
                   Get started
                 </Link>
               </div>
@@ -138,7 +138,7 @@ function Header() {
                 {user?.isAdmin && (
                   <Link
                     to="/admin"
-                    className="block py-2 px-3 border-b lg:border-0 text-text hover:underline"
+                    className="block py-2 px-3 border-b lg:border-0 text-dark-text hover:underline"
                     onClick={() => setMenuOpen(false)}
                   >
                     Dashboard

@@ -48,7 +48,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="bg-dark-background min-h-screen text-dark-text font-sans">
+    <div className="bg-dark-background text-dark-text font-sans">
       {/* Header Section */}
       <div className="bg-gradient-to-r from-blue-900 to-purple-900 py-16 text-center">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Contact Us</h1>

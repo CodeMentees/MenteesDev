@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 
 const About = () => {
   return (
-    <div className="min-h-screen p-8 bg-white">
+    <div className="p-8 bg-white">
       {/* ✅ SEO Meta Tags */}
       <Helmet>
         <title>About Us | Codementees</title>

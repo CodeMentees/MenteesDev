@@ -11,6 +11,7 @@ import { init } from "./utils/socket.js";
 import http from "http";
 import routes from "./routes/index.js"
 import swaggerRoutes from "./swagger.js";
+import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 const app = express();
 dotenv.config();
 
@@ -38,7 +39,7 @@ mongoose.connection.on("open", () => console.log("Connected to database"));
 // Create HTTP server to work with Socket.io
 const server = http.createServer(app);
 init(server);
-app.use("/api",routes)
+app.use("/api", routes)
 app.use("/api", swaggerRoutes);
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 app.get("*", (req, res) => {
@@ -51,6 +52,8 @@ cron.schedule("0 0 * * *", async () => {
   await BlockedIp.deleteMany({ timestamp: { $lt: twentyFourHoursAgo } });
   console.log("Cleared old blocked IPs.");
 });
+
+app.use(errorHandler);
 
 app.listen(process.env.PORT, () =>
   console.log(`BackedExpressAPIServer running on port ${process.env.PORT}`)
