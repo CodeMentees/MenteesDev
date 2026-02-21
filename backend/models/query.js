@@ -5,8 +5,9 @@ const querySchema = new mongoose.Schema({
   email: String,
   phoneNumber: String,
   courseName: String,
+  message: { type: String, required: true },
   date: { type: Date, default: Date.now },
-});
+}, { timestamps: true });
 
 const Query = mongoose.model("Query", querySchema);
 

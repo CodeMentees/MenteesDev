@@ -1,31 +1,66 @@
 import React from 'react';
-import {Link} from "react-router-dom"
-function CourseCard({ category,courses }) {
+import { Link } from "react-router-dom"
+function CourseCard({ category, courses }) {
     return (
-        <div className='container dark:bg-black-500'>
-        
-            <div className="max-w-4xl mx-auto p-0 lg:p-4 rounded-lg shadow-lg">
-                <img className='inline' style={{ height: "32px" }} src={category.image} alt={category.name} />
-                <h1 className="text-xl inline mx-2 font-bold text-gray-800 dark:text-white mb-4">{category.name}</h1>
-                <p className="text-gray-600 text-sm mb-6 dark:text-white">{category.description}</p>
+        <div className='container bg-black-500'>
 
-                <div className="gap-3 flex flex-wrap flex-row">
+            <div className="max-w-4xl mx-auto p-0 lg:p-4 rounded-lg shadow-lg">
+                <img className='inline text-white' style={{ height: "32px" }} src={category.image} alt={category.name} />
+                <h1 className="text-xl inline mx-2 font-bold text-white mb-4">{category.name}</h1>
+                <p className="text-sm mb-6 text-white">{category.description}</p>
+
+                <div className="gap-3 flex flex-wrap flex-col lg:flex-row">
                     {courses.map((course, index) => (
-                        <Link className='w-full'  to={`/course-details/${course._id}`}>
-                        <div key={index} className="bg-blue-50 p-0 p-4 lg:p-6 w-full lg:w-80 rounded-lg flex gap-2">
-                            <img className='inline' style={{ height: "32px" }} src={course.image} alt={course.name} />
-                            <div>
-                                <h2 className="text-sm font-semibold text-blue-800 mb-2">{course.name}</h2>
-                                <div className='flex gap-2 '>
-                                    {course.tags.map((tag, tagIndex) => (
-                                        <span key={tagIndex} className="bg-red-100 px-3 text-green-800 text-sm">
-                                            {tag}
-                                        </span>
-                                    ))}
+                        <div
+                            key={index}
+                            className="group mx-2 mt-10 grid max-w-screen-lg grid-cols-1 space-x-8 overflow-hidden rounded-lg border border-blue-900 shadow-sm shadow-indigo-700   text-white   hover:shadow-md hover:shadow-indigo-800  sm:mx-auto sm:grid-cols-5"
+                        >
+                            <Link to={`/courses/${course._id}`} className="col-span-2 text-left text-white hover:text-gray-700">
+                                <div className="group relative h-full w-full overflow-hidden">
+                                    <img
+                                        src={course.image}
+                                        alt={course.name}
+                                        className="h-full w-full p-4 border-none object-cover text-gray-700 transition"
+                                    />
+                                    <span className="absolute top-2  left-2 rounded-full bg-blue-600  px-3 py-1 text-xs font-semibold text-black">
+                                        {course.category.name}
+                                    </span>
+                                    <img
+                                        src="/images/AnbWyIjnwNbW9Wz6c_cja.svg"
+                                        className="absolute inset-1/2 w-10 max-w-full -translate-x-1/2 -translate-y-1/2 transition group-hover:scale-125"
+                                        alt=""
+                                    />
+                                </div>
+                            </Link>
+                            <div className="col-span-3 flex flex-col space-y-3 pr-8 text-left">
+                                <Link to={`/courses/${course._id}`} className="mt-3 overflow-hidden text-2xl font-semibold">
+                                    {course.name}
+                                </Link>
+                                <p className="overflow-hidden text-sm">{course.description ?? "Dummy descrption"}</p>
+                                <span className="text-sm font-semibold text-dark-h">{course.instructor ?? "Codementees"}</span>
+                                <div className="flex flex-col text-gray-700 sm:flex-row">
+                                    <div className="flex h-fit space-x-2 text-sm font-medium">
+                                        {
+                                            course.tags.map((tag) => {
+                                                return (
+
+                                                    <div className="rounded-full border-2 border-blue-700 px-2 py-0.5 text-white">
+                                                        {tag ?? "Live Class"}
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+
+                                    <Link
+                                        to={`/courses/${course._id}`}
+                                        className="my-5 rounded-md px-5 py-2 text-center transition hover:scale-105 bg-dark-btn text-white sm:ml-auto"
+                                    >
+                                        Enroll Now
+                                    </Link>
                                 </div>
                             </div>
                         </div>
-                        </Link>
                     ))}
                 </div>
 

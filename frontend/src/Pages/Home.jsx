@@ -1,52 +1,86 @@
 import React, { useEffect } from "react";
-import Carousel from "../Components/Carousel/Carousel"
-import WhyCodeMentees from "../Components/WhyCodeMentees/WhyCodeMentees"
+import { Helmet } from "react-helmet-async";
+import Carousel from "../Components/Carousel/Carousel";
+import WhyCodeMentees from "../Components/WhyCodeMentees/WhyCodeMentees";
 import Learning from "../Components/Learning/Learing";
-import WorkshopCard from "../Components/WorkshopCard/WorkshopCard";
 import BlogGridFour from "../Components/Blog/BlogGridFour";
 import CourseSection from "../Components/CourseSection/CourseSection";
 import RatingSection from "../Components/RatingSection/RatingSection";
-import { fetchCategory } from "../api/categoryApi"
-import { setCategory } from "../Slices/categorySlice"
+import { useCategoryAPI } from "../api/categoryApi";
+import { setCategory } from "../Slices/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
+import Loading from "../Components/Helpers/Loading";
+import ComprehensiveTraining from "../Components/Training/ComprehensiveTraining";
+import UpcomingEvents from "../Components/Event/UpcomingEvents";
 
 function Home() {
+
+  <Helmet>
+    <title>Codementees - Learn Coding with Experts</title>
+    <meta name="description" content="Master web development, AI, and programming with expert-led courses on Codementees." />
+    <meta property="og:title" content="Codementees - Learn Coding with Experts" />
+    <meta property="og:description" content="Master web development, AI, and programming with expert-led courses on Codementees." />
+    <meta property="og:image" content="https://codementees.com/images/home.jpg" />
+    <meta property="og:url" content="https://codementees.com/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Codementees - Learn Coding with Experts" />
+    <meta name="twitter:description" content="Master web development, AI, and programming with expert-led courses on Codementees." />
+    <meta name="twitter:image" content="https://codementees.com/images/twitter-home.jpg" />
+  </Helmet>
+
+
+
+  const { fetchCategories } = useCategoryAPI();
   const categoryData = useSelector((state) => state.category);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // Set Page Title & Meta Description for SEO
+    document.title = "Codementees | Learn Coding with Experts";
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute("content", "Master web development, AI, and programming with expert-led courses at Codementees.");
+
+    // Fetch category data
     const fetchData = async () => {
-      const data = await fetchCategory();
-      dispatch(setCategory(data));
+      const data = await fetchCategories();
+      dispatch(setCategory(data.categories));
     };
 
     fetchData();
   }, [dispatch]);
 
-
-  if (!categoryData) return <div>Loading...</div>;
+  if (!categoryData) return <Loading />;
 
   return (
-    <div className="bg-gray-700 pb-10 overflow-x-hidden">
+    <main className="bg-dark-background pb-10 overflow-x-hidden">
+      {/* JSON-LD Structured Data for SEO */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "EducationalOrganization",
+          "name": "Codementees",
+          "url": "https://codementees.com/",
+          "description": "Learn coding from expert mentors. Get top programming courses in web development, AI, and more.",
+          "sameAs": [
+            "https://www.facebook.com/codementees",
+            "https://twitter.com/codementees",
+            "https://www.linkedin.com/company/codementees"
+          ]
+        })}
+      </script>
+
+
       <Carousel />
-      <WhyCodeMentees />
+      <UpcomingEvents />
+      <ComprehensiveTraining />
       <CourseSection />
       <Learning />
-      <div className=" container max-w-6xl mx-auto px-6 my-4 lg:my-10">
-        <WorkshopCard
-          imageUrl="https://via.placeholder.com/800x400"
-          title="Upcoming Workshop: Mastering Tailwind CSS"
-          description="Join us for an interactive workshop where you'll learn how to build modern, responsive websites using Tailwind CSS. Whether you're a beginner or an experienced developer, this workshop will help you level up your skills."
-          date="November 15, 2023"
-          time="10:00 AM - 12:00 PM"
-          buttonText="Register Now"
-          buttonLink="#"
-        />
-      </div>
+      <WhyCodeMentees />
       <BlogGridFour />
       <RatingSection />
-    </div >
-  )
+    </main>
+  );
 }
 
-export default Home
+export default Home;

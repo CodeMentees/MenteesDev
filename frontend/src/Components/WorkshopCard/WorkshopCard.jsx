@@ -4,23 +4,23 @@ import { Designer } from "../../assets/mainPage";
 
 const WorkshopCard = ({ imageUrl, title, description, date, time, buttonText, buttonLink }) => {
   return (
-    <div data-aos="zoom-in" className="max-w-sm container p-4  bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div data-aos="zoom-in" className="max-w-xs container bg-dark-background border border-blue-900 shadow-indigo-700  rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {/* Image Section */}
       <div
         className="w-full h-48 bg-cover bg-center"
-        style={{ backgroundImage: `url(${Designer})` }}
+        style={{ backgroundImage: `url(${imageUrl})` ?? `url(${Designer})` }}
       ></div>
 
       {/* Content Section */}
       <div className="p-6">
         {/* Title */}
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">{title}</h2>
+        <h2 className="text-xl font-semibold text-gray-100 mb-2">{title}</h2>
 
         {/* Description */}
-        <p className="text-sm text-gray-800 dark:text-gray-300 mb-4 line-clamp-3">{description}</p>
+        <p className="text-sm text-gray-300 mb-4 line-clamp-3">{description}</p>
 
         {/* Date and Time */}
-        <div className="flex items-center text-sm text-gray-600 mb-4">
+        <div className="flex items-center text-sm text-dark-text mb-4">
           <svg
             className="w-5 h-5 mr-2 text-gray-500"
             fill="none"

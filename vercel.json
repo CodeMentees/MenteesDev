@@ -1,8 +1,14 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "backend/index.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "frontend/dist/**"
+        ]
+      }
     }
   ],
   "routes": [

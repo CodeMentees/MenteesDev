@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useCourse } from "../../api/courseApi";
 
 const UpdateCourseDetails = () => {
-  const { courseId } = useParams(); // Get courseId from the URL parameters
+  const {fetchCourse, updateDetails} = useCourse()
+  const { id } = useParams(); 
+  const [courseName, setCourseName] = useState("");
   const [details, setDetails] = useState([
     {
       label: "",
@@ -15,22 +17,26 @@ const UpdateCourseDetails = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const fetchCourseDetails = async () => {
+    const course = await fetchCourse(id)
+    setCourseName(course.data.name)
+    setFeatures(course.data.features)
+    console.log("data details length",course)
+    setDetails(course.data.details)
+  }
+
   useEffect(() => {
-    if (courseId) {
-      axios
-        .get(`/api/course/${courseId}`)
-        .then((response) => {
-          const fetchedDetails = response.data.data.details; // Assuming the API returns the course details
-          console.log("feached deat", fetchedDetails)
-          setDetails(fetchedDetails || []); // Set details if available, otherwise default to empty array
-          setFeatures(response.data.data.features || [])
-        })
-        .catch((err) => {
-          console.log(err);
-          setError("Failed to fetch course details.");
-        });
+    if (id) {
+      fetchCourseDetails()
     }
-  }, [courseId]);
+  }, [id]);
+
+  // ✅ Fix: Properly update feature list
+  const handleFeatureChange = (index, value) => {
+    const updatedFeatures = [...features];
+    updatedFeatures[index] = value;
+    setFeatures(updatedFeatures);
+  };
 
   const handleChange = (index, field, value, contentIndex = 0) => {
     const updatedDetails = [...details];
@@ -79,16 +85,15 @@ const UpdateCourseDetails = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
-    try {
-      await axios.put(`/api/course/${courseId}/details`, { details,features });
-      alert("Course details updated successfully!");
-    } catch (err) {
-      setError("Failed to update course details.");
-    } finally {
-      setLoading(false);
+    const data = await updateDetails(id,{details,features})
+    if(data){
+      setLoading(false)
     }
-  };
+    if(!data){
+      alert("Error")
+    }
+  }
+
 
   return (
     <div className="max-w-xxl grid grid-cols-2 mx-auto bg-white p-8 rounded-lg shadow-md">
@@ -97,13 +102,12 @@ const UpdateCourseDetails = () => {
         <h1 className="text-2xl font-bold text-center mb-6">Update Course Details</h1>
         {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         <div className="mb-4">
-          <label htmlFor="courseId" className="block text-sm font-medium text-gray-700">Course ID</label>
+          <label htmlFor="id" className="block text-sm font-medium text-gray-700">Course Name </label>
           <input
             type="text"
-            id="courseId"
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-            value={courseId} // courseId taken from URL
-            readOnly
+            value={courseName} // id taken from URL
+            disabled
           />
         </div>
         {details.length === 0 ? (
@@ -111,7 +115,7 @@ const UpdateCourseDetails = () => {
         ) : (
           details.map((detail, index) => (
             <div key={index} className="mb-4 border p-4 rounded-lg">
-              <label htmlFor={`label-${index}`} className="block text-sm font-medium text-gray-700">Label</label>
+              <label htmlFor={`label-${index}`} className="block text-sm font-medium text-gray-700">Topic</label>
               <input
                 type="text"
                 id={`label-${index}`}
@@ -123,7 +127,7 @@ const UpdateCourseDetails = () => {
               {detail.content.map((content, contentIndex) => (
                 <div key={contentIndex} className="mt-4">
                   <div className="mb-2">
-                    <label htmlFor={`title-${index}-${contentIndex}`} className="block text-sm font-medium text-gray-700">Content Title</label>
+                    <label htmlFor={`title-${index}-${contentIndex}`} className="block text-sm font-medium text-gray-700">SubTopic</label>
                     <input
                       type="text"
                       id={`title-${index}-${contentIndex}`}
@@ -134,7 +138,7 @@ const UpdateCourseDetails = () => {
                     />
                   </div>
                   <div className="mb-2">
-                    <label htmlFor={`description-${index}-${contentIndex}`} className="block text-sm font-medium text-gray-700">Content Description</label>
+                    <label htmlFor={`description-${index}-${contentIndex}`} className="block text-sm font-medium text-gray-700">Sub Topoic Description</label>
                     <textarea
                       id={`description-${index}-${contentIndex}`}
                       className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -196,6 +200,8 @@ const UpdateCourseDetails = () => {
               type="text"
               id={`feature-${index}`}
               name={`feature-${index}`}
+              value={feature}
+              onChange={(e)=>handleFeatureChange(index,e.target.value)}
               defaultValue={feature}
               placeholder={`Enter ${feature}`}
             />
@@ -214,7 +220,7 @@ const UpdateCourseDetails = () => {
           Add Feature
         </button>
         <br />
-        <button className="px-6 py-2 bg-green-900" type="submit">Submit</button>
+    
       </form>
     </div>
   );

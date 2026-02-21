@@ -1,11 +1,13 @@
 import { Router } from "express";
-import { getCourseCategory } from "../controllers/courseController.js";
-import { createCategory } from "../controllers/categoryController.js"; // Import the correct controller
+import { createCategory, deleteCategory, getCategories, getCategoryById, updateCategory } from "../controllers/categoryController.js"; // Import the correct controller
 import isAdmin from "../middlewares/isAdmin.js";
 
 const router = Router();
-router.get("/", getCourseCategory);
+router.get("/", getCategories);
+router.get("/:id",getCategoryById)
 router.use(isAdmin)
 router.post("/", createCategory); 
+router.put("/:id", updateCategory); 
+router.delete("/:id", deleteCategory); 
 
 export default router;

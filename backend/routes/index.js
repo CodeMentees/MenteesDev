@@ -1,0 +1,30 @@
+import express from "express";
+import userRoutes from "./usersRoutes.js";
+import authRoutes from "./authRoutes.js";
+import postRoutes from "./postRoutes.js";
+import courseRoutes from "./courseRoutes.js";
+import categoryRoutes from "./categoryRoutes.js";
+import queryRoutes from "./queryRoutes.js";
+import homeRoutes from "./homeRoutes.js";
+import groupRoutes from "./groupRoutes.js";
+import messageRoutes from "./messageRoutes.js";
+import eventRoutes from "./eventRoutes.js";
+import blogCategoryRoutes from "./blogCategoryRoutes.js";
+import testRoutes from "./test.js";
+
+const router = express.Router();
+router.use("/home", homeRoutes);
+router.use("/users", userRoutes);
+router.use("/auth", authRoutes);
+router.use("/posts", postRoutes);
+router.use("/blog-categories", blogCategoryRoutes);
+router.use("/courses", courseRoutes);
+router.use("/categories", categoryRoutes);
+router.use("/queries", queryRoutes);
+router.use("/groups", groupRoutes);
+router.use("/messages", messageRoutes);
+router.use("/events", eventRoutes);
+router.use("/events", eventRoutes);
+router.use("/test", testRoutes);
+
+export default router;

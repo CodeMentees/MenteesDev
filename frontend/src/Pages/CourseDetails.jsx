@@ -1,242 +1,159 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import generatePdf from "../utils/genrateCoursePdf";
-import axios from "axios";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import QueryForm from "../Components/Forms/QueryForm";
-
+import Loading from "../Components/Helpers/Loading";
+import { useCourse } from "../api/courseApi";
 
 function CourseDetails() {
-    const [activeTab, setActiveTab] = useState(1); // Default to the first tab
-    const [details, setDetails] = useState();
-    const { courseId } = useParams({});
-
-    // Refs for each content section
-    const sectionRefs = useRef([]);
-
-    const handleTabClick = useCallback((id) => {
-        setActiveTab(id);
-        const section = document.getElementById(`tab-${id}`);
-        if (section) {
-            section.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-    }, []);
-
-    useEffect(() => {
-        if (courseId) {
-            axios
-                .get(`/api/course/${courseId}`)
-                .then((response) => {
-                    const fetchedDetails = response.data.data;
-                    console.log("opa", fetchedDetails)
-                    setDetails(fetchedDetails); // Use the fetched details if available
-                })
-                .catch((err) => {
-                    console.log(err)
-                    setError("Failed to fetch course details.");
-                });
-        }
-    }, [courseId]);
 
 
-    // IntersectionObserver to detect which section is in view
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const id = entry.target.id.split("-")[1]; // Extract tab ID from section ID
-                        setActiveTab(Number(id)); // Update active tab state
-                    }
-                });
-            },
-            {
-                root: document.querySelector(".content-container"), // Observe within the scrollable container
-                rootMargin: "-50px 0px -50px 0px", // Expand the detection area slightly
-                threshold: 0.1, // Trigger when 10% of the section is visible
-            }
-        );
+  const { fetchCourse } = useCourse();
+  const { courseId } = useParams();
+  const [course, setCourse] = useState(null);
+  const [showQuery, setShowQuery] = useState(false);
+  const [activeSection, setActiveSection] = useState(null);
 
-        // Observe each section
-        sectionRefs.current.forEach((section) => {
-            if (section) observer.observe(section);
-        });
 
-        // Cleanup observer on unmount
-        return () => {
-            sectionRefs.current.forEach((section) => {
-                if (section) observer.unobserve(section);
-            });
-        };
-    }, []);
+  useEffect(() => {
+    if (!courseId) return;
 
-    return (
-        (details) ?
-            <>
-                <QueryForm courseName={details.name} />
-                <div className="min-h-64 dark:bg-blue-700 relative">
-                    <div className=" grid grid-cols-2 lg:grid-cols-6 pb-12 lg:pb-0 ">
-                        <div className="max-w-3xl p-4 lg:pl-8 col-span-4 h-80 mx-auto relative  py-8 my-8 dark:bg-blue-700">
-                            <img
-                                className="inline"
-                                style={{ height: "64px" }}
-                                src="/images/c-sharp.png"
-                                alt={"jjjjjjjj"}
-                            />
-                            <h1 className="text-xl inline mx-2 font-bold text-gray-800 dark:text-white mb-4">
-                                {details.name}
-                            </h1>
-                            <p className="text-gray-600 lg:border-l px-2 my-8 text-sm mb-6 dark:text-white">
-                                {details.description}
-                            </p>
-                            <button
-                                data-modal-target="crud-modal"
-                                data-modal-toggle="crud-modal"
-                                className="text-white mb-4 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-                                Choose Batch
-                            </button>
-                            <div className="lg:absolute h-sm lg:h-12 py-8  -bottom-14 container max-w-screen-sm lg:ml-4  bg-white-700 dark:bg-gray-700">
-                                <div className="grid grid-cols-1 bottom-1 lg:absolute grid-cols-4  md:grid-cols-4 gap-3 text-center">
-                                    <div className="text-center">
-                                        <div className="text-xs lg:text-sm  text-white-600 dark:text-white">
-                                            350+
-                                        </div>
-                                        <div className="text-gray-600 text-xs lg:text-sm text-white-600 dark:text-white">
-                                            problems
-                                        </div>
-                                    </div>
+    const fetchCourseDetails = async () => {
+      const response = await fetchCourse(courseId);
+      setCourse(response.data);
+    };
 
-                                    <div className="text-center">
-                                        <div className="text-xs lg:text-sm  text-white-600 dark:text-white">6</div>
-                                        <div className="text-white-600 text-xs lg:text-sm dark:text-white">
-                                            Live projects
-                                        </div>
-                                    </div>
+    fetchCourseDetails();
+  }, [courseId]);
 
-                                    <div className="text-center">
-                                        <div className="text-xs lg:text-sm text-white-600 dark:text-white">4/6</div>
-                                        <div className="text-white-600 text-xs lg:text-sm dark:text-white">
-                                            Duration
-                                        </div>
-                                    </div>
-                                    <div className="text-center">
-                                        <div className="text-xs lg:text-sm text-white-600 dark:text-white">
-                                            Classroom | Live | Online
-                                        </div>
-                                        <div className="text-white-600 text-xs dark:text-white ">
-                                            Mode of Delivery
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex flex-col  lg:absolute right-0 mx-10  col-span-2 p-6 mt-16  lg:mt-8 mx-left max-w-sm text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
-                            <p className="font-light text-gray-500 sm:text-lg dark:text-gray-400">
-                                Starting from
-                            </p>
-                            <div className="flex justify-center items-baseline my-4">
-                                <span className="mr-2 text-xl font-extrabold">₹5000</span>
-                                <span className="text-gray-500 dark:text-gray-400">/month</span>
-                            </div>
-                            {/* List */}
-                            <ul role="list" className="mb-8 space-y-4 text-left">
-                                <p>Key Highlight</p>
+  if (!course) return <Loading />;
 
-                                {details.features.map((feature) => {
-                                    return <>
-                                        <li className="flex items-center space-x-3">
-                                            {/* Icon */}
-                                            <svg
-                                                className="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
-                                                fill="currentColor"
-                                                viewBox="0 0 20 20"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                    clipRule="evenodd"
-                                                />
-                                            </svg>
-                                            <span>{feature}</span>
-                                        </li></>
-                                })}
-                            </ul>
-                            <a
-                                href="#"
-                                data-modal-target="crud-modal"
-                                data-modal-toggle="crud-modal"
-                                className="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white  dark:focus:ring-primary-900"
-                            >
-                                Choose Batch
-                            </a>
-                        </div>
-                    </div>
-                </div >
-                <div className="dark:bg-gray-800 pt-12 lg:pt-32 ">
-                    <div className="container mx-auto max-w-6xl dark:bg-gray-900 px-4 py-4 mx-auto flex  justify-between align-center">
-                        <div className="">
-                            <i className="fa-solid fa-book inline text-white"></i>
-                            <p className="text-xl text-white inline ">Syllabus</p>
-                        </div>
 
-                        <button onClick={() => generatePdf(details.details)} className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 group-hover:from-red-200 group-hover:via-red-300 group-hover:to-yellow-200 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 border-2 border-transparent hover:border-red-500">
-                            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
-                                Download Syllabus
-                            </span>
-                        </button>
+  return (
+    <div className="bg-dark-background pb-10 overflow-x-hidden">
+      <Helmet>
+        <title>Course Details - Codementees</title>
+        <meta name="description" content={`Explore details about Course ${courseId} at Codementees.`} />
+      </Helmet>
+      {showQuery && <QueryForm setQuery={setShowQuery} courseName={course.name} />}
 
-                    </div>
-                    <div className="md:flex container mx-auto max-w-6xl ">
-                        {/* Tabs */}
-                        <ul className="flex-column space-y space-y-4 text-sm font-medium text-gray-500 dark:text-gray-400 md:me-4 mb-4 md:mb-0">
-                            {details.details.map((tab) => (
-                                <li key={tab.id}>
-                                    <button
-                                        onClick={() => handleTabClick(tab.id)}
-                                        className={`inline-flex items-center px-4 py-3 rounded-lg w-full ${activeTab === tab.id
-                                            ? "text-white bg-blue-700 dark: bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600" // Active tab style
-                                            : "bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white" // Inactive tab style
-                                            }`}
-                                    >
-                                        {tab.label}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
+      <div className="flex flex-col lg:flex-row gap-6 p-6 lg:p-12 mx-auto max-w-6xl bg-dark-background">
+        {/* Left Section */}
+        <div className="lg:w-2/3">
+          <img className="inline h-16" src={course.image} alt="Course" />
+          <h1 className="text-2xl font-bold text-white mt-4">{course.name}</h1>
+          <p className="lg:border-l px-2 mt-4 text-gray-300 text-sm leading-relaxed">
+            {course.description}
+          </p>
 
-                        {/* Content Sections */}
-                        <div
-                            className="p-6 bg-gray-50 text-medium text-gray-500 dark:text-gray-400 dark:bg-gray-800 rounded-lg w-full overflow-y-auto max-h-[500px] content-container  [&::-webkit-scrollbar]:w-2
-  [&::-webkit-scrollbar-track]:bg-red-100
-  [&::-webkit-scrollbar-thumb]:bg-red-300
-  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-  dark:[&::-webkit-scrollbar-thumb]:bg-pink-500"
-                        >
-                            {details.details.map((tab, index) => (
-                                <div
-                                    key={tab.id}
-                                    id={`tab-${tab.id}`}
-                                    ref={(el) => (sectionRefs.current[index] = el)} // Assign ref to each section
-                                    className="mb-8"
-                                >
-                                    <h2 className="text-xl font-bold mb-4">{tab.label}</h2>
-                                    <ul>
-                                        {tab.content.map((item, index) => (
-                                            <li key={index} className="mb-4">
-                                                <strong>{item.title}</strong>
-                                                <br />
-                                                {item.description}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </>
-            : <>Loading.......</>
-    );
+          <button
+            onClick={() => setShowQuery(true)}
+            className="mt-6 text-white border-2 border-blue-900 shadow-md hover:bg-blue-900 transition-all duration-300 font-medium rounded-full text-sm px-5 py-2.5"
+          >
+            Enroll Now
+          </button>
+
+          <div className="bg-blue-900 py-5 flex flex-wrap justify-around rounded-lg mt-6 shadow-lg">
+            {[
+              { label: "Problems", value: "350+" },
+              { label: "Live Projects", value: "6" },
+              { label: "Duration", value: "4/6 Months" },
+              { label: "Mode", value: "Classroom | Live | Online" },
+            ].map(({ label, value }) => (
+              <div key={label} className="text-sm text-white text-center">
+                <span className="font-bold">{value}</span>
+                <div className="text-xs">{label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Section */}
+        <div className="mx-6 px-6 py-10 lg:w-1/3 text-center bg-gray-800 rounded-lg border-2 border-dark-btn shadow-lg">
+          <p className="text-gray-400 text-lg text-left">Starting from</p>
+          <div className="flex items-baseline flex-wrap mt-2">
+            <span className="mr-2 text-xl line-through text-gray-400">₹2500/month</span>
+            <span className="mr-2 text-3xl font-extrabold text-white">₹1599</span>
+            <span className="text-blue-400">/month</span>
+          </div>
+
+          <ul className="mb-8 mt-6 text-left space-y-2">
+            <li className="font-bold text-white">Key Highlights</li>
+            {course.features.map((feature, index) => (
+              <li key={index} className="flex items-center text-gray-300">
+                <svg className="w-5 h-5 text-green-500" viewBox="0 0 20 20">
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="ml-2">{feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          <button
+            onClick={() => setShowQuery(true)}
+            className="text-white bg-blue-900 hover:bg-dark-background transition-all duration-300 font-medium rounded-full text-sm px-6 py-3"
+          >
+            Enroll Course
+          </button>
+        </div>
+      </div>
+
+      {/* Syllabus Section */}
+      <div className="container mx-auto max-w-6xl px-4 py-8">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold text-white">Syllabus</h2>
+          <button
+            onClick={() => generatePdf(course.details)}
+            className="text-white bg-blue-700 hover:bg-blue-800 transition-all duration-300 rounded-lg px-5 py-2 shadow-md"
+          >
+            Download Syllabus
+          </button>
+        </div>
+
+        {/* Syllabus as List (Accordion) */}
+        <div className="space-y-4">
+          {course.details?.map((section, index) => (
+            <div
+              key={index}
+              className="border border-gray-700 rounded-lg shadow-md"
+            >
+              {/* Clickable Section Title */}
+              <button
+                onClick={() => setActiveSection(prev => (prev === index ? null : index))}
+                className="w-full text-left px-6 py-4 bg-gray-800 text-white font-semibold flex justify-between items-center transition-all duration-300 hover:bg-gray-700"
+              >
+                {section.label}
+                <span className="text-blue-500">{activeSection === index ? "▲" : "▼"}</span>
+              </button>
+
+              {/* Section Content (Expandable) */}
+              <div
+                className={`transition-all duration-300 ease-in-out ${activeSection === index ? "max-h-screen opacity-100 p-6 bg-gray-900" : "max-h-0 opacity-0 overflow-hidden"
+                  }`}
+              >
+                <ul className="space-y-4">
+                  {section.content.map((item, idx) => (
+                    <li
+                      key={idx}
+                      className="p-4 bg-gray-800 rounded-lg transition-all duration-300 hover:bg-gray-700"
+                    >
+                      <strong>{item.title}</strong>
+                      <p className="text-sm text-gray-300">{item.description}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default CourseDetails;

@@ -23,7 +23,7 @@ function Learning() {
         ],
         peer_group: [
             {
-                icon: "fa-solid fa-people-group",
+                icon: "fa-solid   fa-user-group",
                 description: "Awesome Peer group",
             },
             {
@@ -56,19 +56,19 @@ function Learning() {
     const currentFeatures = featuresData[tabs[activeTab].key];
 
     return (
-        <section data-aos="fade-right" name="chooselearn" className=" container max-w-6xl mx-auto px-6 my-6  lg:my-10 tracking-tight font-extrabold">
-            <h2 className="mb-4  lg:text-3xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+        <section data-aos="fade-right" name="chooselearn" className="bg-dark-box  container max-w-6xl mx-auto p-4 lg:p-12  my-10">
+            <h2 className="mb-4  lg:text-3xl tracking-tight font-extrabold text-dark-h">
                 Choose how you learn!
             </h2>
-            <p className="mb-4 text-gray-500 sm:text-xl dark:text-gray-400">
+            <p className="mb-4 text-dark-text">
                 Each learner has their own manner of learning, and one model of teaching does not fit all.
-                At Coding Blocks, we realize this and therefore deliver programs in Classroom, Live interactive,
+                At CodeMentees, we realize this and therefore deliver programs in Classroom, Live interactive,
                 and Online guided learning models.
             </p>
 
 
             {/* Tab Headers */}
-            <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+            <div className="text-sm font-medium text-center text-gray-200 border-b border-gray-200 ">
                 <ul className="flex flex-nowrap overflow-x-auto -mb-px">
                     {tabs.map((tab, index) => (
                         <li key={index} className="mr-2">
@@ -87,18 +87,13 @@ function Learning() {
             </div>
 
             {/* Tab Content */}
-            <div className="p-4 bg-gray-50 rounded-lg dark:bg-gray-800">
-                <div className="gap-6 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-4 sm:py-16 lg:px-6">
-                    <img
-                        className="w-full dark:block col-span-1"
-                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/cta/cta-dashboard-mockup-dark.svg"
-                        alt="Dashboard Mockup"
-                    />
+            <div className="my-4">
+                <div className="gap-6 items-center py-4  px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-4 py-16  lg:py-4 lg:px-0  ">
                     <div className="mt-4 md:mt-0 col-span-3">
                         <FeatureGrid features={currentFeatures} />
                     </div>
                 </div>
-                <button className="relative inline-flex items-center justify-center px-5 py-3 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">See All</button>
+                <button className="  px-7  py-3 bg-dark-btn text-dark-text  rounded-lg     overflow-hidden text-sm">See All</button>
             </div>
         </section>
     );

@@ -1,84 +1,168 @@
-import User from '../models/userModel.js';
-import asyncHandler from 'express-async-handler';
+import User from "../models/userModel.js";
+import asyncHandler from "express-async-handler";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-//create user
+// 🔐 Generate JWT Token
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+};
+
+// 🛡️ Hash Password
+const hashPassword = async (password) => {
+  const salt = await bcrypt.genSalt(10);
+  return await bcrypt.hash(password, salt);
+};
+
+// 🛠️ Validate Email Format
+const isValidEmail = (email) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
+/**
+ * @swagger
+ * /api/users:
+ *   post:
+ *     summary: Create a new user
+ */
 const createUser = asyncHandler(async (req, res) => {
-   try {
-        const user = new User({
-            name: req.body.name,
-            email: req.body.email,
-            password: req.body.password
-        });
-        const createdUser = await user.save();
-        res.status(201).json(createdUser);
-    } catch (error) {
-        res.status(400);
-        throw new Error(error);
+  try {
+    const { name, email, password } = req.body;
+
+    // Validate Input
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
     }
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
+
+    // Hash password before saving
+    const hashedPassword = await hashPassword(password);
+
+    // Create User
+    const user = new User({ name, email, password: hashedPassword });
+    const createdUser = await user.save();
+
+    // Return user data with token
+    res.status(201).json({
+      _id: createdUser._id,
+      name: createdUser.name,
+      email: createdUser.email,
+      token: generateToken(createdUser._id),
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 });
 
-//delete user
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Soft delete a user
+ */
 const deleteUser = asyncHandler(async (req, res) => {
   try {
-        const user = await User.findById(req.params.id);
-        if (user) {
-            await user.remove();
-            res.json({ message: 'User removed' });
-        } else {
-            res.status(404);
-            throw new Error('User not found');
-        }
-    } catch (error) {
-        res.status(400);
-        throw new Error(error);
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
+
+    // Soft delete: set "isActive" to false
+    user.isActive = false;
+    await user.save();
+
+    res.json({ message: "User deactivated successfully" });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 });
 
-//get user
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   get:
+ *     summary: Get user details by ID
+ */
 const getUser = asyncHandler(async (req, res) => {
-  try { 
-        const user = await User.findById(req.params.id);
-        if (user) {
-            res.json(user);
-        } else {
-            res.status(404);
-            throw new Error('User not found');
-        }
-    } catch (error) {
-        res.status(400);
-        throw new Error(error);
+  try {
+    const user = await User.findById(req.params.id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-})
-
-//update user
-const updateUser = asyncHandler(async (req, res) => {
-    try { 
-        const user = await User.findById(req.params.id);
-        if (user) {
-            user.name = req.body.name || user.name;
-            user.email = req.body.email || user.email;
-            user.password = req.body.password || user.password;
-            const updatedUser = await user.save();
-            res.json(updatedUser);
-        } else {
-            res.status(404);
-            throw new Error('User not found');
-        }
-    } catch (error) {
-        res.status(400);
-        throw new Error(error);
-    }
+    res.json(user);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 });
 
-//get users
-const getUsers = asyncHandler(async (req, res) => {
-    try {
-        const users = await User.find({});
-        res.json(users);
-    } catch (error) {
-        res.status(400);
-        throw new Error(error);
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   put:
+ *     summary: Update user details
+ */
+const updateUser = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
+
+    // Update fields if provided
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+
+    // Hash new password if provided
+    if (req.body.password) {
+      user.password = await hashPassword(req.body.password);
+    }
+
+    const updatedUser = await user.save();
+    res.json({ message: "User updated successfully", data: updatedUser });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Get all users with pagination
+ */
+const getUsers = asyncHandler(async (req, res) => {
+  try {
+    let { page = 1, limit = 10 } = req.query;
+    page = parseInt(page);
+    limit = parseInt(limit);
+    const skip = (page - 1) * limit;
+
+    // Exclude passwords from response and only active users
+    const users = await User.find({ isActive: { $ne: false } })
+      .select("-password")
+      .skip(skip)
+      .limit(limit);
+
+    const totalUsers = await User.countDocuments({ isActive: { $ne: false } });
+
+    res.json({
+      data: users,
+      currentPage: page,
+      totalPages: Math.ceil(totalUsers / limit),
+      totalUsers,
+      message: "Users retrieved successfully",
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 });
 
 export { createUser, deleteUser, getUser, getUsers, updateUser };

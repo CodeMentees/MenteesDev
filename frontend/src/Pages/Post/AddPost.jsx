@@ -1,172 +1,216 @@
-import { initFlowbite } from 'flowbite'
-import React, { useEffect, useState } from 'react'
-import RichTextEditor from '../../Components/RichTextEditor';
-
-
+import { initFlowbite } from "flowbite";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import RichTextEditor from "../../Components/RichTextEditor";
+import { useBlogCategory } from "../../api/blogCategoryApi";
 
 function AddPost() {
-    const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
-    const [postData, setPostData] = useState({
-        title: '',
-        category: '',
-        image: '',
-        content: ''
+  const { fetchBlogCategories } = useBlogCategory();
+  const { id } = useParams(); // Get post ID from URL
+  const navigate = useNavigate();
 
-    })
+  const [toast, setToast] = useState({
+    visible: false,
+    message: "",
+    type: "success",
+  });
+  const [postData, setPostData] = useState({
+    title: "",
+    categories: [],
+    image: "",
+    content: "",
+  });
+  const [editorContent, setEditorContent] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
 
-    useEffect(() => {
-        initFlowbite();
-    }, [])
-
-
-    const [editorContent, setEditorContent] = useState('');
-
-    // Function to handle editor content changes
-    const handleEditorChange = (content) => {
-        setEditorContent(content);
-        setPostData({ ...postData, content: editorContent })
-    };
-
-    const handleChange = (e) => {
-        setPostData({
-            ...postData,
-            [e.target.name]: e.target.value
-        })
+  useEffect(() => {
+    initFlowbite();
+    loadCategories();
+    if (id) {
+      fetchPostDetails(id);
+      setIsEditing(true);
     }
+  }, [id]);
 
-    const addPost = async (e) => {
-        try {
-            const response = await fetch("/api/post", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(postData)
-            })
-            if (response) {
-                const data = await response.json()
-                setToast({ visible: true, message: data.message, type: "success" });
-                setTimeout(() => {
-                    setToast({ visible: false, message: "", type: "success" });
-                }, 5000);
-                setPostData({
-                    title: '',
-                    category: '',
-                    image: '',
-                    content: ''
+  const loadCategories = async () => {
+    const categories = await fetchBlogCategories();
+    setCategories(categories.data);
+  };
 
-                });
-            } else {
-                alert("Some error")
-            }
-        } catch (error) {
-            console.log(error)
-        }
+  const fetchPostDetails = async (postId) => {
+    try {
+      const response = await fetch(`/api/posts/${postId}`);
+      const data = await response.json();
+      setPostData(data.data);
+      setEditorContent(data.data.content);
+    } catch (error) {
+      console.error("Error fetching post:", error);
     }
+  };
 
-    return (
-        <section className="bg-white">
-            {toast.visible && (
-                <div
-                    className={`fixed top-5 right-5 inline-flex items-center p-4 space-x-2 text-sm font-medium text-green-500 bg-green-100 rounded-lg ${toast.type === "error" ? "text-red-500 bg-red-100" : "text-green-500 bg-green-100"
-                        }`}
-                >
-                    <svg
-                        className="w-5 h-5"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                    >
-                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                    </svg>
-                    <span>{toast.message}</span>
-                </div>
-            )}
-            <div className="py-2 px-4 mx-auto max-w-2xl lg:py-16">
-                <h2 className="mb-4 text-xl font-bold text-gray-900">
-                    Add a Blog
-                </h2>
-                <form action="#">
-                    <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                        <div className="sm:col-span-2">
-                            <label
-                                htmlFor="name"
-                                className="block mb-2 text-sm font-medium text-black-900"
-                            >
-                                Title
-                            </label>
-                            <input
-                                type="text"
-                                name="title"
-                                onChange={handleChange}
-                                value={postData.title}
-                                className="bg-black-50 border border-gray-300 text-black-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                            />
-                        </div>
-                        <div className="sm:col-span-2">
-                            <label
-                                htmlFor="name"
-                                className="block mb-2 text-sm font-medium text-black-900"
-                            >
-                                Image
-                            </label>
-                            <input
-                                type="text"
-                                name="image"
-                                onChange={handleChange}
-                                value={postData.image}
-                                className="bg-black-50 border border-gray-300 text-black-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                            />
-                        </div>
-                        <div className='sm:col-span-2'>
-                            <label
-                                htmlFor="category"
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >
-                                Category
-                            </label>
-                            <select
-                                value={postData.category}
-                                onChange={handleChange}
-                                name='category'
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 "
-                            >
-                                <option selected="">Select category</option>
-                                <option value="TV">TV/Monitors</option>
-                                <option value="PC">PC</option>
-                                <option value="GA">Gaming/Console</option>
-                                <option value="PH">Phones</option>
-                            </select>
-                        </div>
+  const handleCategorySelect = (category) => {
+    if (!postData.categories.includes(category)) {
+      setPostData((prev) => ({
+        ...prev,
+        categories: [...prev.categories, category],
+      }));
+    }
+  };
 
-                        <div className="sm:col-span-2">
-                            <label
-                                htmlFor="description"
-                                className="block mb-2 text-sm font-medium text-gray-900"
-                            >
-                                Description
-                            </label>
-                            <RichTextEditor
-                                value={editorContent}
-                                onChange={handleEditorChange}
-                                placeholder="Write your content here..."
-                            />
+  const handleCategoryRemove = (category) => {
+    setPostData((prev) => ({
+      ...prev,
+      categories: prev.categories.filter((c) => c !== category),
+    }));
+  };
 
-                        </div>
-                    </div>
-                    <button
-                        type="button"
-                        onClick={addPost}
-                        className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-black bg-yellow-500"
-                    >
-                        Add Post
-                    </button>
-                </form>
+  const handleEditorChange = (content) => {
+    setEditorContent(content);
+    setPostData((prev) => ({ ...prev, content }));
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setPostData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(`/api/posts${isEditing ? `/${id}` : ""}`, {
+        method: isEditing ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(postData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setToast({ visible: true, message: data.message, type: "success" });
+
+        setTimeout(() => {
+          setToast({ visible: false, message: "", type: "success" });
+          navigate("/admin/posts");
+        }, 2000);
+      } else {
+        setToast({
+          visible: true,
+          message: "Something went wrong!",
+          type: "error",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      setToast({ visible: true, message: "Network error", type: "error" });
+    }
+  };
+
+  return (
+    <section className="bg-gray-900 text-white min-h-screen p-6">
+      {toast.visible && (
+        <div
+          className={`fixed z-50 top-5 right-5 p-4 rounded-lg shadow-md ${
+            toast.type === "error"
+              ? "bg-red-700 text-red-200"
+              : "bg-green-700 text-green-200"
+          }`}
+        >
+          ✅ <span>{toast.message}</span>
+        </div>
+      )}
+
+      <div className="max-w-3xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold text-white mb-6">
+          {isEditing ? "✏️ Edit Blog Post" : "📝 Add a Blog Post"}
+        </h2>
+
+        <form>
+          <div className="grid gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-400">
+                Title
+              </label>
+              <input
+                type="text"
+                name="title"
+                onChange={handleChange}
+                value={postData.title}
+                className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5"
+                placeholder="Enter post title"
+              />
             </div>
-        </section>
 
-    )
+            <div>
+              <label className="block text-sm font-medium text-gray-400">
+                Image URL
+              </label>
+              <input
+                type="text"
+                name="image"
+                onChange={handleChange}
+                value={postData.image}
+                className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5"
+                placeholder="Enter image URL"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-400">
+                Categories
+              </label>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {postData.categories.map((category) => (
+                  <span
+                    key={category}
+                    className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm flex items-center gap-2"
+                  >
+                    {category}
+                    <button
+                      onClick={() => handleCategoryRemove(category)}
+                      className="text-gray-200 hover:text-gray-50"
+                    >
+                      ✖
+                    </button>
+                  </span>
+                ))}
+              </div>
+
+              <select
+                onChange={(e) => handleCategorySelect(e.target.value)}
+                className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5"
+              >
+                <option value="">Select category</option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-400">
+                Content
+              </label>
+              <RichTextEditor
+                value={editorContent}
+                onChange={handleEditorChange}
+                placeholder="Write your content here..."
+                className="bg-gray-700 text-white"
+              />
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="w-full mt-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition"
+          >
+            {isEditing ? "✏️ Update Post" : "➕ Add Post"}
+          </button>
+        </form>
+      </div>
+    </section>
+  );
 }
 
-export default AddPost
+export default AddPost;

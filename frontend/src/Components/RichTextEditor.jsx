@@ -1,66 +1,58 @@
-import React from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import React, { useEffect, useRef, useState } from "react";
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
+import hljs from "highlight.js";
+import 'highlight.js/styles/github-dark.css';
 
 const RichTextEditor = ({ value, onChange, placeholder }) => {
-  // Quill modules for toolbar customization
-  const modules = {
-    toolbar: [
-      [{ font: [] }],
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ color: [] }, { background: [] }],
-      [{ script: 'sub' }, { script: 'super' }],
-      ['blockquote', 'code-block'],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      [{ indent: '-1' }, { indent: '+1' }],
-      [{ direction: 'rtl' }],
-      [{ align: [] }],
-      ['link', 'image', 'video'],
-      ['clean'],
-    ],
-  };
+  const editorRef = useRef(null);
+  const quillInstance = useRef(null);
+  const [content, setContent] = useState(value || "");
 
-  // Quill formats for supported formats
-  const formats = [
-    'header',
-    'font',
-    'size',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'color',
-    'background',
-    'script',
-    'blockquote',
-    'code-block',
-    'list',
-    'bullet',
-    'indent',
-    'direction',
-    'align',
-    'link',
-    'image',
-    'video',
-    'clean',
-  ];
+  useEffect(() => {
+    if (!editorRef.current) return;
 
-  
+    quillInstance.current = new Quill(editorRef.current, {
+      theme: "snow",
+      placeholder: placeholder || "Write something...",
+      modules: {
+        toolbar: [
+          [{ font: [] }],
+          [{ header: [1, 2, 3, 4, 5, 6, false] }],
+          ["bold", "italic", "underline", "strike"],
+          [{ color: [] }, { background: [] }],
+          [{ script: "sub" }, { script: "super" }],
+          ["blockquote", "code-block"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          [{ indent: "-1" }, { indent: "+1" }],
+          [{ direction: "rtl" }],
+          [{ align: [] }],
+          ["link", "image", "video"],
+          ["clean"],
+        ],
+        syntax: {
+          highlight: (text) => hljs.highlightAuto(text).value,
+        },
+      },
+    });
+
+    quillInstance.current.on("text-change", () => {
+      const html = editorRef.current.querySelector(".ql-editor").innerHTML;
+      setContent(html);
+      onChange && onChange(html);
+    });
+
+    return () => {
+      quillInstance.current = null;
+    };
+  }, []);
+
   return (
     <div>
-      <ReactQuill
-        theme="snow"
-        value={value}
-        onChange={onChange}
-        modules={modules}
-        formats={formats}
-        placeholder={placeholder || 'Write something...'}
-        style={{ height: '400px', marginBottom: '20px' }}
-      />
+      <div ref={editorRef} style={{ height: "400px", marginBottom: "20px" }} />
       <div>
         <h3>Preview:</h3>
-        <div dangerouslySetInnerHTML={{ __html: value }} />
+        <div dangerouslySetInnerHTML={{ __html: content }} />
       </div>
     </div>
   );

@@ -1,0 +1,65 @@
+import { useState } from "react";
+import api from "./api"; // Ensure this is correctly configured
+
+const useCRUD = (endpoint) => {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const apiCall = async (method, url = "", body = null) => {
+    setIsLoading(true);
+    setError(null); // Reset error before making request
+
+    try {
+      const config = {
+        method,
+        url: `${endpoint}${url}`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      // Include body for POST, PUT, PATCH requests
+      if (body && ["POST", "PUT", "PATCH"].includes(method.toUpperCase())) {
+        config.data = JSON.stringify(body);
+      }
+
+      const response = await api(config);
+
+      setData(response.data);
+
+      // Handle pagination response if available
+      if (response.data?.totalPages !== undefined) {
+        setTotalPages(response.data.totalPages);
+        setCurrentPage(response.data.currentPage || 1);
+      }
+
+      return response.data;
+    } catch (err) {
+      const errorMessage = err.response?.data || "An error occurred";
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Expose CRUD operations
+  return {
+    data,
+    isLoading,
+    error,
+    totalPages,
+    currentPage,
+    getItems: (page = 1, limit = 10) => apiCall("GET", `?page=${page}&limit=${limit}`),
+    getItemById: (id) => apiCall("GET", `/${id}`),
+    createItem: (body) => apiCall("POST", "", body),
+    updateItem: (id, body) => apiCall("PUT", `/${id}`, body),
+    deleteItem: (id) => apiCall("DELETE", `/${id}`),
+    customRequest: (method, url, body = null) => apiCall(method.toUpperCase(), url, body),
+  };
+};
+
+export default useCRUD;

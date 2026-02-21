@@ -4,38 +4,30 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import userRoutes from "./routes/usersRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
-import postRoutes from "./routes/postRoutes.js";
-import courseRoutes from "./routes/courseRoutes.js";
-import categoryRoutes from "./routes/categoryRoutes.js";
-import queryRoutes from "./routes/queryRoutes.js";
-import homeRoutes from "./routes/homeRoutes.js";
-import groupRoutes from "./routes/groupRoutes.js";
-import messageRoutes from "./routes/messageRoutes.js";
-
 import cron from "node-cron";
 import BlockedIp from "./middlewares/ipBlockMiddleware.js";
 import path from "path";
 import { init } from "./utils/socket.js";
 import http from "http";
+import routes from "./routes/index.js"
+import swaggerRoutes from "./swagger.js";
+import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 const app = express();
 dotenv.config();
 
 import { fileURLToPath } from "url";
-
-// Derive __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const corsOptions = {
-  origin: "https://codementees.com",
+  origin: "*",
   credentials: true,
 };
 
-app.use(cors());
+// app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.set("trust proxy", 1);
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -44,26 +36,16 @@ mongoose.connect(process.env.MONGODB_URI, {
 mongoose.connection.on("error", (error) => console.error(error));
 mongoose.connection.on("open", () => console.log("Connected to database"));
 
-app.use("/api/home", homeRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/post", postRoutes);
-app.use("/api/course", courseRoutes);
-app.use("/api/category", categoryRoutes);
-app.use("/api/query", queryRoutes);
-
-//chats related
-app.use("/api/groups", groupRoutes);
-app.use("/api/messages", messageRoutes);
-
 // Create HTTP server to work with Socket.io
 const server = http.createServer(app);
-// Socket.io
 init(server);
+app.use("/api", routes)
+app.use("/api", swaggerRoutes);
+// Serve static files from the frontend/dist directory
+const frontendDistPath = path.join(process.cwd(), "frontend", "dist");
 
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+app.use(express.static(frontendDistPath));
 
-// Fallback for all other routes to serve the index.html
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
@@ -75,10 +57,8 @@ cron.schedule("0 0 * * *", async () => {
   console.log("Cleared old blocked IPs.");
 });
 
+app.use(errorHandler);
+
 app.listen(process.env.PORT, () =>
   console.log(`BackedExpressAPIServer running on port ${process.env.PORT}`)
-);
-
-server.listen( 4000, () =>
-  console.log(`WesocketServer running on port ${4000}`)
 );
