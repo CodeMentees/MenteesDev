@@ -49,7 +49,7 @@ function BlogGridFour() {
             <article key={latest._id} className="max-w-xs">
               <Link to={`/blogs/${latest._id}`}>
                 <img
-                  src={latest.image || "https://via.placeholder.com/300"}
+                  src={latest.image || "https://placehold.co/300x200?text=No+Image"}
                   className="mb-5 rounded-lg w-full h-48 object-cover"
                   alt={latest.title || "Blog Image"}
                 />

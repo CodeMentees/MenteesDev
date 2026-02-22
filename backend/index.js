@@ -19,12 +19,16 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const allowedOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(",")
+  : ["http://localhost:5173", "http://127.0.0.1:5173"];
+
 const corsOptions = {
-  origin: "*",
+  origin: allowedOrigins,
   credentials: true,
 };
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.set("trust proxy", 1);
@@ -40,6 +44,7 @@ mongoose.connection.on("open", () => console.log("Connected to database"));
 const server = http.createServer(app);
 init(server);
 app.use("/api", routes)
+app.get("/api/ping", (req, res) => res.json({ message: "pong" }));
 app.use("/api", swaggerRoutes);
 // Serve static files from the frontend/dist directory
 const frontendDistPath = path.join(process.cwd(), "frontend", "dist");
@@ -57,6 +62,8 @@ cron.schedule("0 0 * * *", async () => {
   console.log("Cleared old blocked IPs.");
 });
 
+// Error Handling Middlewares
+app.use(notFound);
 app.use(errorHandler);
 
 app.listen(process.env.PORT, () =>

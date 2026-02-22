@@ -10,6 +10,7 @@ import groupRoutes from "./groupRoutes.js";
 import messageRoutes from "./messageRoutes.js";
 import eventRoutes from "./eventRoutes.js";
 import blogCategoryRoutes from "./blogCategoryRoutes.js";
+import schoolCourseRoutes from "./schoolCourseRoutes.js";
 import testRoutes from "./test.js";
 
 const router = express.Router();
@@ -19,6 +20,7 @@ router.use("/auth", authRoutes);
 router.use("/posts", postRoutes);
 router.use("/blog-categories", blogCategoryRoutes);
 router.use("/courses", courseRoutes);
+router.use("/school-courses", schoolCourseRoutes);
 router.use("/categories", categoryRoutes);
 router.use("/queries", queryRoutes);
 router.use("/groups", groupRoutes);

@@ -6,7 +6,7 @@ const notFound = (req, res, next) => {
 
 const errorHandler = (err, req, res, next) => {
     let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-    let message = err.message;
+    let message = err.message || "Internal Server Error";
 
     // If Mongoose not found error, set to 404 and change message
     if (err.name === 'CastError' && err.kind === 'ObjectId') {
@@ -14,7 +14,11 @@ const errorHandler = (err, req, res, next) => {
         message = 'Resource not found';
     }
 
-    res.status(statusCode).json({
+    res.status(statusCode);
+
+    // Always return JSON for API requests
+    return res.json({
+        success: false,
         message,
         stack: process.env.NODE_ENV === 'production' ? null : err.stack,
     });

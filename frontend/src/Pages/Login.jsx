@@ -67,7 +67,12 @@ function LoginPage() {
       }
     } catch (error) {
       console.error("Login Error:", error);
-      showToast(error.message || "An error occurred during login.", "error");
+      const errorMessage = error.message || "";
+      if (errorMessage.includes("User not Signed Up")) {
+        showToast("User not found. Please sign up first.", "error");
+      } else {
+        showToast(errorMessage || "An error occurred during login.", "error");
+      }
     }
   };
 

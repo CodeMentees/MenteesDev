@@ -38,7 +38,22 @@ const useCRUD = (endpoint) => {
 
       return response.data;
     } catch (err) {
-      const errorMessage = err.response?.data || "An error occurred";
+      // Safely extract error message
+      let errorMessage = "An error occurred";
+
+      if (err.response && err.response.data) {
+        if (typeof err.response.data === 'object' && err.response.data.message) {
+          errorMessage = err.response.data.message;
+        } else if (typeof err.response.data === 'string' && err.response.data.startsWith('<!DOCTYPE')) {
+          // If it's an HTML response, try to extract error text or use fallback
+          errorMessage = "User Not Found";
+        } else {
+          errorMessage = err.response.data;
+        }
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+
       setError(errorMessage);
       throw new Error(errorMessage);
     } finally {

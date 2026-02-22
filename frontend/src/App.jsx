@@ -32,6 +32,10 @@ import FAQ from './Pages/FAQ/FAQ';
 import UserList from './Pages/User/UserList';
 import AddEditUser from './Pages/User/AddEditUser';
 import DashboardOverview from './Pages/DashboardOverview';
+import SchoolCoding from './Pages/SchoolCoding';
+import CurriculumCatalog from './Pages/CurriculumCatalog';
+import SchoolCourseList from './Pages/Course/SchoolCourseList';
+import AddEditSchoolCourse from './Pages/Course/AddEditSchoolCourse';
 
 // HelmetWrapper component to handle SEO meta tags
 const HelmetWrapper = ({
@@ -93,7 +97,10 @@ const adminRoutes = [
   { path: "events/edit/:id", title: "Edit Event", element: <CreateEvent /> },
   { path: "users", title: "Users", element: <UserList /> },
   { path: "users/create", title: "Add User", element: <AddEditUser /> },
-  { path: "users/edit/:id", title: "Edit User", element: <AddEditUser /> }
+  { path: "users/edit/:id", title: "Edit User", element: <AddEditUser /> },
+  { path: "school-courses", title: "School Courses", element: <SchoolCourseList /> },
+  { path: "school-courses/add", title: "Add School Course", element: <AddEditSchoolCourse /> },
+  { path: "school-courses/edit/:id", title: "Edit School Course", element: <AddEditSchoolCourse /> }
 ];
 
 function App() {
@@ -220,6 +227,47 @@ function App() {
                   >
                     <FAQ />
                   </HelmetWrapper>
+                }
+              />
+
+              <Route
+                path="/school-coding"
+                element={
+                  <HelmetWrapper
+                    title="School Coding | CodeMentees"
+                    description="Explore our comprehensive K-12 computer science curriculum designed for schools."
+                    canonical="/school-coding"
+                  >
+                    <SchoolCoding />
+                  </HelmetWrapper>
+                }
+              />
+
+              <Route
+                path="/school-coding/catalog"
+                element={
+                  <HelmetWrapper
+                    title="Curriculum Catalog | CodeMentees"
+                    description="Explore our full school coding curriculum."
+                    canonical="/school-coding/catalog"
+                  >
+                    <CurriculumCatalog />
+                  </HelmetWrapper>
+                }
+              />
+
+              <Route
+                path="/school-courses/edit/:id"
+                element={
+                  <AdminRoutes>
+                    <HelmetWrapper
+                      title="Edit School Course | CodeMentees"
+                      description="Edit school course details"
+                      noindex={true}
+                    >
+                      <AddEditSchoolCourse />
+                    </HelmetWrapper>
+                  </AdminRoutes>
                 }
               />
 

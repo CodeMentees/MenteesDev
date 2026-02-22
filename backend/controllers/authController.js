@@ -113,8 +113,7 @@ export const authUser = asyncHandler(async (req, res) => {
   } else {
     user = await User.findOne({ email });
     if (!user || !(await user.matchPassword(password))) {
-      res.status(401);
-      throw new Error("Invalid email or password");
+      return res.status(401).json({ message: "User not Signed Up" });
     }
   }
 

@@ -24,6 +24,7 @@ const menuItems = [
       { id: 31, title: "Create Course", link: "/admin/courses/create" },
       { id: 32, title: "Course List", link: "/admin/courses" },
       { id: 33, title: "Categories", link: "/admin/categories" },
+      { id: 34, title: "School Course List", link: "/admin/school-courses" },
     ],
   },
   {

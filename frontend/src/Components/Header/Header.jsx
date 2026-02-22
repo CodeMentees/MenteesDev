@@ -14,7 +14,7 @@ function Header() {
     { label: "All Courses", link: "/courses" },
     { label: "Blogs", link: "/blogs" },
     { label: "Live Courses", link: "#" },
-    { label: "School Coding", link: "#" },
+    { label: "School Coding", link: "/school-coding" },
     { label: "Placement Support", link: "#" },
   ];
 
