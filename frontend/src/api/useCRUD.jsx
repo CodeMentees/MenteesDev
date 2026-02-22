@@ -16,14 +16,14 @@ const useCRUD = (endpoint) => {
       const config = {
         method,
         url: `${endpoint}${url}`,
-        headers: {
+        headers: body instanceof FormData ? {} : {
           "Content-Type": "application/json",
         },
       };
 
       // Include body for POST, PUT, PATCH requests
       if (body && ["POST", "PUT", "PATCH"].includes(method.toUpperCase())) {
-        config.data = JSON.stringify(body);
+        config.data = body instanceof FormData ? body : JSON.stringify(body);
       }
 
       const response = await api(config);

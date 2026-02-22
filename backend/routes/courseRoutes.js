@@ -1,4 +1,6 @@
 import { Router } from "express";
+import isAdmin from "../middlewares/isAdmin.js";
+import protect from "../middlewares/IsAuthenticate.js";
 import {
   createCourse,
   deleteCourse,
@@ -8,8 +10,10 @@ import {
   updateCourse,
   updateCourseDetails
 } from "../controllers/courseController.js"; // Import the correct controller
-import isAdmin from "../middlewares/isAdmin.js";
+import multer from "multer";
+import { storage } from "../config/cloudinaryConfig.js";
 
+const upload = multer({ storage });
 const router = Router();
 
 router.get("/:id", getCourse);
@@ -17,8 +21,8 @@ router.get("/:categoryId/category", getCoursesByCategory);
 router.get("/", getCourses);
 
 router.use(isAdmin)
-router.post("/", createCourse);
-router.put("/:id", updateCourse);
+router.post("/", upload.single("image"), createCourse);
+router.put("/:id", upload.single("image"), updateCourse);
 router.put("/:id/details", updateCourseDetails);
 router.delete("/:id", deleteCourse);
 

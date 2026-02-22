@@ -44,19 +44,26 @@ import mongoose from "mongoose";
  *         description: Invalid input data
  */
 const createCourse = asyncHandler(async (req, res) => {
-  const { name, image, category, description, module, price } = req.body;
+  const { name, category, description, modules, details, tags, price } = req.body;
+  const image = req.file ? req.file.path : req.body.image;
 
   if (!name || !category) {
     res.status(400);
     throw new Error("Name and category are required");
   }
 
+  const modulesParsed = typeof modules === 'string' ? JSON.parse(modules) : modules;
+  const detailsParsed = typeof details === 'string' ? JSON.parse(details) : details;
+  const tagsParsed = typeof tags === 'string' ? JSON.parse(tags) : tags;
+
   const course = new Course({
     name,
     image,
     category,
     description,
-    module,
+    modules: modulesParsed,
+    details: detailsParsed,
+    tags: tagsParsed,
     price,
   });
 
@@ -195,10 +202,12 @@ const updateCourse = asyncHandler(async (req, res) => {
   }
 
   course.name = req.body.name || course.name;
-  course.image = req.body.image || course.image;
+  course.image = req.file ? req.file.path : (req.body.image || course.image);
   course.category = req.body.category || course.category;
   course.description = req.body.description || course.description;
-  course.module = req.body.module || course.module;
+  course.modules = req.body.modules ? (typeof req.body.modules === 'string' ? JSON.parse(req.body.modules) : req.body.modules) : course.modules;
+  course.details = req.body.details ? (typeof req.body.details === 'string' ? JSON.parse(req.body.details) : req.body.details) : course.details;
+  course.tags = req.body.tags ? (typeof req.body.tags === 'string' ? JSON.parse(req.body.tags) : req.body.tags) : course.tags;
   course.price = req.body.price || course.price;
 
   const updatedCourse = await course.save();

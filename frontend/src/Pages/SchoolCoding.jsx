@@ -503,7 +503,7 @@ const SchoolCoding = () => {
                                             </button>
                                         ) : (
                                             <button
-                                                onClick={() => navigate('/register')}
+                                                onClick={() => navigate('/contact')}
                                                 className="col-span-2 text-sm font-bold text-pink-400 hover:text-white transition-all py-2.5 px-4 rounded-xl border border-pink-500/30 hover:bg-pink-600 shadow-md hover:shadow-pink-500/20 mt-2"
                                             >
                                                 Register Now

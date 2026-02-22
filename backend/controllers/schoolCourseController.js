@@ -26,7 +26,11 @@ const getSchoolCourseById = asyncHandler(async (req, res) => {
 // @route   POST /api/school-courses
 // @access  Private/Admin
 const createSchoolCourse = asyncHandler(async (req, res) => {
-    const { title, description, image, level, duration, contactHours, language, category, units, syllabus } = req.body;
+    const { title, description, level, duration, contactHours, language, category, units, syllabus } = req.body;
+    const image = req.file ? req.file.path : req.body.image;
+
+    const unitsParsed = typeof units === 'string' ? JSON.parse(units) : units;
+    const syllabusParsed = typeof syllabus === 'string' ? JSON.parse(syllabus) : syllabus;
 
     const course = new SchoolCourse({
         title,
@@ -37,8 +41,8 @@ const createSchoolCourse = asyncHandler(async (req, res) => {
         contactHours,
         language,
         category,
-        units,
-        syllabus,
+        units: unitsParsed,
+        syllabus: syllabusParsed,
     });
 
     const createdCourse = await course.save();
@@ -49,7 +53,8 @@ const createSchoolCourse = asyncHandler(async (req, res) => {
 // @route   PUT /api/school-courses/:id
 // @access  Private/Admin
 const updateSchoolCourse = asyncHandler(async (req, res) => {
-    const { title, description, image, level, duration, contactHours, language, category, units, syllabus } = req.body;
+    const { title, description, level, duration, contactHours, language, category, units, syllabus } = req.body;
+    const image = req.file ? req.file.path : req.body.image;
 
     const course = await SchoolCourse.findById(req.params.id);
 
@@ -62,8 +67,8 @@ const updateSchoolCourse = asyncHandler(async (req, res) => {
         course.contactHours = contactHours || course.contactHours;
         course.language = language || course.language;
         course.category = category || course.category;
-        course.units = units || course.units;
-        course.syllabus = syllabus || course.syllabus;
+        course.units = units ? (typeof units === 'string' ? JSON.parse(units) : units) : course.units;
+        course.syllabus = syllabus ? (typeof syllabus === 'string' ? JSON.parse(syllabus) : syllabus) : course.syllabus;
 
         const updatedCourse = await course.save();
         res.json({ data: updatedCourse });

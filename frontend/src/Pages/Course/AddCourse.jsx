@@ -22,6 +22,7 @@ function AddCourse() {
     details: [{ label: "", content: [{ title: "", description: "" }] }],
   });
   const [categories, setCategories] = useState([]);
+  const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
     initFlowbite();
@@ -47,25 +48,50 @@ function AddCourse() {
     setCourseData({ ...courseData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async () => {
-    if (id) {
-      let updated = updateCourse(id, courseData)
-      if(updated){
-        setToast(true)
-      }
-
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setCourseData({ ...courseData, image: URL.createObjectURL(file) });
     }
-    else {
-      createCourse(courseData)
-      setToast(true)
+  };
 
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    Object.keys(courseData).forEach(key => {
+      if (['modules', 'details', 'tags'].includes(key)) {
+        formData.append(key, JSON.stringify(courseData[key]));
+      } else if (key === 'image') {
+        if (imageFile) {
+          formData.append('image', imageFile);
+        } else {
+          formData.append('image', courseData.image);
+        }
+      } else {
+        formData.append(key, courseData[key]);
+      }
+    });
+
+    try {
+      if (id) {
+        let updated = await updateCourse(id, formData)
+        if (updated) {
+          setToast({ visible: true, message: "Course Updated Successfully", type: "success" });
+        }
+      } else {
+        await createCourse(formData)
+        setToast({ visible: true, message: "Course Created Successfully", type: "success" });
+      }
+    } catch (error) {
+      console.error("Error saving course:", error);
+      setToast({ visible: true, message: "Error saving course", type: "danger" });
     }
   };
 
   return (
     <section className="bg-gray-900 text-white p-6 rounded-lg shadow-lg max-w-3xl mx-auto">
 
-      <Toast visible={toast} message="Sucess Updated" />
+      <Toast visible={toast.visible} message={toast.message} />
       <div className="py-2 px-4">
         <h2 className="mb-4 text-2xl font-bold text-gray-100">
           {id ? "Update Course" : "Create a Course"}
@@ -79,14 +105,25 @@ function AddCourse() {
             onChange={handleChange}
             className="border border-gray-700 bg-gray-800 text-white p-2 w-full rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
           />
-          <input
-            type="text"
-            name="image"
-            placeholder="Image URL"
-            value={courseData.image}
-            onChange={handleChange}
-            className="border border-gray-700 bg-gray-800 text-white p-2 w-full rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
-          />
+          <div className="flex gap-2">
+            <input
+              type="text"
+              name="image"
+              placeholder="Image URL"
+              value={courseData.image}
+              onChange={handleChange}
+              className="flex-1 border border-gray-700 bg-gray-800 text-white p-2 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+            />
+            <label className="cursor-pointer bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg flex items-center justify-center transition-colors font-semibold">
+              Upload
+              <input
+                type="file"
+                className="hidden"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+            </label>
+          </div>
           <input
             type="number"
             name="price"

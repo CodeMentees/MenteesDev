@@ -12,6 +12,7 @@ function AddEditSchoolCourse() {
     const navigate = useNavigate();
     const user = useSelector((state) => state.auth.user);
     const [toast, setToast] = useState({ visible: false, message: "" });
+    const [imageFile, setImageFile] = useState(null);
 
     const [courseData, setCourseData] = useState({
         title: "",
@@ -38,6 +39,14 @@ function AddEditSchoolCourse() {
 
     const handleChange = (e) => {
         setCourseData({ ...courseData, [e.target.name]: e.target.value });
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImageFile(file);
+            setCourseData({ ...courseData, image: URL.createObjectURL(file) });
+        }
     };
 
     // Unit handlers
@@ -74,12 +83,28 @@ function AddEditSchoolCourse() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const formData = new FormData();
+        Object.keys(courseData).forEach(key => {
+            if (key === 'units' || key === 'syllabus') {
+                formData.append(key, JSON.stringify(courseData[key]));
+            } else if (key === 'image') {
+                if (imageFile) {
+                    formData.append('image', imageFile);
+                } else {
+                    formData.append('image', courseData.image);
+                }
+            } else {
+                formData.append(key, courseData[key]);
+            }
+        });
+
         try {
             if (id) {
-                await updateSchoolCourse(id, courseData);
+                await updateSchoolCourse(id, formData);
                 setToast({ visible: true, message: "Course updated successfully!" });
             } else {
-                await createSchoolCourse(courseData);
+                await createSchoolCourse(formData);
                 setToast({ visible: true, message: "Course created successfully!" });
             }
             setTimeout(() => {
@@ -119,15 +144,25 @@ function AddEditSchoolCourse() {
                         <div>
                             <label className="block text-sm font-medium mb-1">Icon/Image URL</label>
                             <div className="space-y-3">
-                                <input
-                                    type="text"
-                                    name="image"
-                                    placeholder="URL to image (use public URLs like Unsplash or direct Drive links)"
-                                    value={courseData.image}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
-                                />
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        name="image"
+                                        placeholder="URL to image"
+                                        value={courseData.image}
+                                        onChange={handleChange}
+                                        className="flex-1 bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
+                                    />
+                                    <label className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center justify-center transition-colors">
+                                        <FaPlus className="mr-2" /> Upload
+                                        <input
+                                            type="file"
+                                            className="hidden"
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                        />
+                                    </label>
+                                </div>
 
                                 {/* Image Preview */}
                                 <div className="mt-2 p-2 border border-dashed border-gray-300 rounded-lg bg-gray-50 flex flex-col items-center justify-center min-h-[150px]">

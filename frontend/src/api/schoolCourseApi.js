@@ -14,12 +14,18 @@ export const useSchoolCourseAPI = () => {
     };
 
     const createSchoolCourse = async (courseData) => {
-        const response = await api.post(API_URL, courseData);
+        const isFormData = courseData instanceof FormData;
+        const response = await api.post(API_URL, courseData, {
+            headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : { 'Content-Type': 'application/json' }
+        });
         return response.data;
     };
 
     const updateSchoolCourse = async (id, courseData) => {
-        const response = await api.put(`${API_URL}/${id}`, courseData);
+        const isFormData = courseData instanceof FormData;
+        const response = await api.put(`${API_URL}/${id}`, courseData, {
+            headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : { 'Content-Type': 'application/json' }
+        });
         return response.data;
     };
 

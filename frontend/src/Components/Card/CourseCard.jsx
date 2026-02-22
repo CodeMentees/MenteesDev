@@ -36,7 +36,7 @@ function CourseCard({ category, courses }) {
                                 <Link to={`/courses/${course._id}`} className="mt-3 overflow-hidden text-2xl font-semibold">
                                     {course.name}
                                 </Link>
-                                <p className="overflow-hidden text-sm">{course.description ?? "Dummy descrption"}</p>
+                                <p className="overflow-hidden text-sm">{course.description ?? "No description available"}</p>
                                 <span className="text-sm font-semibold text-dark-h">{course.instructor ?? "Codementees"}</span>
                                 <div className="flex flex-col text-gray-700 sm:flex-row">
                                     <div className="flex h-fit space-x-2 text-sm font-medium">
