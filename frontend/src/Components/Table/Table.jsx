@@ -33,33 +33,39 @@ const ReusableTable = ({ headers, data, actions, isLoading }) => {
             <tbody>
                 {data.map((item, rowIndex) => (
                     <tr key={rowIndex} className="border-b dark:border-gray-700">
-                        {headers.map((header, colIndex) => (
-                            <td key={colIndex} className="px-4 py-3">
-                                {["createdat", "date", "updatedat"].includes(header.toLowerCase()) ? ( // Format dates
-                                    new Date(item[header]).toLocaleString("en-US", {
-                                        year: "numeric",
-                                        month: "short",
-                                        day: "2-digit",
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                        second: "2-digit",
-                                        hour12: true,
-                                    })
-                                ) : Array.isArray(item[header]) ? ( // Display array as chips
-                                    <div className="flex flex-wrap gap-2">
-                                        {item[header].map((value, index) => (
-                                            <span key={index} className="px-2 py-1 text-xs font-medium text-white bg-blue-500 rounded-full">
-                                                {value}
-                                            </span>
-                                        ))}
-                                    </div>
-                                ) : header.toLowerCase() === "image" ? ( // Handle images
-                                    <img src={item[header]} alt="Image" className="w-10 h-10 rounded shadow-sm object-cover" />
-                                ) : (
-                                    item[header]
-                                )}
-                            </td>
-                        ))}
+                        {headers.map((header, colIndex) => {
+                            // Find the key in item that matches header (case-insensitive)
+                            const itemKey = Object.keys(item).find(key => key.toLowerCase() === header.toLowerCase()) || header;
+                            const value = item[itemKey];
+
+                            return (
+                                <td key={colIndex} className="px-4 py-3">
+                                    {["createdat", "date", "updatedat"].includes(header.toLowerCase()) ? ( // Format dates
+                                        new Date(value).toLocaleString("en-US", {
+                                            year: "numeric",
+                                            month: "short",
+                                            day: "2-digit",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                            second: "2-digit",
+                                            hour12: true,
+                                        })
+                                    ) : Array.isArray(value) ? ( // Display array as chips
+                                        <div className="flex flex-wrap gap-2">
+                                            {value.map((v, index) => (
+                                                <span key={index} className="px-2 py-1 text-xs font-medium text-white bg-blue-500 rounded-full">
+                                                    {v}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    ) : header.toLowerCase() === "image" ? ( // Handle images
+                                        <img src={value} alt="Image" className="w-10 h-10 rounded shadow-sm object-cover" />
+                                    ) : (
+                                        value
+                                    )}
+                                </td>
+                            );
+                        })}
                         {actions && (
                             <td className="px-4 py-3 text-right relative">
                                 <button

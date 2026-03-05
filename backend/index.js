@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cron from "node-cron";
+import compression from "compression";
 import BlockedIp from "./middlewares/ipBlockMiddleware.js";
 import path from "path";
 import { init } from "./utils/socket.js";
@@ -12,7 +13,9 @@ import http from "http";
 import routes from "./routes/index.js"
 import swaggerRoutes from "./swagger.js";
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
+
 const app = express();
+app.use(compression());
 dotenv.config();
 
 import { fileURLToPath } from "url";

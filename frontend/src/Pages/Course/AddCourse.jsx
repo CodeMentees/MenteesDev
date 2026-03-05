@@ -2,13 +2,13 @@ import { initFlowbite } from "flowbite";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useCourse } from "../../api/courseApi";
-import { useBlogCategory } from "../../api/blogCategoryApi";
+import { useCategoryAPI } from "../../api/categoryApi";
 import Toast from "../../Components/UI/Toast";
 
 
 function AddCourse() {
   const { createCourse, fetchCourse, updateCourse } = useCourse();
-  const { fetchBlogCategories } = useBlogCategory();
+  const { fetchCategories: getCourseCategories } = useCategoryAPI();
   const { id } = useParams();
   const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
   const [courseData, setCourseData] = useState({
@@ -18,22 +18,22 @@ function AddCourse() {
     price: "",
     category: "",
     description: "",
-    modules: [{ icon: "", title: "" }],
-    details: [{ label: "", content: [{ title: "", description: "" }] }],
+    modules: [],
+    details: [],
   });
   const [categories, setCategories] = useState([]);
   const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
     initFlowbite();
-    fetchCategories();
+    fetchCategoriesData();
     if (id) fetchCourseDetails();
   }, [id]);
 
-  const fetchCategories = async () => {
+  const fetchCategoriesData = async () => {
     try {
-      const blogCategories = await fetchBlogCategories()
-      setCategories(blogCategories.data);
+      const resp = await getCourseCategories()
+      setCategories(resp.categories);
     } catch (error) {
       console.log("Error fetching categories:", error);
     }

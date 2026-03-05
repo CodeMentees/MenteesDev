@@ -66,7 +66,7 @@ function PostList() {
           <div className="relative shadow-md sm:rounded-lg overflow-hidden">
             <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
               <Link
-                to={"/dashboard/add-post"}
+                to={"/admin/posts/create"}
                 className="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
               >
                 <svg

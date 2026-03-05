@@ -1,41 +1,44 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Helmet } from 'react-helmet';
-import Home from './Pages/Home';
-import LoginPage from './Pages/Login';
-import RegisterPage from './Pages/Register';
-import Header from './Components/Header/Header';
-import ProtectedRoute from './ProtectedRoute';
-import Blog from './Pages/Blog';
-import DashboardLayout from './Pages/Dashboard';
-import AddPost from './Pages/Post/AddPost';
-import PostList from './Pages/Post/PostList';
-import Footer from './Components/Footer/Footer';
-import AllCourse from './Pages/AllCourse';
-import CourseDetails from './Pages/CourseDetails';
-import UpdateCourseDetails from './Pages/Course/UpdateCourseDetails';
-import AddCourse from './Pages/Course/AddCourse';
-import AddCourseCategory from './Pages/Course/AddCourseCategory';
-import QueryList from './Pages/Query/QueryList';
-import CourseList from './Pages/Course/CourseList';
-import Unauth from './Pages/Error/Unauth';
-import AdminRoutes from "./AdminRoute";
-import BlogPage from './Pages/BlogPage';
-import HomeSite from './Pages/Home/HomeSite';
-import CategoryList from './Pages/Course/CategoryList';
-import { EventManager, CreateEvent } from './Pages/Event/AddEvent';
-import BlogCategoryManager from './Components/Blog/BlogCategoryManger';
-import NotFound from './Pages/Error/NotFound';
-import About from './Pages/About/About';
-import Contact from './Pages/Contact/Contact';
-import FAQ from './Pages/FAQ/FAQ';
-import UserList from './Pages/User/UserList';
-import AddEditUser from './Pages/User/AddEditUser';
-import DashboardOverview from './Pages/DashboardOverview';
-import SchoolCoding from './Pages/SchoolCoding';
-import CurriculumCatalog from './Pages/CurriculumCatalog';
-import SchoolCourseList from './Pages/Course/SchoolCourseList';
-import AddEditSchoolCourse from './Pages/Course/AddEditSchoolCourse';
+
+// Lazy load components
+const Home = lazy(() => import('./Pages/Home'));
+const LoginPage = lazy(() => import('./Pages/Login'));
+const RegisterPage = lazy(() => import('./Pages/Register'));
+const Header = lazy(() => import('./Components/Header/Header'));
+const ProtectedRoute = lazy(() => import('./ProtectedRoute'));
+const Blog = lazy(() => import('./Pages/Blog'));
+const DashboardLayout = lazy(() => import('./Pages/Dashboard'));
+const AddPost = lazy(() => import('./Pages/Post/AddPost'));
+const PostList = lazy(() => import('./Pages/Post/PostList'));
+const Footer = lazy(() => import('./Components/Footer/Footer'));
+const AllCourse = lazy(() => import('./Pages/AllCourse'));
+const CourseDetails = lazy(() => import('./Pages/CourseDetails'));
+const UpdateCourseDetails = lazy(() => import('./Pages/Course/UpdateCourseDetails'));
+const AddCourse = lazy(() => import('./Pages/Course/AddCourse'));
+const AddCourseCategory = lazy(() => import('./Pages/Course/AddCourseCategory'));
+const QueryList = lazy(() => import('./Pages/Query/QueryList'));
+const CourseList = lazy(() => import('./Pages/Course/CourseList'));
+const Unauth = lazy(() => import('./Pages/Error/Unauth'));
+const AdminRoutes = lazy(() => import("./AdminRoute"));
+const BlogPage = lazy(() => import('./Pages/BlogPage'));
+const HomeSite = lazy(() => import('./Pages/Home/HomeSite'));
+const CategoryList = lazy(() => import('./Pages/Course/CategoryList'));
+const EventManager = lazy(() => import('./Pages/Event/AddEvent').then(m => ({ default: m.EventManager })));
+const CreateEvent = lazy(() => import('./Pages/Event/AddEvent').then(m => ({ default: m.CreateEvent })));
+const BlogCategoryManager = lazy(() => import('./Components/Blog/BlogCategoryManger'));
+const NotFound = lazy(() => import('./Pages/Error/NotFound'));
+const About = lazy(() => import('./Pages/About/About'));
+const Contact = lazy(() => import('./Pages/Contact/Contact'));
+const FAQ = lazy(() => import('./Pages/FAQ/FAQ'));
+const UserList = lazy(() => import('./Pages/User/UserList'));
+const AddEditUser = lazy(() => import('./Pages/User/AddEditUser'));
+const DashboardOverview = lazy(() => import('./Pages/DashboardOverview'));
+const SchoolCoding = lazy(() => import('./Pages/SchoolCoding'));
+const CurriculumCatalog = lazy(() => import('./Pages/CurriculumCatalog'));
+const SchoolCourseList = lazy(() => import('./Pages/Course/SchoolCourseList'));
+const AddEditSchoolCourse = lazy(() => import('./Pages/Course/AddEditSchoolCourse'));
 
 // HelmetWrapper component to handle SEO meta tags
 const HelmetWrapper = ({
@@ -108,243 +111,245 @@ function App() {
     <>
       <Router>
         <div className="flex flex-col min-h-screen bg-dark-box">
-          <Header />
-          <main className="flex-grow font-sans mt-12">
-            <Routes>
-              {/* Public Routes */}
-              <Route
-                path="/"
-                element={
-                  <HelmetWrapper
-                    title="Home | CodeMentees"
-                    description="Welcome to CodeMentees - The best platform for learning coding and development skills"
-                    canonical="/"
-                  >
-                    <Home />
-                  </HelmetWrapper>
-                }
-              />
-
-              <Route
-                path="/register"
-                element={
-                  <HelmetWrapper
-                    title="Register | CodeMentees"
-                    description="Create an account to access our courses and resources"
-                    canonical="/register"
-                  >
-                    <RegisterPage />
-                  </HelmetWrapper>
-                }
-              />
-
-              <Route
-                path="/login"
-                element={
-                  <HelmetWrapper
-                    title="Login | CodeMentees"
-                    description="Login to your account to continue learning"
-                    canonical="/login"
-                  >
-                    <LoginPage />
-                  </HelmetWrapper>
-                }
-              />
-
-              <Route
-                path="/courses"
-                element={
-                  <HelmetWrapper
-                    title="All Courses | CodeMentees"
-                    description="Browse our comprehensive collection of coding courses"
-                    canonical="/courses"
-                  >
-                    <AllCourse />
-                  </HelmetWrapper>
-                }
-              />
-
-              <Route
-                path="/courses/:courseId"
-                element={
-                  <HelmetWrapper
-                    title={`CodeMentees course`}
-                    description={`Learn  with our comprehensive course`}
-                    canonical="/courses/:courseId"
-                  >
-                    <CourseDetails />
-                  </HelmetWrapper>
-                }
-              />
-
-              <Route
-                path='/about'
-                element={
-                  <HelmetWrapper
-                    title="About Us | CodeMentees"
-                    description="Learn about our mission, vision, and team of coding experts"
-                    canonical="/about"
-                  >
-                    <About />
-                  </HelmetWrapper>
-                }
-              />
-
-              <Route
-                path="/unauthorized"
-                element={
-                  <HelmetWrapper
-                    title="Unauthorized | CodeMentees"
-                    description="You don't have permission to access this page"
-                    canonical="/unauthorized"
-                    noindex={true}
-                  >
-                    <Unauth />
-                  </HelmetWrapper>
-                }
-              />
-
-              <Route
-                path="/contact"
-                element={
-                  <HelmetWrapper
-                    title="Contact Us | CodeMentees"
-                    description="Get in touch with our team for questions and support"
-                    canonical="/contact"
-                  >
-                    <Contact />
-                  </HelmetWrapper>
-                }
-              />
-
-              <Route
-                path='/faq'
-                element={
-                  <HelmetWrapper
-                    title="FAQ | CodeMentees"
-                    description="Frequently asked questions about our platform and courses"
-                    canonical="/faq"
-                  >
-                    <FAQ />
-                  </HelmetWrapper>
-                }
-              />
-
-              <Route
-                path="/school-coding"
-                element={
-                  <HelmetWrapper
-                    title="School Coding | CodeMentees"
-                    description="Explore our comprehensive K-12 computer science curriculum designed for schools."
-                    canonical="/school-coding"
-                  >
-                    <SchoolCoding />
-                  </HelmetWrapper>
-                }
-              />
-
-              <Route
-                path="/school-coding/catalog"
-                element={
-                  <HelmetWrapper
-                    title="Curriculum Catalog | CodeMentees"
-                    description="Explore our full school coding curriculum."
-                    canonical="/school-coding/catalog"
-                  >
-                    <CurriculumCatalog />
-                  </HelmetWrapper>
-                }
-              />
-
-              <Route
-                path="/school-courses/edit/:id"
-                element={
-                  <AdminRoutes>
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen text-white">Loading...</div>}>
+            <Header />
+            <main className="flex-grow font-sans mt-12">
+              <Routes>
+                {/* Public Routes */}
+                <Route
+                  path="/"
+                  element={
                     <HelmetWrapper
-                      title="Edit School Course | CodeMentees"
-                      description="Edit school course details"
+                      title="Home | CodeMentees"
+                      description="Welcome to CodeMentees - The best platform for learning coding and development skills"
+                      canonical="/"
+                    >
+                      <Home />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path="/register"
+                  element={
+                    <HelmetWrapper
+                      title="Register | CodeMentees"
+                      description="Create an account to access our courses and resources"
+                      canonical="/register"
+                    >
+                      <RegisterPage />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path="/login"
+                  element={
+                    <HelmetWrapper
+                      title="Login | CodeMentees"
+                      description="Login to your account to continue learning"
+                      canonical="/login"
+                    >
+                      <LoginPage />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path="/courses"
+                  element={
+                    <HelmetWrapper
+                      title="All Courses | CodeMentees"
+                      description="Browse our comprehensive collection of coding courses"
+                      canonical="/courses"
+                    >
+                      <AllCourse />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path="/courses/:courseId"
+                  element={
+                    <HelmetWrapper
+                      title={`CodeMentees course`}
+                      description={`Learn  with our comprehensive course`}
+                      canonical="/courses/:courseId"
+                    >
+                      <CourseDetails />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path='/about'
+                  element={
+                    <HelmetWrapper
+                      title="About Us | CodeMentees"
+                      description="Learn about our mission, vision, and team of coding experts"
+                      canonical="/about"
+                    >
+                      <About />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path="/unauthorized"
+                  element={
+                    <HelmetWrapper
+                      title="Unauthorized | CodeMentees"
+                      description="You don't have permission to access this page"
+                      canonical="/unauthorized"
                       noindex={true}
                     >
-                      <AddEditSchoolCourse />
+                      <Unauth />
                     </HelmetWrapper>
-                  </AdminRoutes>
-                }
-              />
+                  }
+                />
 
-              <Route
-                path="/blogs"
-                element={
-                  <HelmetWrapper
-                    title="Blog | CodeMentees"
-                    description="Read our latest articles and insights about coding and technology"
-                    canonical="/blogs"
-                  >
-                    <Blog />
-                  </HelmetWrapper>
-                }
-              />
-
-              <Route
-                path="/blogs/:id"
-                element={
-                  <HelmetWrapper
-                    title={`CodeMentees Blog`}
-                    description={`Read our article about`}
-                    canonical="/blogs/:id"
-                  >
-                    <BlogPage />
-                  </HelmetWrapper>
-                }
-              />
-
-              {/* Admin Routes (Dashboard) */}
-              <Route
-                path="/admin"
-                element={
-                  <AdminRoutes>
+                <Route
+                  path="/contact"
+                  element={
                     <HelmetWrapper
-                      title="Admin Dashboard | CodeMentees"
-                      description="Admin dashboard for managing content"
-                      noindex={true}
-                      nofollow={true}
+                      title="Contact Us | CodeMentees"
+                      description="Get in touch with our team for questions and support"
+                      canonical="/contact"
                     >
-                      <DashboardLayout />
+                      <Contact />
                     </HelmetWrapper>
-                  </AdminRoutes>
-                }
-              >
-                {adminRoutes.map((route) => (
-                  <Route
-                    key={route.path}
-                    path={route.path}
-                    element={
+                  }
+                />
+
+                <Route
+                  path='/faq'
+                  element={
+                    <HelmetWrapper
+                      title="FAQ | CodeMentees"
+                      description="Frequently asked questions about our platform and courses"
+                      canonical="/faq"
+                    >
+                      <FAQ />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path="/school-coding"
+                  element={
+                    <HelmetWrapper
+                      title="School Coding | CodeMentees"
+                      description="Explore our comprehensive K-12 computer science curriculum designed for schools."
+                      canonical="/school-coding"
+                    >
+                      <SchoolCoding />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path="/school-coding/catalog"
+                  element={
+                    <HelmetWrapper
+                      title="Curriculum Catalog | CodeMentees"
+                      description="Explore our full school coding curriculum."
+                      canonical="/school-coding/catalog"
+                    >
+                      <CurriculumCatalog />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path="/school-courses/edit/:id"
+                  element={
+                    <AdminRoutes>
                       <HelmetWrapper
-                        title={`${route.title} | Admin`}
+                        title="Edit School Course | CodeMentees"
+                        description="Edit school course details"
+                        noindex={true}
+                      >
+                        <AddEditSchoolCourse />
+                      </HelmetWrapper>
+                    </AdminRoutes>
+                  }
+                />
+
+                <Route
+                  path="/blogs"
+                  element={
+                    <HelmetWrapper
+                      title="Blog | CodeMentees"
+                      description="Read our latest articles and insights about coding and technology"
+                      canonical="/blogs"
+                    >
+                      <Blog />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path="/blogs/:id"
+                  element={
+                    <HelmetWrapper
+                      title={`CodeMentees Blog`}
+                      description={`Read our article about`}
+                      canonical="/blogs/:id"
+                    >
+                      <BlogPage />
+                    </HelmetWrapper>
+                  }
+                />
+
+                {/* Admin Routes (Dashboard) */}
+                <Route
+                  path="/admin"
+                  element={
+                    <AdminRoutes>
+                      <HelmetWrapper
+                        title="Admin Dashboard | CodeMentees"
+                        description="Admin dashboard for managing content"
                         noindex={true}
                         nofollow={true}
                       >
-                        {route.element}
+                        <DashboardLayout />
                       </HelmetWrapper>
-                    }
-                  />
-                ))}
-              </Route>
+                    </AdminRoutes>
+                  }
+                >
+                  {adminRoutes.map((route) => (
+                    <Route
+                      key={route.path}
+                      path={route.path}
+                      element={
+                        <HelmetWrapper
+                          title={`${route.title} | Admin`}
+                          noindex={true}
+                          nofollow={true}
+                        >
+                          {route.element}
+                        </HelmetWrapper>
+                      }
+                    />
+                  ))}
+                </Route>
 
-              <Route
-                path="*"
-                element={
-                  <HelmetWrapper
-                    title="Page Not Found | CodeMentees"
-                    description="The page you're looking for doesn't exist"
-                    noindex={true}
-                  >
-                    <NotFound />
-                  </HelmetWrapper>
-                }
-              />
-            </Routes>
-          </main>
-          <Footer />
+                <Route
+                  path="*"
+                  element={
+                    <HelmetWrapper
+                      title="Page Not Found | CodeMentees"
+                      description="The page you're looking for doesn't exist"
+                      noindex={true}
+                    >
+                      <NotFound />
+                    </HelmetWrapper>
+                  }
+                />
+              </Routes>
+            </main>
+            <Footer />
+          </Suspense>
         </div>
       </Router>
     </>

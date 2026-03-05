@@ -23,7 +23,7 @@ const useCRUD = (endpoint) => {
 
       // Include body for POST, PUT, PATCH requests
       if (body && ["POST", "PUT", "PATCH"].includes(method.toUpperCase())) {
-        config.data = body instanceof FormData ? body : JSON.stringify(body);
+        config.data = body;
       }
 
       const response = await api(config);

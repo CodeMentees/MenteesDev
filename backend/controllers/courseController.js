@@ -45,11 +45,16 @@ import mongoose from "mongoose";
  */
 const createCourse = asyncHandler(async (req, res) => {
   const { name, category, description, modules, details, tags, price } = req.body;
-  const image = req.file ? req.file.path : req.body.image;
+  let image = req.file ? req.file.path : req.body.image;
 
-  if (!name || !category) {
+  // Defensive check for image field
+  if (image && typeof image === 'object' && Object.keys(image).length === 0) {
+    image = "";
+  }
+
+  if (!name || !category || !image) {
     res.status(400);
-    throw new Error("Name and category are required");
+    throw new Error("Name, category, and image are required");
   }
 
   const modulesParsed = typeof modules === 'string' ? JSON.parse(modules) : modules;

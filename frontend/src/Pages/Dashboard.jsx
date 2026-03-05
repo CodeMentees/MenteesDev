@@ -11,8 +11,7 @@ const menuItems = [
     title: "Posts",
     icon: <FaFileAlt />,
     subItems: [
-      { id: 21, title: "Create Post", link: "/admin/posts/create" },
-      { id: 22, title: "Post List", link: "/admin/posts" },
+      { id: 22, title: "Blog List", link: "/admin/posts" },
       { id: 23, title: "Categories", link: "/admin/posts/categories" },
     ],
   },
@@ -21,7 +20,6 @@ const menuItems = [
     title: "Courses",
     icon: <FaBook />,
     subItems: [
-      { id: 31, title: "Create Course", link: "/admin/courses/create" },
       { id: 32, title: "Course List", link: "/admin/courses" },
       { id: 33, title: "Categories", link: "/admin/categories" },
       { id: 34, title: "School Course List", link: "/admin/school-courses" },

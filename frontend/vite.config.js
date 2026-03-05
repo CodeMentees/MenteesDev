@@ -9,4 +9,16 @@ export default defineConfig({
       '/api': 'http://localhost:5000',
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          ui: ['flowbite', 'aos', 'react-icons'],
+          utils: ['axios', 'redux', '@reduxjs/toolkit'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+  },
 })

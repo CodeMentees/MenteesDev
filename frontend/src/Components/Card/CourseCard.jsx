@@ -5,7 +5,7 @@ function CourseCard({ category, courses }) {
         <div className='container bg-black-500'>
 
             <div className="max-w-4xl mx-auto p-0 lg:p-4 rounded-lg shadow-lg">
-                <img className='inline text-white' style={{ height: "32px" }} src={category.image} alt={category.name} />
+                <img className='inline text-white' style={{ height: "32px" }} src={category.image} alt={category.name} loading="lazy" />
                 <h1 className="text-xl inline mx-2 font-bold text-white mb-4">{category.name}</h1>
                 <p className="text-sm mb-6 text-white">{category.description}</p>
 
@@ -21,6 +21,7 @@ function CourseCard({ category, courses }) {
                                         src={course.image}
                                         alt={course.name}
                                         className="h-full w-full p-4 border-none object-cover text-gray-700 transition"
+                                        loading="lazy"
                                     />
                                     <span className="absolute top-2  left-2 rounded-full bg-blue-600  px-3 py-1 text-xs font-semibold text-black">
                                         {course.category.name}
@@ -29,6 +30,7 @@ function CourseCard({ category, courses }) {
                                         src="/images/AnbWyIjnwNbW9Wz6c_cja.svg"
                                         className="absolute inset-1/2 w-10 max-w-full -translate-x-1/2 -translate-y-1/2 transition group-hover:scale-125"
                                         alt=""
+                                        loading="lazy"
                                     />
                                 </div>
                             </Link>

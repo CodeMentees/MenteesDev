@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link  } from "react-router-dom"
+import { Link } from "react-router-dom"
 function CourseCard({ course }) {
     return (
         <div className="w-full max-w-xs p-4 bg-dark-box border border-blue-900 rounded-lg shadow-md shadow-indigo-700  sm:p-8 ">
@@ -10,7 +10,7 @@ function CourseCard({ course }) {
             ))}
 
             <div className="items-baseline text-white">
-                <img className='mt-2' style={{ height: "40px" }} src={course.image} alt={course.name} />
+                <img className='mt-2' style={{ height: "40px" }} src={course.image} alt={course.name} loading="lazy" />
                 <span className="text-lg font-semibold">{course.name}</span>
             </div>
 
