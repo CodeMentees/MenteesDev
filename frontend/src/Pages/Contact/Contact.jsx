@@ -174,10 +174,32 @@ const Contact = () => {
                     required
                   >
                     <option value="">Select a Course</option>
-                    <option value="Spring Bootcamp">Spring Bootcamp</option>
-                    <option value="Summer Training">Summer Training</option>
-                    <option value="Winter Training">Winter Training</option>
-                    <option value="Full Stack Development">Full Stack Development</option>
+                    <optgroup label="Programming Languages">
+                      <option value="Python Programming">Python Programming</option>
+                      <option value="JavaScript">JavaScript</option>
+                      <option value="C / C++">C / C++</option>
+                      <option value="Java">Java</option>
+                    </optgroup>
+                    <optgroup label="Data Structures & Algorithms">
+                      <option value="DSA with C++">DSA with C++</option>
+                      <option value="DSA with Java">DSA with Java</option>
+                      <option value="DSA with Python">DSA with Python</option>
+                    </optgroup>
+                    <optgroup label="Web Development">
+                      <option value="Full Stack Development">Full Stack Development</option>
+                      <option value="Frontend Development (React)">Frontend Development (React)</option>
+                      <option value="Backend Development (Node.js)">Backend Development (Node.js)</option>
+                      <option value="MERN Stack">MERN Stack</option>
+                    </optgroup>
+                    <optgroup label="Other Programs">
+                      <option value="Machine Learning & AI">Machine Learning & AI</option>
+                      <option value="Data Science">Data Science</option>
+                      <option value="System Design">System Design</option>
+                      <option value="Spring Bootcamp">Spring Bootcamp</option>
+                      <option value="Summer Training">Summer Training</option>
+                      <option value="Winter Training">Winter Training</option>
+                      <option value="Other">Other</option>
+                    </optgroup>
                   </select>
                 </div>
               </div>

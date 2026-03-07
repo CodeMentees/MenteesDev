@@ -1,8 +1,9 @@
 import { initFlowbite } from "flowbite";
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import RichTextEditor from "../../Components/RichTextEditor";
 import { useBlogCategory } from "../../api/blogCategoryApi";
+import { FaPlus } from "react-icons/fa";
 
 function AddPost() {
   const { fetchBlogCategories } = useBlogCategory();
@@ -108,11 +109,10 @@ function AddPost() {
     <section className="bg-gray-900 text-white min-h-screen p-6">
       {toast.visible && (
         <div
-          className={`fixed z-50 top-5 right-5 p-4 rounded-lg shadow-md ${
-            toast.type === "error"
-              ? "bg-red-700 text-red-200"
-              : "bg-green-700 text-green-200"
-          }`}
+          className={`fixed z-50 top-5 right-5 p-4 rounded-lg shadow-md ${toast.type === "error"
+            ? "bg-red-700 text-red-200"
+            : "bg-green-700 text-green-200"
+            }`}
         >
           ✅ <span>{toast.message}</span>
         </div>
@@ -154,9 +154,17 @@ function AddPost() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-400">
-                Categories
-              </label>
+              <div className="flex justify-between items-center mb-1">
+                <label className="block text-sm font-medium text-gray-400">
+                  Categories
+                </label>
+                <Link
+                  to="/admin/posts/categories"
+                  className="text-xs text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1"
+                >
+                  <FaPlus className="w-2 h-2" /> Manage Categories
+                </Link>
+              </div>
               <div className="flex flex-wrap gap-2 mb-2">
                 {postData.categories.map((category) => (
                   <span

@@ -39,6 +39,7 @@ const SchoolCoding = lazy(() => import('./Pages/SchoolCoding'));
 const CurriculumCatalog = lazy(() => import('./Pages/CurriculumCatalog'));
 const SchoolCourseList = lazy(() => import('./Pages/Course/SchoolCourseList'));
 const AddEditSchoolCourse = lazy(() => import('./Pages/Course/AddEditSchoolCourse'));
+const ForgotPassword = lazy(() => import('./Pages/ForgotPassword'));
 
 // HelmetWrapper component to handle SEO meta tags
 const HelmetWrapper = ({
@@ -151,6 +152,18 @@ function App() {
                       canonical="/login"
                     >
                       <LoginPage />
+                    </HelmetWrapper>
+                  }
+                />\n\n                <Route
+                  path="/forgot-password"
+                  element={
+                    <HelmetWrapper
+                      title="Forgot Password | CodeMentees"
+                      description="Reset your CodeMentees account password securely"
+                      canonical="/forgot-password"
+                      noindex={true}
+                    >
+                      <ForgotPassword />
                     </HelmetWrapper>
                   }
                 />

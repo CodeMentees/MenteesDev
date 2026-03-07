@@ -110,6 +110,12 @@ export const authUser = asyncHandler(async (req, res) => {
     const ticket = await client.verifyIdToken({ idToken: credential, audience: client_id });
     const payload = ticket.getPayload();
     user = await User.findOne({ email: payload.email });
+
+    // Auto-register via Google if user does not exist
+    if (!user) {
+      const { email, given_name, family_name } = payload;
+      user = await User.create({ email, name: `${given_name || ''} ${family_name || ''}`.trim() || 'Google User' });
+    }
   } else {
     user = await User.findOne({ email });
     if (!user || !(await user.matchPassword(password))) {

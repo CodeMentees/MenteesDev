@@ -1,14 +1,21 @@
 import { Router } from "express";
-import { createPost, deletePost, getPost, getPosts, updatePost } from "../controllers/postController.js";
+import { createPost, deletePost, getPost, getPosts, updatePost, likePost, addComment, deleteComment } from "../controllers/postController.js";
 import isAdmin from "../middlewares/isAdmin.js";
+import isAuthenticated from "../middlewares/IsAuthenticate.js";
 
 const router = Router();
 
-// Define routes
+// Public routes
 router.get("/", getPosts);
 router.get("/:id", getPost);
 
-router.use(isAdmin)
+// Authenticated user routes (likes & comments)
+router.post("/:id/like", isAuthenticated, likePost);
+router.post("/:id/comment", isAuthenticated, addComment);
+router.delete("/:id/comment/:commentId", isAdmin, deleteComment);
+
+// Admin-only routes
+router.use(isAdmin);
 router.post("/", createPost);
 router.put("/:id", updatePost);
 router.delete("/:id", deletePost);
