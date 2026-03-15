@@ -4,10 +4,11 @@ import isAdmin from "../middlewares/isAdmin.js";
 
 const router = Router(); 
 
+router.use(isAdmin)
+
 // Define routes
 router.get("/", getUsers);
 router.get("/:id", getUser);
-router.use(isAdmin)
 router.post("/", createUser);
 router.put("/:id", updateUser);
 router.delete("/:id", deleteUser);

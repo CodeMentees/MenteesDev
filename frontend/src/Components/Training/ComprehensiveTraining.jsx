@@ -39,7 +39,7 @@ const ComprehensiveTraining = () => {
         {
             title: "Spring Bootcamp",
             duration: "30 Days",
-            price: "₹ 6,000",
+            // price: "₹ 6,000",
             priceColor: "bg-blue-600",
             description:
                 "Project Based Training. It focuses on practical coding skills, teamwork, and real-world application development.",
@@ -48,7 +48,7 @@ const ComprehensiveTraining = () => {
         {
             title: "Summer Training",
             duration: "45-60 Days",
-            price: "₹ 7,000",
+            // price: "₹ 7,000",
             priceColor: "bg-orange-600",
             description:
                 "Objective Based Training. It is designed to enhance knowledge and skills in specific areas of technology.",
@@ -57,7 +57,7 @@ const ComprehensiveTraining = () => {
         {
             title: "Winter Training",
             duration: "15-30 Days",
-            price: "₹ 4,500",
+            // price: "₹ 4,500",
             priceColor: "bg-blue-600",
             description:
                 "Seasonal Based Training. It provides focused learning opportunities during the winter break.",

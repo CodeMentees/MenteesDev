@@ -17,7 +17,7 @@ function PostList() {
   const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
 
   const handleDelete = async (id) => {
-    await deleteItem(id, "/api/posts");
+    await deleteItem(id, "/posts");
   };
 
   useEffect(() => {

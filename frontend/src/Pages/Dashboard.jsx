@@ -21,8 +21,9 @@ const menuItems = [
     icon: <FaBook />,
     subItems: [
       { id: 32, title: "Course List", link: "/admin/courses" },
-      { id: 33, title: "Categories", link: "/admin/categories" },
-      { id: 34, title: "School Course List", link: "/admin/school-courses" },
+      { id: 33, title: "Create Course", link: "/admin/courses/create" },
+      { id: 34, title: "Categories", link: "/admin/categories" },
+      { id: 35, title: "School Course List", link: "/admin/school-courses" },
     ],
   },
   {

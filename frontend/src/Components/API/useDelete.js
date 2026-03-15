@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../../api/api';
 
 const useDelete = () => {
   const [message, setMessage] = useState('');
@@ -9,7 +9,7 @@ const useDelete = () => {
   const deleteItem = async (id, apiUrl) => {
     setIsLoading(true);
     try {
-      const response = await axios.delete(`${apiUrl}/${id}`);
+      const response = await api.delete(`${apiUrl}/${id}`);
       
       if (response.status === 200 || response.status === 204) {
         setMessage('Item deleted successfully!');

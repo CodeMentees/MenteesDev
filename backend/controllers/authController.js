@@ -2,6 +2,8 @@ import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
 import { OAuth2Client } from "google-auth-library";
 import asyncHandler from "express-async-handler";
+import crypto from "crypto";
+import { sendVerificationOTP } from "../utils/emailService.js";
 
 const client = new OAuth2Client();
 
@@ -42,7 +44,7 @@ const client = new OAuth2Client();
  *         description: User already exists or invalid data
  */
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, credential, client_id } = req.body;
+  const { name, email, password, phoneNumber, credential, client_id } = req.body;
   let user;
 
   if (credential) {
@@ -56,21 +58,108 @@ export const registerUser = asyncHandler(async (req, res) => {
     user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
 
-    user = await User.create({ email, name: `${given_name} ${family_name}` });
+    user = await User.create({ email, name: `${given_name} ${family_name}`, phoneNumber });
   } else {
     user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
-    user = await User.create({ name, email, password });
+
+    const otp = crypto.randomInt(100000, 999999).toString();
+    const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    user = await User.create({ name, email, password, phoneNumber, verificationOTP: otp, otpExpiresAt, isVerified: false });
+
+    // Send verification OTP
+    try {
+      await sendVerificationOTP(email, otp);
+    } catch (error) {
+      console.error("Error sending verification OTP:", error);
+      // Delete the unverified user if email fails to prevent "ghost" accounts
+      await User.deleteOne({ _id: user._id });
+      return res.status(500).json({ 
+        message: "Failed to send verification email. Please check your email configuration or try again later.",
+        error: error.message 
+      });
+    }
   }
 
   res.status(201).json({
-    _id: user._id,
-    name: user.name,
-    email: user.email,
-    isAdmin: user.isAdmin,
-    token: generateToken(user),
-    message: "User registered successfully",
+    message: "Verification code has been sent to your email.",
+    email: email // Send email back so frontend can use it
   });
+});
+
+/**
+ * POST /api/auth/verify-otp
+ * Verifies user's email using the 6-digit OTP
+ */
+export const verifyOTP = asyncHandler(async (req, res) => {
+  const { email, otp } = req.body;
+
+  if (!email || !otp) {
+    return res.status(400).json({ message: "Email and code are required" });
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  if (user.isVerified) {
+    return res.status(400).json({ message: "Email is already verified" });
+  }
+
+  if (!user.verificationOTP || user.verificationOTP !== otp) {
+    return res.status(400).json({ message: "Invalid verification code" });
+  }
+
+  if (new Date() > user.otpExpiresAt) {
+    return res.status(400).json({ message: "Verification code has expired. Please request a new one." });
+  }
+
+  user.isVerified = true;
+  user.verificationOTP = undefined;
+  user.otpExpiresAt = undefined;
+  await user.save();
+
+  res.json({ message: "Email verified successfully! You can now log in." });
+});
+
+/**
+ * POST /api/auth/resend-otp
+ * Resends a new 6-digit OTP to the user
+ */
+export const resendOTP = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  if (user.isVerified) {
+    return res.status(400).json({ message: "Email is already verified" });
+  }
+
+  const otp = crypto.randomInt(100000, 999999).toString();
+  const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+  user.verificationOTP = otp;
+  user.otpExpiresAt = otpExpiresAt;
+  await user.save();
+
+  try {
+    await sendVerificationOTP(email, otp);
+    res.json({ message: "A new verification code has been sent to your email." });
+  } catch (error) {
+    console.error("Error resending OTP:", error);
+    res.status(500).json({ message: "Failed to send verification code. Please try again later." });
+  }
 });
 
 /**
@@ -119,7 +208,11 @@ export const authUser = asyncHandler(async (req, res) => {
   } else {
     user = await User.findOne({ email });
     if (!user || !(await user.matchPassword(password))) {
-      return res.status(401).json({ message: "User not Signed Up" });
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    if (!user.isVerified && user.email !== process.env.ADMIN_EMAIL) {
+      return res.status(401).json({ message: "Please verify your email address before logging in.", email: user.email, needsVerification: true });
     }
   }
 

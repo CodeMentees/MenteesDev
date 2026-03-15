@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom"
+import { initFlowbite } from 'flowbite';
 import useDelete from '../../Components/API/useDelete';
 import ReusableTable from '../../Components/Table/Table';
 import Pagination from '../../Components/UI/Pagination';
 import Toast from '../../Components/UI/Toast';
+import DeleteConfirmModal from '../../Components/UI/DeleteConfirmModal';
 
 import { useCourse } from '../../api/courseApi';
 function CourseList() {
@@ -13,21 +15,35 @@ function CourseList() {
     const [isToast, setToast] = useState(false)
     const { deleteItem, message, isSuccess, isLoading } = useDelete();
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(10)
+    const [totalPages, setTotalPages] = useState(10);
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [selectedCourse, setSelectedCourse] = useState(null);
     const navigate = useNavigate();
 
-    const handleDelete = async (id) => {
-        await deleteCourse(id);
-        setToast(true)
-        await fetchData()
+    const handleDeleteClick = (id) => {
+        const course = Courses.find(c => (c._id === id || c.id === id));
+        setSelectedCourse(course);
+        setDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!selectedCourse) return;
+        try {
+            await deleteCourse(selectedCourse._id || selectedCourse.id);
+            setToast(true);
+            setTimeout(() => setToast(false), 3000);
+            setDeleteModalOpen(false);
+            await fetchData();
+        } catch (err) {
+            alert("Failed to delete course: " + err.message);
+        }
     };
 
     const headers = ['name', 'price', 'image'];
     const actions = [
-        { label: 'Show', handler: (id) => console.log(`Show item with ID: ${id}`) },
-        { label: 'Edit', handler: (id) => navigate(`/admin/courses/edit/${id}`) },
-        { label: 'Edit Details', handler: (id) => navigate(`/admin/courses/${id}/edit`) },
-        { label: 'Delete', handler: handleDelete },
+        { label: 'Manage', handler: (id) => navigate(`/admin/courses/${id}/manage`) },
+        { label: 'Edit Info', handler: (id) => navigate(`/admin/courses/${id}/manage`) },
+        { label: 'Delete', handler: handleDeleteClick },
     ];
 
     const fetchData = async (page = currentPage) => {
@@ -92,6 +108,14 @@ function CourseList() {
                     </div>
                 </div>
             </section>
+            
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setDeleteModalOpen(false)}
+                onConfirm={handleConfirmDelete}
+                itemName={selectedCourse?.name || "this course"}
+                isLoading={isLoading}
+            />
         </div>
     )
 }

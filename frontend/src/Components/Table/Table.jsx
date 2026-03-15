@@ -93,7 +93,7 @@ const ReusableTable = ({ headers, data, actions, isLoading }) => {
                                                 <li key={actionIndex}>
                                                     <button
                                                         onClick={() => {
-                                                            action.handler(item._id);
+                                                            action.handler(item._id || item.id);
                                                             setActiveDropdown(null);
                                                         }}
                                                         className={`block w-full py-2.5 px-4 hover:bg-gray-50 dark:hover:bg-gray-700 dark:hover:text-white text-left font-medium transition-colors ${action.label.toLowerCase() === 'delete' ? 'text-red-500 hover:text-red-600' : 'text-gray-700 dark:text-gray-200'

@@ -7,6 +7,11 @@ const userSchema = new mongoose.Schema({
   password: String,
   isAdmin: { type: Boolean, default: false },
   isActive: { type: Boolean, default: true },
+  isVerified: { type: Boolean, default: false },
+  role: { type: String, default: "viewer" },
+  phoneNumber: String,
+  verificationOTP: String,
+  otpExpiresAt: Date,
 });
 
 userSchema.pre("save", async function (next) {

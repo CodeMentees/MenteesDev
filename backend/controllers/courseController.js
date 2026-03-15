@@ -238,14 +238,18 @@ const updateCourse = asyncHandler(async (req, res) => {
  *         description: Course not found
  */
 const deleteCourse = asyncHandler(async (req, res) => {
-  const course = await Course.findById(req.params.id);
-  if (!course) {
-    res.status(404).json({ data: null, message: "Course not found" });
-    return;
-  }
+  try {
+    const course = await Course.findById(req.params.id);
+    if (!course) {
+      return res.status(404).json({ success: false, message: "Course not found" });
+    }
 
-  await course.deleteOne();
-  res.json({ data: null, message: "Course deleted successfully" });
+    await course.deleteOne();
+    res.status(200).json({ success: true, message: "Course deleted successfully" });
+  } catch (error) {
+    console.error("Delete course error:", error);
+    res.status(500).json({ success: false, message: error.message || "Failed to delete course" });
+  }
 });
 
 /**
@@ -293,7 +297,7 @@ const updateCourseDetails = asyncHandler(async (req, res) => {
     return;
   }
 
-  res.status(200).json(updatedCourse);
+  res.status(200).json({ success: true, data: updatedCourse, message: "Course details updated successfully" });
 });
 
 /**

@@ -73,6 +73,13 @@ function LoginPage() {
       } else {
         showToast(errorMessage || "An error occurred during login.", "error");
       }
+      
+      // Handle the case where the user needs verification (from error message or special flag)
+      if (error.response && error.response.status === 401 && error.response.data && error.response.data.needsVerification) {
+         setTimeout(() => {
+           navigate("/verify-otp", { state: { email: error.response.data.email } });
+         }, 2000);
+      }
     }
   };
 
@@ -176,10 +183,9 @@ function LoginPage() {
                 </button>
               </div>
             </form>
-            <div className="mt-6">
+{/* <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  {/* <div className="w-full border-t border-gray-300" /> */}
                 </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-transparent text-gray-400">
@@ -195,7 +201,7 @@ function LoginPage() {
                   onError={() => console.error("Google Login Failed")}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

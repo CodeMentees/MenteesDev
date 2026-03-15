@@ -142,8 +142,8 @@ function CourseDetails() {
                       key={idx}
                       className="p-4 bg-gray-800 rounded-lg transition-all duration-300 hover:bg-gray-700"
                     >
-                      <strong>{item.title}</strong>
-                      <p className="text-sm text-gray-300">{item.description}</p>
+                      <strong className="text-blue-400 block mb-1">{item.title}</strong>
+                      <p className="text-sm text-gray-400">{item.description}</p>
                     </li>
                   ))}
                 </ul>

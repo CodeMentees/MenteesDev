@@ -11,9 +11,12 @@ function Register() {
     name: "",
     email: "",
     password: "",
+    phoneNumber: "",
     credential: "",
     client_id: "",
   });
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [toast, setToast] = useState({
     visible: false,
@@ -53,6 +56,7 @@ function Register() {
       client_id: googleResponse.clientId || "",
     };
 
+    setIsLoading(true);
     try {
       const response = await fetch("/api/auth/register", {
         method: "POST",
@@ -65,16 +69,18 @@ function Register() {
       const data = await response.json();
 
       if (response.ok) {
-        showToast(data.message || "User registered successfully!", "success");
+        showToast(data.message || "Registration successful! Please verify your email.", "success");
         setTimeout(() => {
-          navigate("/login");
-        }, 2000);
+          navigate("/verify-otp", { state: { email: formData.email } });
+        }, 1500);
       } else {
         showToast(data.message || "Registration failed.", "error");
       }
     } catch (error) {
       console.error("Error during registration:", error);
       showToast("An error occurred. Please try again.", "error");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -149,14 +155,27 @@ function Register() {
                 placeholder="Enter password"
               />
             </div>
-            <div className="flex items-center mt-8">
+
+            <div className="mt-8">
+              <label className="text-white text-xs block mb-2">Phone Number</label>
               <input
+                name="phoneNumber"
+                type="tel"
+                value={formData.phoneNumber}
+                onChange={setFormDataHandler}
+                required
+                className="w-full bg-transparent text-sm text-white border-b border-gray-300 focus:border-dark-btn pl-2 pr-8 py-3 outline-none"
+                placeholder="Enter phone number"
+              />
+            </div>
+            {/* <div className="flex items-center mt-8"> */}
+            {/* <input
                 id="terms"
                 type="checkbox"
                 className="h-4 w-4 shrink-0 rounded"
                 required
-              />
-              <label htmlFor="terms" className="text-white ml-3 block text-sm">
+              /> */}
+            {/* <label htmlFor="terms" className="text-white ml-3 block text-sm">
                 I accept the{" "}
                 <a
                   href="#"
@@ -164,15 +183,16 @@ function Register() {
                 >
                   Terms and Conditions
                 </a>
-              </label>
-            </div>
+              </label> */}
+            {/* </div> */}
             <div className="mt-8">
               <button
                 type="button"
                 onClick={() => signUpHandler({})}
-                className="w-max shadow-xl py-3 px-6 text-sm text-gray-900 font-semibold rounded bg-dark-btn"
+                disabled={isLoading}
+                className={`w-max shadow-xl py-3 px-6 text-sm text-gray-900 font-semibold rounded bg-dark-btn ${isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-opacity-90"}`}
               >
-                Register
+                {isLoading ? "Registering..." : "Register"}
               </button>
               <p className="text-sm text-white mt-8">
                 Already have an account?{" "}
@@ -184,12 +204,12 @@ function Register() {
                 </Link>
               </p>
             </div>
-            <div className="mt-4">
+            {/* <div className="mt-4">
               <GoogleLogin
                 onSuccess={signUpHandler}
                 onError={() => showToast("Google Login Failed", "error")}
               />
-            </div>
+            </div> */}
           </form>
         </div>
       </div>

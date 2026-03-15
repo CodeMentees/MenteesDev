@@ -30,11 +30,14 @@ function UserList() {
     if (!userToDelete) return;
     setIsDeleting(true);
     try {
-      await deleteItem(userToDelete._id, "/api/users");
+      await deleteItem(userToDelete._id, "/users");
       setIsDeleteModalOpen(false);
       setUserToDelete(null);
     } catch (error) {
       console.error("Error deleting user:", error);
+      setToast({ visible: true, message: error.message || "An error occurred while deleting user.", type: "error" });
+      setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 3000);
+      setIsDeleteModalOpen(false);
     } finally {
       setIsDeleting(false);
     }
@@ -69,7 +72,7 @@ function UserList() {
     initFlowbite();
   }, [users]);
 
-  const headers = ["name", "email"];
+  const headers = ["name", "email", "role", "phoneNumber"];
   const actions = [
     { label: "Show", handler: (id) => console.log(`Show user with ID: ${id}`) },
     { label: "Edit", handler: (id) => navigate(`/admin/users/edit/${id}`) },
@@ -79,7 +82,7 @@ function UserList() {
   return (
     <div className="mx-auto max-w-screen-xl px-2 py-10">
       {toast.visible && (
-        <div className="fixed z-50 top-5 right-5 p-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
+        <div className={`fixed z-50 top-5 right-5 p-4 ${toast.type === "error" ? "bg-red-500" : "bg-green-500"} text-white px-4 py-2 rounded-lg shadow-lg`}>
           {toast.message}
         </div>
       )}

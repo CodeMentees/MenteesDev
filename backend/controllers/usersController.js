@@ -75,13 +75,18 @@ const deleteUser = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Soft delete: set "isActive" to false
-    user.isActive = false;
-    await user.save();
+    // Protection: Prevent admin from deleting themselves
+    if (req.userId && req.userId.toString() === user._id.toString()) {
+      return res.status(400).json({ message: "Action denied: You cannot delete your own admin account." });
+    }
 
-    res.json({ message: "User deactivated successfully" });
+    // Hard delete: remove user from database
+    await User.findByIdAndDelete(req.params.id);
+
+    res.json({ message: `User ${user.name} deleted permanently` });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error("Delete Error:", error);
+    res.status(400).json({ message: error.message || "An error occurred while deleting the user" });
   }
 });
 
@@ -145,13 +150,13 @@ const getUsers = asyncHandler(async (req, res) => {
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
 
-    // Exclude passwords from response and only active users
-    const users = await User.find({ isActive: { $ne: false } })
+    // Exclude passwords from response
+    const users = await User.find({})
       .select("-password")
       .skip(skip)
       .limit(limit);
 
-    const totalUsers = await User.countDocuments({ isActive: { $ne: false } });
+    const totalUsers = await User.countDocuments({});
 
     res.json({
       data: users,

@@ -14,33 +14,12 @@ import ComprehensiveTraining from "../Components/Training/ComprehensiveTraining"
 import UpcomingEvents from "../Components/Event/UpcomingEvents";
 
 function Home() {
-
-  <Helmet>
-    <title>Codementees - Learn Coding with Experts</title>
-    <meta name="description" content="Master web development, AI, and programming with expert-led courses on Codementees." />
-    <meta property="og:title" content="Codementees - Learn Coding with Experts" />
-    <meta property="og:description" content="Master web development, AI, and programming with expert-led courses on Codementees." />
-    <meta property="og:image" content="https://codementees.com/images/home.jpg" />
-    <meta property="og:url" content="https://codementees.com/" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Codementees - Learn Coding with Experts" />
-    <meta name="twitter:description" content="Master web development, AI, and programming with expert-led courses on Codementees." />
-    <meta name="twitter:image" content="https://codementees.com/images/twitter-home.jpg" />
-  </Helmet>
-
-
-
   const { fetchCategories } = useCategoryAPI();
   const categoryData = useSelector((state) => state.category);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    // Set Page Title & Meta Description for SEO
-    document.title = "Codementees | Learn Coding with Experts";
-    document
-      .querySelector('meta[name="description"]')
-      ?.setAttribute("content", "Master web development, AI, and programming with expert-led courses at Codementees.");
 
+  useEffect(() => {
     // Fetch category data
     const fetchData = async () => {
       const data = await fetchCategories();
@@ -59,9 +38,22 @@ function Home() {
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "EducationalOrganization",
-          "name": "Codementees",
+          "name": "CodeMentees",
           "url": "https://codementees.com/",
-          "description": "Learn coding from expert mentors. Get top programming courses in web development, AI, and more.",
+          "logo": "https://codementees.com/logo.png",
+          "description": "Learn coding, DSA, AI/ML, and Data Science from expert IIT/IIIT alumni. Offering live classes, certification, and placement preparation.",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "IN"
+          },
+          "offers": {
+            "@type": "Offer",
+            "category": "Coding Classes, AI/ML, Data Science, DSA"
+          },
+          "founder": {
+            "@type": "Person",
+            "name": "CodeMentees Team"
+          },
           "sameAs": [
             "https://www.facebook.com/codementees",
             "https://twitter.com/codementees",

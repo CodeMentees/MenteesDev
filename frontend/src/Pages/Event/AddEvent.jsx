@@ -45,7 +45,7 @@ const EventManager = () => {
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this event?")) {
-      await deleteItem(id, "/api/events");
+      await deleteItem(id, "/events");
     }
   };
 

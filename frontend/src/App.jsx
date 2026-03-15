@@ -39,13 +39,17 @@ const SchoolCoding = lazy(() => import('./Pages/SchoolCoding'));
 const CurriculumCatalog = lazy(() => import('./Pages/CurriculumCatalog'));
 const SchoolCourseList = lazy(() => import('./Pages/Course/SchoolCourseList'));
 const AddEditSchoolCourse = lazy(() => import('./Pages/Course/AddEditSchoolCourse'));
+const CourseManagement = lazy(() => import('./Pages/Course/CourseManagement'));
+const OTPVerification = lazy(() => import('./Pages/OTPVerification'));
 const ForgotPassword = lazy(() => import('./Pages/ForgotPassword'));
 
 // HelmetWrapper component to handle SEO meta tags
 const HelmetWrapper = ({
   title,
   description,
+  keywords,
   canonical,
+  ogImage = "/images/home.jpg",
   noindex = false,
   nofollow = false,
   children
@@ -55,6 +59,7 @@ const HelmetWrapper = ({
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={description} />
+        {keywords && <meta name="keywords" content={keywords} />}
         <link rel="canonical" href={`https://codementees.com${canonical}`} />
 
         {noindex || nofollow ? (
@@ -68,12 +73,14 @@ const HelmetWrapper = ({
         <meta property="og:url" content={`https://codementees.com${canonical}`} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
+        <meta property="og:image" content={`https://codementees.com${ogImage}`} />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content={`https://codementees.com${canonical}`} />
         <meta property="twitter:title" content={title} />
         <meta property="twitter:description" content={description} />
+        <meta property="twitter:image" content={`https://codementees.com${ogImage}`} />
       </Helmet>
       {children}
     </>
@@ -88,9 +95,9 @@ const adminRoutes = [
   { path: "posts/edit/:id", title: "Edit Post", element: <AddPost /> },
   { path: "posts/categories", title: "Post Categories", element: <BlogCategoryManager /> },
   { path: "posts", title: "Posts", element: <PostList /> },
-  { path: "courses/create", title: "Create Course", element: <AddCourse /> },
-  { path: "courses/edit/:id", title: "Edit Course", element: <AddCourse /> },
   { path: "courses", title: "Courses", element: <CourseList /> },
+  { path: "courses/create", title: "Create Course", element: <CourseManagement /> },
+  { path: "courses/:id/manage", title: "Manage Course", element: <CourseManagement /> },
   { path: "courses/:id/edit", title: "Update Course", element: <UpdateCourseDetails /> },
   { path: "categories/create", title: "Create Category", element: <AddCourseCategory /> },
   { path: "categories/edit/:id", title: "Edit Category", element: <AddCourseCategory /> },
@@ -121,8 +128,9 @@ function App() {
                   path="/"
                   element={
                     <HelmetWrapper
-                      title="Home | CodeMentees"
-                      description="Welcome to CodeMentees - The best platform for learning coding and development skills"
+                      title="Learn Coding, DSA, AI/ML & Data Science | CodeMentees"
+                      description="Master Coding, Data Structures & Algorithms (DSA), AI/ML, and Python Programming with CodeMentees. Expert-led live classes, internships, and placement preparation."
+                      keywords="coding classes, DSA, AI/ML courses, AI/ML classes, Data Science, Data Analyst, Java Programming, Python Programming, Computer Coding Live Classes, Internships, Certification, placement preparation, jobs"
                       canonical="/"
                     >
                       <Home />
@@ -134,11 +142,26 @@ function App() {
                   path="/register"
                   element={
                     <HelmetWrapper
-                      title="Register | CodeMentees"
-                      description="Create an account to access our courses and resources"
+                      title="Register | Start Your Coding Journey with CodeMentees"
+                      description="Create an account at CodeMentees to access expert-led courses in AI/ML, Data Science, and DSA. Join our community of learners today."
+                      keywords="register, join codementees, learning platform, coding courses"
                       canonical="/register"
                     >
                       <RegisterPage />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path="/verify-otp"
+                  element={
+                    <HelmetWrapper
+                      title="Verify Account | CodeMentees"
+                      description="Enter the 6-digit code to verify your CodeMentees account"
+                      canonical="/verify-otp"
+                      noindex={true}
+                    >
+                      <OTPVerification />
                     </HelmetWrapper>
                   }
                 />
@@ -172,8 +195,9 @@ function App() {
                   path="/courses"
                   element={
                     <HelmetWrapper
-                      title="All Courses | CodeMentees"
-                      description="Browse our comprehensive collection of coding courses"
+                      title="All Courses | Coding, AI/ML, DSA & Tech Certification"
+                      description="Explore our wide range of technical courses including AI/ML, Data Science, DSA, and Java/Python Programming. Get certified and prepare for your dream job."
+                      keywords="AI/ML courses, Data Science classes, DSA course, Java Programming, Python Programming, Tech Certifications"
                       canonical="/courses"
                     >
                       <AllCourse />
@@ -251,8 +275,9 @@ function App() {
                   path="/school-coding"
                   element={
                     <HelmetWrapper
-                      title="School Coding | CodeMentees"
-                      description="Explore our comprehensive K-12 computer science curriculum designed for schools."
+                      title="School Coding | K-12 Computer Science Curriculum"
+                      description="Complete coding curriculum for schools. Teach kids Python, Scratch, and Computer Science fundamentals with CodeMentees' global standards."
+                      keywords="School Coding, K-12 Coding, Kids Coding, Coding for Schools"
                       canonical="/school-coding"
                     >
                       <SchoolCoding />

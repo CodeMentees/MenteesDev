@@ -17,9 +17,9 @@ const isAdmin = async (req, res, next) => {
       });
     }
 
-    if (!decode.isAdmin) {
+    if (!decode.isAdmin || decode.email !== process.env.ADMIN_EMAIL) {
       return res.status(401).json({
-        message: "User is not admin",
+        message: "User is not authorized as an admin",
         success: false,
       });
     }

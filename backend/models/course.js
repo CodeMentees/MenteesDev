@@ -24,7 +24,10 @@ const courseSchema = new mongoose.Schema({
   ],
   details: [
     {
-      id: mongoose.Schema.Types.ObjectId,
+      id: {
+        type: String,
+        required: false,
+      },
       label: {
         type: String,
         required: false,
