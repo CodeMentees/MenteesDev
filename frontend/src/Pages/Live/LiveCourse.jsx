@@ -85,7 +85,12 @@ function LiveCourse() {
     }, []);
 
     const handleJoinClick = (course) => {
-        if (!isAuthenticated || !user?.isFullAccess) {
+        if (!isAuthenticated) {
+            navigate('/login');
+            return;
+        }
+
+        if (!user?.isFullAccess) {
             setToast({ visible: true, message: "Please register for this course to get full access" });
             setTimeout(() => {
                 setToast({ visible: false, message: "" });
@@ -200,7 +205,13 @@ function LiveCourse() {
                             <CourseCard 
                                 key={course._id} 
                                 course={course} 
-                                handleAction={() => navigate(`/live/${course._id}`)} 
+                                handleAction={() => {
+                                    if (!isAuthenticated) {
+                                        navigate('/login');
+                                    } else {
+                                        navigate(`/live/${course._id}`);
+                                    }
+                                }} 
                                 actionLabel="Explore Recordings" 
                                 actionIcon={<FaPlayCircle />} 
                                 isRecorded 

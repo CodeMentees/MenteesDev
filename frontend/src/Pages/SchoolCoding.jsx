@@ -107,7 +107,7 @@ const SchoolCoding = () => {
                             </button>
                             <button
                                 onClick={() => {
-                                    navigate("/contact");
+                                    navigate("/school-coding/catalog");
                                     window.scrollTo(0, 0);
                                 }}
                                 className="px-8 py-4 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700 rounded-xl font-bold transition-all"

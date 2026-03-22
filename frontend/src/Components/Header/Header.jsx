@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../Slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { initFlowbite } from "flowbite";
@@ -7,6 +7,7 @@ import { FaUserCircle, FaTimes, FaBars } from "react-icons/fa";
 
 function Header() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -70,6 +71,7 @@ function Header() {
                         const response = await fetch('/api/auth/logout', { method: 'POST' });
                         if (response.ok) {
                           dispatch(logout());
+                          navigate("/login");
                         }
                       } catch (error) {
                         console.error('Logout failed:', error);
@@ -150,6 +152,8 @@ function Header() {
                       const response = await fetch('/api/auth/logout', { method: 'POST' });
                       if (response.ok) {
                         dispatch(logout());
+                        setMenuOpen(false);
+                        navigate("/login");
                       }
                     } catch (error) {
                       console.error('Logout failed:', error);

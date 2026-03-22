@@ -15,6 +15,12 @@ const LiveCourseDetails = () => {
     const [toast, setToast] = useState({ visible: false, message: "" });
 
     useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('/login');
+        }
+    }, [isAuthenticated, navigate]);
+
+    useEffect(() => {
         const getDetails = async () => {
             try {
                 const data = await fetchLiveCourse(id);

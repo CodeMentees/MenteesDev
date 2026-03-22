@@ -75,9 +75,13 @@ function Carousel() {
           >
             <img
               style={{ position: "absolute", zIndex: 10 }}
-              src={images[0]}
+              src={images[0] || "/images/banner-fallback.png"}
               alt="mockup"
               className="animate-float "
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "https://placehold.co/1200x600?text=Welcome+to+CodeMentees";
+              }}
             />
             <svg
               className="animate-float"
