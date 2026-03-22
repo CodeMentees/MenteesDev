@@ -124,6 +124,9 @@ const updateUser = asyncHandler(async (req, res) => {
     // Update fields if provided
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
+    if (req.body.isFullAccess !== undefined) {
+      user.isFullAccess = req.body.isFullAccess;
+    }
 
     // Hash new password if provided
     if (req.body.password) {

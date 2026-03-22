@@ -13,7 +13,7 @@ function Header() {
   const menuItems = [
     { label: "All Courses", link: "/courses" },
     { label: "Blogs", link: "/blogs" },
-    { label: "Live Courses", link: "#" },
+    { label: "Live Courses", link: "/live" },
     { label: "School Coding", link: "/school-coding" },
     { label: "Placement Support", link: "#" },
   ];

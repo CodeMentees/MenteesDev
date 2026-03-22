@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   isActive: { type: Boolean, default: true },
   isVerified: { type: Boolean, default: false },
   role: { type: String, default: "viewer" },
+  isFullAccess: { type: Boolean, default: false },
   phoneNumber: String,
   verificationOTP: String,
   otpExpiresAt: Date,

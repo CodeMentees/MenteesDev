@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useUserAPI } from "../api/userApi";
-import { FaUsers, FaUserPlus, FaUserSlash, FaArrowRight } from "react-icons/fa";
+import { FaUsers, FaUserPlus, FaUserSlash, FaArrowRight, FaEdit } from "react-icons/fa";
 import DeleteConfirmModal from "../Components/UI/DeleteConfirmModal";
 
 const DashboardOverview = () => {
@@ -112,7 +112,14 @@ const DashboardOverview = () => {
                                     <tr key={user._id} className="hover:bg-gray-700/30 transition-colors">
                                         <td className="px-6 py-4 text-white font-medium">{user.name}</td>
                                         <td className="px-6 py-4 text-gray-400">{user.email}</td>
-                                        <td className="px-6 py-4 text-right">
+                                        <td className="px-6 py-4 text-right flex justify-end gap-2">
+                                            <Link
+                                                to={`/admin/users/edit/${user._id}`}
+                                                className="text-blue-500 hover:text-blue-400 p-2 hover:bg-blue-900/20 rounded-lg transition-all"
+                                                title="Edit User"
+                                            >
+                                                <FaEdit size={18} />
+                                            </Link>
                                             <button
                                                 onClick={() => handleDeleteClick(user)}
                                                 className="text-red-500 hover:text-red-400 p-2 hover:bg-red-900/20 rounded-lg transition-all"

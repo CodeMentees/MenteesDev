@@ -19,6 +19,7 @@ const UpdateCourseDetails = lazy(() => import('./Pages/Course/UpdateCourseDetail
 const AddCourse = lazy(() => import('./Pages/Course/AddCourse'));
 const AddCourseCategory = lazy(() => import('./Pages/Course/AddCourseCategory'));
 const QueryList = lazy(() => import('./Pages/Query/QueryList'));
+const SchoolCodingLeadList = lazy(() => import('./Pages/Query/SchoolCodingLeadList'));
 const CourseList = lazy(() => import('./Pages/Course/CourseList'));
 const Unauth = lazy(() => import('./Pages/Error/Unauth'));
 const AdminRoutes = lazy(() => import("./AdminRoute"));
@@ -42,6 +43,11 @@ const AddEditSchoolCourse = lazy(() => import('./Pages/Course/AddEditSchoolCours
 const CourseManagement = lazy(() => import('./Pages/Course/CourseManagement'));
 const OTPVerification = lazy(() => import('./Pages/OTPVerification'));
 const ForgotPassword = lazy(() => import('./Pages/ForgotPassword'));
+const LivePage = lazy(() => import('./Pages/Live/LiveCourse'));
+const LiveCourseDetails = lazy(() => import('./Pages/Live/LiveCourseDetails'));
+const LiveCourseList = lazy(() => import('./Pages/Admin/LiveCourse/LiveCourseList'));
+const AddEditLiveCourse = lazy(() => import('./Pages/Admin/LiveCourse/AddEditLiveCourse'));
+const LiveCourseContent = lazy(() => import('./Pages/Admin/LiveCourse/LiveCourseContent'));
 
 // HelmetWrapper component to handle SEO meta tags
 const HelmetWrapper = ({
@@ -103,6 +109,7 @@ const adminRoutes = [
   { path: "categories/edit/:id", title: "Edit Category", element: <AddCourseCategory /> },
   { path: "categories", title: "Categories", element: <CategoryList /> },
   { path: "queries", title: "Queries", element: <QueryList /> },
+  { path: "school-coding-leads", title: "School Coding Leads", element: <SchoolCodingLeadList /> },
   { path: "events", title: "Events", element: <EventManager /> },
   { path: "events/create", title: "Create Event", element: <CreateEvent /> },
   { path: "events/edit/:id", title: "Edit Event", element: <CreateEvent /> },
@@ -111,7 +118,11 @@ const adminRoutes = [
   { path: "users/edit/:id", title: "Edit User", element: <AddEditUser /> },
   { path: "school-courses", title: "School Courses", element: <SchoolCourseList /> },
   { path: "school-courses/add", title: "Add School Course", element: <AddEditSchoolCourse /> },
-  { path: "school-courses/edit/:id", title: "Edit School Course", element: <AddEditSchoolCourse /> }
+  { path: "school-courses/edit/:id", title: "Edit School Course", element: <AddEditSchoolCourse /> },
+  { path: "live-courses", title: "Live Courses", element: <LiveCourseList /> },
+  { path: "live-courses/create", title: "Create Live Course", element: <AddEditLiveCourse /> },
+  { path: "live-courses/edit/:id", title: "Edit Live Course", element: <AddEditLiveCourse /> },
+  { path: "live-courses/:id/content", title: "Manage Content", element: <LiveCourseContent /> }
 ];
 
 function App() {
@@ -214,6 +225,33 @@ function App() {
                       canonical="/courses/:courseId"
                     >
                       <CourseDetails />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path="/live"
+                  element={
+                    <HelmetWrapper
+                      title="Live Courses | Interactive Classes | CodeMentees"
+                      description="Join our live interactive coding classes. Expert-led sessions with real-time doubt clearing and certificate."
+                      keywords="live coding classes, interactive courses, live DSA, live AI/ML"
+                      canonical="/live"
+                    >
+                      <LivePage />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path="/live/:id"
+                  element={
+                    <HelmetWrapper
+                      title="Live Course Details | CodeMentees"
+                      description="View live course content and join sessions."
+                      canonical="/live/:id"
+                    >
+                      <LiveCourseDetails />
                     </HelmetWrapper>
                   }
                 />

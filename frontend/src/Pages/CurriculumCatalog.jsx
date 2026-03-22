@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useSchoolCourseAPI } from '../api/schoolCourseApi';
 import Toast from '../Components/UI/Toast';
 import { getDirectImageUrl, handleImageError, FALLBACK_IMAGE_URL } from '../utils/imageUtils';
+import SchoolCodingQueryForm from '../Components/Forms/SchoolCodingQueryForm';
 
 const Modal = ({ isOpen, onClose, title, children }) => {
     if (!isOpen) return null;
@@ -45,6 +46,7 @@ const CurriculumCatalog = () => {
     const languages = ["All Languages", "Python", "Java", "JavaScript", "Scratch", "HTML/CSS"];
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [modalType, setModalType] = useState(null);
+    const [showQuery, setShowQuery] = useState(false);
     const [isToast, setToast] = useState({ visible: false, message: '', type: 'success' });
 
     const fetchData = async () => {
@@ -299,10 +301,13 @@ const CurriculumCatalog = () => {
                                         <FaArrowRight className="group-hover/btn:translate-x-1 transition-transform" />
                                     </button>
                                     <button
-                                        onClick={() => navigate('/contact')}
+                                        onClick={() => {
+                                            setSelectedCourse(course);
+                                            setShowQuery(true);
+                                        }}
                                         className="w-full bg-transparent hover:bg-gray-800 text-gray-300 font-bold py-3.5 rounded-xl transition-all border border-gray-700 active:scale-95"
                                     >
-                                        Learn More
+                                        Join Now
                                     </button>
                                     {user?.isAdmin && (
                                         <button
@@ -325,6 +330,14 @@ const CurriculumCatalog = () => {
                     )}
                 </div>
             </div>
+
+            {/* Enrollment Modal */}
+            {showQuery && selectedCourse && (
+                <SchoolCodingQueryForm 
+                    courseName={selectedCourse.title} 
+                    setQuery={setShowQuery} 
+                />
+            )}
 
             {/* Modals */}
             <Modal

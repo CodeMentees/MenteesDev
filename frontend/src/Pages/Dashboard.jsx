@@ -30,7 +30,10 @@ const menuItems = [
     id: 4,
     title: "Queries",
     icon: <FaQuestionCircle />,
-    subItems: [{ id: 41, title: "Query List", link: "/admin/queries" }],
+    subItems: [
+      { id: 41, title: "Query List", link: "/admin/queries" },
+      { id: 42, title: "School Coding Leads", link: "/admin/school-coding-leads" },
+    ],
   },
   {
     id: 5,
@@ -51,6 +54,15 @@ const menuItems = [
     subItems: [
       { id: 71, title: "Create Event", link: "/admin/events/create" },
       { id: 72, title: "Events", link: "/admin/events" },
+    ],
+  },
+  {
+    id: 9,
+    title: "Live Courses",
+    icon: <FaBook />,
+    subItems: [
+      { id: 91, title: "Live Course List", link: "/admin/live-courses" },
+      { id: 92, title: "Create Live Course", link: "/admin/live-courses/create" },
     ],
   },
   {

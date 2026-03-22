@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { initFlowbite } from "flowbite";
 import ReusableTable from "../../Components/Table/Table";
 import useDelete from "../../Components/API/useDelete";
 import { useUserAPI } from "../../api/userApi";
+import { updateUserSession } from "../../Slices/authSlice";
 import Pagination from "../../Components/UI/Pagination";
 import DeleteConfirmModal from "../../Components/UI/DeleteConfirmModal";
 
 function UserList() {
-  const { fetchUsers } = useUserAPI();
+  const { fetchUsers, updateUser } = useUserAPI();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user: currentUser } = useSelector((state) => state.auth);
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -72,12 +76,34 @@ function UserList() {
     initFlowbite();
   }, [users]);
 
-  const headers = ["name", "email", "role", "phoneNumber"];
+  const headers = ["name", "email", "role", "isFullAccess", "phoneNumber"];
   const actions = [
     { label: "Show", handler: (id) => console.log(`Show user with ID: ${id}`) },
     { label: "Edit", handler: (id) => navigate(`/admin/users/edit/${id}`) },
     { label: "Delete", handler: handleDelete },
   ];
+
+  const handleAccessToggle = async (userId, currentLevel) => {
+    try {
+      const newLevel = !currentLevel;
+      await updateUser(userId, { isFullAccess: newLevel });
+      setToast({ visible: true, message: `Access level updated strictly to ${newLevel ? "Full Access" : "Limited"}`, type: "success" });
+      setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 2000);
+      
+      setUsers(prevUsers => prevUsers.map(user => 
+        (user._id === userId || user.id === userId) ? { ...user, isFullAccess: newLevel } : user
+      ));
+
+      // Sync local auth state if the admin is updating their own access
+      if (currentUser && (currentUser._id === userId || currentUser.id === userId)) {
+        dispatch(updateUserSession({ isFullAccess: newLevel }));
+      }
+    } catch (error) {
+       console.error("Error updating access level:", error);
+       setToast({ visible: true, message: error.message || "Failed to update access level", type: "error" });
+       setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 3000);
+    }
+  };
 
   return (
     <div className="mx-auto max-w-screen-xl px-2 py-10">
@@ -111,7 +137,13 @@ function UserList() {
               </Link>
             </div>
             <div className="overflow-x-auto">
-              <ReusableTable headers={headers} data={users} actions={actions} isLoading={isLoading} />
+              <ReusableTable 
+                headers={headers} 
+                data={users} 
+                actions={actions} 
+                isLoading={isLoading} 
+                onAccessToggle={handleAccessToggle}
+              />
               <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
             </div>
           </div>

@@ -227,6 +227,7 @@ export const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      isFullAccess: user.isFullAccess,
       token: generateToken(user),
       message: "User signed in successfully",
     });

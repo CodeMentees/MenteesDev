@@ -8,6 +8,7 @@ const generateToken = (user) => {
       email: user.email,
       isAdmin: user.email === process.env.ADMIN_EMAIL,
       role: user.role,
+      isFullAccess: user.isFullAccess || false,
     },
     process.env.JWT_SECRET
     );

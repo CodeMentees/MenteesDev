@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const ReusableTable = ({ headers, data, actions, isLoading }) => {
+const ReusableTable = ({ headers, data, actions, isLoading, onAccessToggle }) => {
     const [activeDropdown, setActiveDropdown] = useState(null);
     const dropdownRef = useRef(null);
 
@@ -60,6 +60,18 @@ const ReusableTable = ({ headers, data, actions, isLoading }) => {
                                         </div>
                                     ) : header.toLowerCase() === "image" ? ( // Handle images
                                         <img src={value} alt="Image" className="w-10 h-10 rounded shadow-sm object-cover" />
+                                    ) : header.toLowerCase() === "isfullaccess" ? (
+                                        <button 
+                                            onClick={() => onAccessToggle && onAccessToggle(item._id || item.id, !!value)}
+                                            disabled={!onAccessToggle}
+                                            className={`px-3 py-1 text-xs font-bold rounded-full transition-colors ${onAccessToggle ? "cursor-pointer hover:opacity-80 shadow-sm" : "cursor-default"} ${value ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+                                        >
+                                            {value ? "Full Access" : "Limited Access"}
+                                        </button>
+                                    ) : header.toLowerCase() === "livestatus" ? (
+                                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${value ? "bg-red-100 text-red-800 animate-pulse" : "bg-gray-100 text-gray-800"}`}>
+                                            {value ? "LIVE" : "OFFLINE"}
+                                        </span>
                                     ) : (
                                         value
                                     )}

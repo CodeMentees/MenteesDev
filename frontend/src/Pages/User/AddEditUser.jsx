@@ -1,12 +1,16 @@
 import { initFlowbite } from "flowbite";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { useUserAPI } from "../../api/userApi";
+import { updateUserSession } from "../../Slices/authSlice";
 
 function AddEditUser() {
   const { fetchUser, createUser, updateUser } = useUserAPI();
   const { id } = useParams(); // Get user ID from URL
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user: currentUser } = useSelector((state) => state.auth);
 
   const [toast, setToast] = useState({
     visible: false,
@@ -17,6 +21,7 @@ function AddEditUser() {
     name: "",
     email: "",
     password: "",
+    isFullAccess: false,
   });
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -37,6 +42,7 @@ function AddEditUser() {
         name: data.name || "",
         email: data.email || "",
         password: "", // Don't populate password
+        isFullAccess: data.isFullAccess || false,
       });
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -47,8 +53,11 @@ function AddEditUser() {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setUserData((prev) => ({ 
+      ...prev, 
+      [name]: type === "checkbox" ? checked : value 
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -61,6 +70,11 @@ function AddEditUser() {
         const updatePayload = { ...userData };
         if (!updatePayload.password) delete updatePayload.password;
         response = await updateUser(id, updatePayload);
+        
+        // Sync local auth state if the admin is updating their own profile
+        if (currentUser && (currentUser._id === id || currentUser.id === id)) {
+          dispatch(updateUserSession(updatePayload));
+        }
       } else {
         response = await createUser(userData);
       }
@@ -149,6 +163,20 @@ function AddEditUser() {
               className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500"
               placeholder="••••••••"
             />
+          </div>
+
+          <div className="flex items-center gap-3 mt-4">
+            <input
+              type="checkbox"
+              id="isFullAccess"
+              name="isFullAccess"
+              checked={userData.isFullAccess}
+              onChange={handleChange}
+              className="w-5 h-5 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2 cursor-pointer"
+            />
+            <label htmlFor="isFullAccess" className="block text-sm font-medium text-gray-300 cursor-pointer select-none">
+              Grant Full Access (Premium)
+            </label>
           </div>
 
           <div className="flex gap-4 pt-4">
