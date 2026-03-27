@@ -39,7 +39,7 @@ const createQuery = asyncHandler(async (req, res) => {
   try {
     const { name, email, phoneNumber, courseName, message } = req.body;
 
-    if (!name || !email || !phoneNumber || !courseName || !message) {
+    if (!name || !email || !phoneNumber || !courseName) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
