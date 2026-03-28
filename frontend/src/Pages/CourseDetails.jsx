@@ -1,12 +1,24 @@
 import React, { useEffect, useState } from "react";
 import generatePdf from "../utils/genrateCoursePdf";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet-async";
 import QueryForm from "../Components/Forms/QueryForm";
 import Loading from "../Components/Helpers/Loading";
 import { useCourse } from "../api/courseApi";
 
 function CourseDetails() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  const handleEnrollClick = () => {
+    if (!isAuthenticated) {
+      navigate("/login", { state: { from: location.pathname } });
+    } else {
+      setShowQuery(true);
+    }
+  };
 
 
   const { fetchCourse } = useCourse();
@@ -48,7 +60,7 @@ function CourseDetails() {
           </p>
 
           <button
-            onClick={() => setShowQuery(true)}
+            onClick={handleEnrollClick}
             className="mt-6 text-white border-2 border-blue-900 shadow-md hover:bg-blue-900 transition-all duration-300 font-medium rounded-full text-sm px-5 py-2.5"
           >
             Enroll Now
@@ -95,7 +107,7 @@ function CourseDetails() {
           </ul>
 
           <button
-            onClick={() => setShowQuery(true)}
+            onClick={handleEnrollClick}
             className="text-white bg-blue-900 hover:bg-dark-background transition-all duration-300 font-medium rounded-full text-sm px-6 py-3"
           >
             Enroll Course

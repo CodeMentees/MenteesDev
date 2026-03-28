@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { login, logout } from "../Slices/authSlice";
 import { GoogleLogin } from "@react-oauth/google";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import Toast from "../Components/UI/Toast";
 
 import { useAuth } from "../api/authApi";
@@ -10,6 +10,7 @@ import { useAuth } from "../api/authApi";
 function LoginPage() {
   const { loginUser } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const [toast, setToast] = useState({
     visible: false,
@@ -18,11 +19,13 @@ function LoginPage() {
   });
   const auth = useSelector((state) => state.auth.isAuthenticated);
 
+  const from = location.state?.from || "/";
+
   useEffect(() => {
     if (auth) {
-      navigate("/");
+      navigate(from, { replace: true });
     }
-  }, [auth, navigate]);
+  }, [auth, navigate, from]);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -60,7 +63,7 @@ function LoginPage() {
         dispatch(login(userData));
         showToast(userData.message || "Logged in successfully!", "success");
         setTimeout(() => {
-          navigate("/");
+          navigate(from, { replace: true });
         }, 2000);
       } else {
         showToast("Invalid credentials or login failed.", "error");

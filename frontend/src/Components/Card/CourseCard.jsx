@@ -1,6 +1,20 @@
 import React from 'react';
-import { Link } from "react-router-dom"
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 function CourseCard({ category, courses }) {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+    const handleEnrollClick = (courseId) => {
+        if (!isAuthenticated) {
+            navigate("/login", { state: { from: location.pathname } });
+        } else {
+            navigate(`/courses/${courseId}`);
+        }
+    };
+
     return (
         <div className='container bg-black-500'>
 
@@ -54,12 +68,12 @@ function CourseCard({ category, courses }) {
                                         }
                                     </div>
 
-                                    <Link
-                                        to={`/courses/${course._id}`}
+                                    <button
+                                        onClick={() => handleEnrollClick(course._id)}
                                         className="my-5 rounded-md px-5 py-2 text-center transition hover:scale-105 bg-dark-btn text-white sm:ml-auto"
                                     >
                                         Enroll Now
-                                    </Link>
+                                    </button>
                                 </div>
                             </div>
                         </div>
