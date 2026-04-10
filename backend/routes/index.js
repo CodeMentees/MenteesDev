@@ -13,6 +13,7 @@ import blogCategoryRoutes from "./blogCategoryRoutes.js";
 import schoolCourseRoutes from "./schoolCourseRoutes.js";
 import liveCourseRoutes from "./liveCourseRoutes.js";
 import schoolCodingLeadRoutes from "./schoolCodingLeadRoutes.js";
+import jobRoutes from "./jobRoutes.js";
 import testRoutes from "./test.js";
 
 const router = express.Router();
@@ -26,6 +27,7 @@ router.use("/live-courses", liveCourseRoutes);
 router.use("/school-courses", schoolCourseRoutes);
 router.use("/school-coding-leads", schoolCodingLeadRoutes);
 router.use("/categories", categoryRoutes);
+router.use("/jobs", jobRoutes);
 router.use("/queries", queryRoutes);
 router.use("/groups", groupRoutes);
 router.use("/messages", messageRoutes);

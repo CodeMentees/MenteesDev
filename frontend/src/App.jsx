@@ -48,6 +48,9 @@ const LiveCourseDetails = lazy(() => import('./Pages/Live/LiveCourseDetails'));
 const LiveCourseList = lazy(() => import('./Pages/Admin/LiveCourse/LiveCourseList'));
 const AddEditLiveCourse = lazy(() => import('./Pages/Admin/LiveCourse/AddEditLiveCourse'));
 const LiveCourseContent = lazy(() => import('./Pages/Admin/LiveCourse/LiveCourseContent'));
+const PlacementSupport = lazy(() => import('./Pages/PlacementSupport'));
+const JobManagement = lazy(() => import('./Pages/Admin/Job/JobManagement'));
+const AddEditJob = lazy(() => import('./Pages/Admin/Job/AddEditJob'));
 
 // HelmetWrapper component to handle SEO meta tags
 const HelmetWrapper = ({
@@ -122,7 +125,10 @@ const adminRoutes = [
   { path: "live-courses", title: "Live Courses", element: <LiveCourseList /> },
   { path: "live-courses/create", title: "Create Live Course", element: <AddEditLiveCourse /> },
   { path: "live-courses/edit/:id", title: "Edit Live Course", element: <AddEditLiveCourse /> },
-  { path: "live-courses/:id/content", title: "Manage Content", element: <LiveCourseContent /> }
+  { path: "live-courses/:id/content", title: "Manage Content", element: <LiveCourseContent /> },
+  { path: "jobs", title: "Job Opportunities", element: <JobManagement /> },
+  { path: "jobs/create", title: "Add Job Opportunity", element: <AddEditJob /> },
+  { path: "jobs/edit/:id", title: "Edit Job Opportunity", element: <AddEditJob /> }
 ];
 
 function App() {
@@ -319,6 +325,20 @@ function App() {
                       canonical="/school-coding"
                     >
                       <SchoolCoding />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path="/placement-support"
+                  element={
+                    <HelmetWrapper
+                      title="Placement Support | Live Job Opportunities | CodeMentees"
+                      description="Access live job opportunities and placement support from CodeMentees. Hand-picked roles for our students."
+                      keywords="placement support, job opportunities, tech jobs, internships"
+                      canonical="/placement-support"
+                    >
+                      <PlacementSupport />
                     </HelmetWrapper>
                   }
                 />

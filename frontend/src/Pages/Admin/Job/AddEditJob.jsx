@@ -1,0 +1,163 @@
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Briefcase, Link as LinkIcon, Building, ArrowLeft, Save } from "lucide-react";
+
+function AddEditJob() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const isEditMode = Boolean(id);
+
+  const [formData, setFormData] = useState({
+    role: "",
+    company: "",
+    applyLink: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (isEditMode) {
+      fetchJob();
+    }
+  }, [id]);
+
+  const fetchJob = async () => {
+    try {
+      const response = await axios.get(`/api/jobs`);
+      // Finding the specific job from the list since I didn't implement getJobById separately (though I could)
+      const job = response.data.data.find(j => j._id === id);
+      if (job) {
+        setFormData({
+          role: job.role,
+          company: job.company || "",
+          applyLink: job.applyLink,
+        });
+      }
+    } catch (err) {
+      console.error("Error fetching job:", err);
+      setError("Failed to fetch job details");
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+
+    try {
+      if (isEditMode) {
+        await axios.put(`/api/jobs/${id}`, formData);
+      } else {
+        await axios.post("/api/jobs", formData);
+      }
+      navigate("/admin/jobs");
+    } catch (err) {
+      console.error("Error saving job:", err);
+      setError(err.response?.data?.message || "Failed to save job opportunity");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-2xl mx-auto">
+        <button
+          onClick={() => navigate("/admin/jobs")}
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-8 transition-colors"
+        >
+          <ArrowLeft size={20} />
+          Back to list
+        </button>
+
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
+          <div className="bg-blue-600 px-8 py-6">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <Briefcase />
+              {isEditMode ? "Edit Job Opportunity" : "Post New Job Opportunity"}
+            </h2>
+          </div>
+
+          <form onSubmit={handleSubmit} className="p-8 space-y-6">
+            {error && (
+              <div className="p-4 bg-red-100 border-l-4 border-red-500 text-red-700 text-sm">
+                {error}
+              </div>
+            )}
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                <Briefcase size={16} className="text-blue-500" />
+                Job Role *
+              </label>
+              <input
+                type="text"
+                name="role"
+                required
+                placeholder="e.g. Frontend Developer Intern"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                value={formData.role}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                <Building size={16} className="text-purple-500" />
+                Company Name
+              </label>
+              <input
+                type="text"
+                name="company"
+                placeholder="e.g. Google, Microsoft, or Recruiting Agency"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                value={formData.company}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                <LinkIcon size={16} className="text-green-500" />
+                Application Link *
+              </label>
+              <input
+                type="url"
+                name="applyLink"
+                required
+                placeholder="https://..."
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                value={formData.applyLink}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full flex items-center justify-center gap-2 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all transform active:scale-95 disabled:opacity-50 shadow-lg shadow-blue-500/30"
+              >
+                {isLoading ? (
+                  <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <>
+                    <Save size={20} />
+                    {isEditMode ? "Update Opportunity" : "Post Opportunity"}
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default AddEditJob;

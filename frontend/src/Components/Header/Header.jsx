@@ -16,7 +16,7 @@ function Header() {
     { label: "Blogs", link: "/blogs" },
     { label: "Live Courses", link: "/live" },
     { label: "School Coding", link: "/school-coding" },
-    { label: "Placement Support", link: "#" },
+    { label: "Placement Support", link: "/placement-support" },
   ];
 
   useEffect(() => {

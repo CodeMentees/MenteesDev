@@ -71,6 +71,15 @@ const menuItems = [
     icon: <FaUsers />,
     subItems: [{ id: 81, title: "Users", link: "/admin/users" }],
   },
+  {
+    id: 10,
+    title: "Jobs",
+    icon: <FaFileAlt />,
+    subItems: [
+      { id: 101, title: "Job List", link: "/admin/jobs" },
+      { id: 102, title: "Post Job", link: "/admin/jobs/create" },
+    ],
+  },
 ];
 
 function DashboardLayout() {
