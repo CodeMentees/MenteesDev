@@ -119,7 +119,33 @@ function Carousel() {
           </div>
         </div>
 
-
+        {/* Stats Bar */}
+        <div className="max-w-6xl mx-auto px-4 mt-8 pb-8">
+          <div className="bg-gray-800/50 backdrop-blur-md border border-gray-700 rounded-2xl p-6 shadow-xl shadow-purple-900/10">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center divide-x divide-gray-700">
+              <div className="flex flex-col items-center justify-center p-2">
+                <span className="text-3xl mb-2">🎓</span>
+                <p className="text-white font-bold text-lg md:text-xl">500+</p>
+                <p className="text-gray-400 text-sm">Students Trained</p>
+              </div>
+              <div className="flex flex-col items-center justify-center p-2">
+                <span className="text-3xl mb-2">💼</span>
+                <p className="text-white font-bold text-lg md:text-xl">50+</p>
+                <p className="text-gray-400 text-sm">Hiring Partners</p>
+              </div>
+              <div className="flex flex-col items-center justify-center p-2">
+                <span className="text-3xl mb-2">🛠️</span>
+                <p className="text-white font-bold text-lg md:text-xl">11</p>
+                <p className="text-gray-400 text-sm">Tech Tracks</p>
+              </div>
+              <div className="flex flex-col items-center justify-center p-2 border-r-0">
+                <span className="text-3xl mb-2">🌐</span>
+                <p className="text-white font-bold text-lg md:text-xl">100%</p>
+                <p className="text-gray-400 text-sm">Remote</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );

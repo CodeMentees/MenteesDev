@@ -80,6 +80,14 @@ const menuItems = [
       { id: 102, title: "Post Job", link: "/admin/jobs/create" },
     ],
   },
+  {
+    id: 11,
+    title: "Interns",
+    icon: <FaUsers />,
+    subItems: [
+      { id: 111, title: "Applicants", link: "/admin/interns" },
+    ],
+  },
 ];
 
 function DashboardLayout() {

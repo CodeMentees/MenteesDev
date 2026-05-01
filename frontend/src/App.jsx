@@ -51,6 +51,8 @@ const LiveCourseContent = lazy(() => import('./Pages/Admin/LiveCourse/LiveCourse
 const PlacementSupport = lazy(() => import('./Pages/PlacementSupport'));
 const JobManagement = lazy(() => import('./Pages/Admin/Job/JobManagement'));
 const AddEditJob = lazy(() => import('./Pages/Admin/Job/AddEditJob'));
+const SummerInternship = lazy(() => import('./Pages/Internship/SummerInternship'));
+const InternshipList = lazy(() => import('./Pages/Admin/Interns/InternshipList'));
 
 // HelmetWrapper component to handle SEO meta tags
 const HelmetWrapper = ({
@@ -128,7 +130,8 @@ const adminRoutes = [
   { path: "live-courses/:id/content", title: "Manage Content", element: <LiveCourseContent /> },
   { path: "jobs", title: "Job Opportunities", element: <JobManagement /> },
   { path: "jobs/create", title: "Add Job Opportunity", element: <AddEditJob /> },
-  { path: "jobs/edit/:id", title: "Edit Job Opportunity", element: <AddEditJob /> }
+  { path: "jobs/edit/:id", title: "Edit Job Opportunity", element: <AddEditJob /> },
+  { path: "interns", title: "Internship Applications", element: <InternshipList /> }
 ];
 
 function App() {
@@ -165,6 +168,20 @@ function App() {
                       canonical="/register"
                     >
                       <RegisterPage />
+                    </HelmetWrapper>
+                  }
+                />
+
+                <Route
+                  path="/summer-internships"
+                  element={
+                    <HelmetWrapper
+                      title="Summer Training & Internships | CodeMentees"
+                      description="Apply for our Summer Training and Internship program. Choose from 12+ tech stacks including AI, Data Science, MERN, and more!"
+                      keywords="summer training, internship, MERN stack internship, AI internship, CodeMentees internship"
+                      canonical="/summer-internships"
+                    >
+                      <SummerInternship />
                     </HelmetWrapper>
                   }
                 />

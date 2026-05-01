@@ -16,9 +16,9 @@ function Footer() {
                                 </Link>
                             </li>
                             <li className="mb-4">
-                                <a href="#" className="hover:underline">
+                                <Link to="/summer-internships" className="hover:underline">
                                     Careers
-                                </a>
+                                </Link>
                             </li>
                             <li className="mb-4">
                                 <a href="#" className="hover:underline">

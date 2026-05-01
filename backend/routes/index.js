@@ -15,6 +15,7 @@ import liveCourseRoutes from "./liveCourseRoutes.js";
 import schoolCodingLeadRoutes from "./schoolCodingLeadRoutes.js";
 import jobRoutes from "./jobRoutes.js";
 import testRoutes from "./test.js";
+import internshipRoutes from "./internshipRoutes.js";
 
 const router = express.Router();
 router.use("/home", homeRoutes);
@@ -34,5 +35,6 @@ router.use("/messages", messageRoutes);
 router.use("/events", eventRoutes);
 router.use("/events", eventRoutes);
 router.use("/test", testRoutes);
+router.use("/internships", internshipRoutes);
 
 export default router;

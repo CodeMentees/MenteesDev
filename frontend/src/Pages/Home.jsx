@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loading from "../Components/Helpers/Loading";
 import ComprehensiveTraining from "../Components/Training/ComprehensiveTraining";
 import UpcomingEvents from "../Components/Event/UpcomingEvents";
+import SummerInternshipModal from "../Components/Modals/SummerInternshipModal";
 
 function Home() {
   const { fetchCategories } = useCategoryAPI();
@@ -62,7 +63,7 @@ function Home() {
         })}
       </script>
 
-
+      <SummerInternshipModal />
       <Carousel />
       <UpcomingEvents />
       <ComprehensiveTraining />
