@@ -53,6 +53,7 @@ const JobManagement = lazy(() => import('./Pages/Admin/Job/JobManagement'));
 const AddEditJob = lazy(() => import('./Pages/Admin/Job/AddEditJob'));
 const SummerInternship = lazy(() => import('./Pages/Internship/SummerInternship'));
 const InternshipList = lazy(() => import('./Pages/Admin/Interns/InternshipList'));
+const BulkMailSender = lazy(() => import('./Pages/Admin/BulkMail/BulkMailSender'));
 
 // HelmetWrapper component to handle SEO meta tags
 const HelmetWrapper = ({
@@ -131,7 +132,8 @@ const adminRoutes = [
   { path: "jobs", title: "Job Opportunities", element: <JobManagement /> },
   { path: "jobs/create", title: "Add Job Opportunity", element: <AddEditJob /> },
   { path: "jobs/edit/:id", title: "Edit Job Opportunity", element: <AddEditJob /> },
-  { path: "interns", title: "Internship Applications", element: <InternshipList /> }
+  { path: "interns", title: "Internship Applications", element: <InternshipList /> },
+  { path: "bulk-mail", title: "Bulk Email Sender", element: <BulkMailSender /> }
 ];
 
 function App() {

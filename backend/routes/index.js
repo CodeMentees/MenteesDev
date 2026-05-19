@@ -16,6 +16,7 @@ import schoolCodingLeadRoutes from "./schoolCodingLeadRoutes.js";
 import jobRoutes from "./jobRoutes.js";
 import testRoutes from "./test.js";
 import internshipRoutes from "./internshipRoutes.js";
+import bulkMailRoutes from "./bulkMailRoutes.js";
 
 const router = express.Router();
 router.use("/home", homeRoutes);
@@ -36,5 +37,6 @@ router.use("/events", eventRoutes);
 router.use("/events", eventRoutes);
 router.use("/test", testRoutes);
 router.use("/internships", internshipRoutes);
+router.use("/bulk-mail", bulkMailRoutes);
 
 export default router;

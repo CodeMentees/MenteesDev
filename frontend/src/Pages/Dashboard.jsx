@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { initFlowbite } from "flowbite";
-import { FaHome, FaFileAlt, FaBook, FaQuestionCircle, FaGlobe, FaComments, FaCalendarAlt, FaUsers } from "react-icons/fa";
+import { FaHome, FaFileAlt, FaBook, FaQuestionCircle, FaGlobe, FaComments, FaCalendarAlt, FaUsers, FaEnvelope } from "react-icons/fa";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
 const menuItems = [
@@ -87,6 +87,12 @@ const menuItems = [
     subItems: [
       { id: 111, title: "Applicants", link: "/admin/interns" },
     ],
+  },
+  {
+    id: 12,
+    title: "Bulk Mail",
+    icon: <FaEnvelope />,
+    link: "/admin/bulk-mail",
   },
 ];
 
