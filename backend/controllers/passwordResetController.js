@@ -94,11 +94,12 @@ export const sendResetCode = asyncHandler(async (req, res) => {
 });
 
 /**
- * POST /api/auth/verify-otp
+ * POST /api/auth/verify-reset-code
  * Validates OTP and marks it as verified, so the final reset step can proceed
  */
 export const verifyResetCode = asyncHandler(async (req, res) => {
-    const { email, code } = req.body;
+    const { email, code: reqCode, otp } = req.body;
+    const code = reqCode || otp;
 
     if (!email || !code) {
         return res.status(400).json({ message: "Email and code are required" });

@@ -55,7 +55,11 @@ const useCRUD = (endpoint) => {
       }
 
       setError(errorMessage);
-      throw new Error(errorMessage);
+      const customError = new Error(errorMessage);
+      if (err.response) {
+        customError.response = err.response;
+      }
+      throw customError;
     } finally {
       setIsLoading(false);
     }

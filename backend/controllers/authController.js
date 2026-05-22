@@ -93,7 +93,8 @@ export const registerUser = asyncHandler(async (req, res) => {
  * Verifies user's email using the 6-digit OTP
  */
 export const verifyOTP = asyncHandler(async (req, res) => {
-  const { email, otp } = req.body;
+  const { email, otp: reqOtp, code } = req.body;
+  const otp = reqOtp || code;
 
   if (!email || !otp) {
     return res.status(400).json({ message: "Email and code are required" });
