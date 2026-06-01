@@ -96,11 +96,26 @@ function SummerInternship() {
   const [status, setStatus] = useState("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
+  // Referral states
+  const [referralCode, setReferralCode] = useState("");
+  const [adminCodeInput, setAdminCodeInput] = useState("");
+  const [generatedLink, setGeneratedLink] = useState("");
+  const [copied, setCopied] = useState(false);
+
   useEffect(() => {
     if (user) {
       setFormData((prev) => ({ ...prev, email: user.email || "" }));
     }
   }, [user]);
+
+  // Extract referral code on page load
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const code = queryParams.get("ref") || queryParams.get("code");
+    if (code) {
+      setReferralCode(code.trim().toUpperCase());
+    }
+  }, [location.search]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -111,6 +126,21 @@ function SummerInternship() {
     }
   };
 
+  const handleGenerateLink = (e) => {
+    e.preventDefault();
+    if (!adminCodeInput.trim()) return;
+    const cleanCode = adminCodeInput.trim().toUpperCase();
+    const link = `${window.location.origin}${window.location.pathname}?ref=${cleanCode}`;
+    setGeneratedLink(link);
+    setCopied(false);
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(generatedLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("loading");
@@ -118,7 +148,8 @@ function SummerInternship() {
 
     try {
       const submitData = new FormData();
-      submitData.append("name", formData.name);
+      const finalName = referralCode ? `${formData.name}-${referralCode}` : formData.name;
+      submitData.append("name", finalName);
       submitData.append("email", formData.email);
       submitData.append("phone", formData.phone);
       submitData.append("college", formData.college);
@@ -213,6 +244,93 @@ function SummerInternship() {
           </div>
         </div>
 
+        {/* Admin Referral Generator Section */}
+        {user?.isAdmin && (
+          <div className="max-w-3xl mx-auto mb-12 bg-gradient-to-r from-purple-950/40 to-blue-950/40 backdrop-blur-2xl border border-purple-500/30 rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden">
+            {/* Top glowing bar */}
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-purple-500 to-pink-500" />
+            
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
+              <div>
+                <span className="inline-block mb-3 px-3 py-1 rounded-full border border-purple-500/40 bg-purple-500/10 text-purple-300 font-bold text-xs tracking-wider uppercase">
+                  Admin Control
+                </span>
+                <h2 className="text-2xl md:text-3xl font-extrabold text-white">
+                  Referral Link Generator
+                </h2>
+                <p className="text-gray-400 mt-2 text-sm leading-relaxed">
+                  Create custom referral codes for marketing and track applicant origins. Applications submitted with these links automatically append the code to the applicant's name.
+                </p>
+              </div>
+              <div className="text-5xl hidden md:block select-none">🔗</div>
+            </div>
+
+            <form onSubmit={handleGenerateLink} className="space-y-4">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative flex-grow">
+                  <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-500">
+                    #
+                  </span>
+                  <input
+                    type="text"
+                    required
+                    value={adminCodeInput}
+                    onChange={(e) => setAdminCodeInput(e.target.value.toUpperCase().replace(/\s+/g, ""))}
+                    placeholder="E.G. AMBASSADOR10"
+                    className="w-full bg-[#131825] border border-gray-700 rounded-xl pl-9 pr-4 py-3.5 text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors uppercase font-mono tracking-wider"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="px-6 py-3.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 whitespace-nowrap"
+                >
+                  Generate Link
+                </button>
+              </div>
+            </form>
+
+            {generatedLink && (
+              <div className="mt-6 p-4 rounded-xl bg-purple-950/20 border border-purple-500/20 space-y-3">
+                <label className="block text-xs font-semibold text-purple-300 uppercase tracking-wider">
+                  Your Referral Link
+                </label>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <input
+                    type="text"
+                    readOnly
+                    value={generatedLink}
+                    className="flex-grow bg-black/40 border border-purple-500/10 rounded-lg px-3 py-2 text-sm text-purple-200 font-mono focus:outline-none"
+                  />
+                  <button
+                    onClick={handleCopyLink}
+                    className={`px-4 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 shrink-0 ${
+                      copied
+                        ? "bg-green-600 text-white"
+                        : "bg-white text-black hover:bg-gray-200"
+                    }`}
+                  >
+                    {copied ? (
+                      <>
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Copied!
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                        </svg>
+                        Copy Link
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Application Form Section */}
         <div id="apply-section" className="max-w-3xl mx-auto">
           <div className="bg-gray-900/80 backdrop-blur-2xl border border-gray-700/50 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
@@ -255,6 +373,14 @@ function SummerInternship() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
+                {referralCode && (
+                  <div className="p-4 bg-purple-950/30 border border-purple-500/40 rounded-xl text-purple-200 text-sm flex items-center gap-3 animate-pulse">
+                    <span className="text-lg">🎉</span>
+                    <div>
+                      Referral Applied: <strong className="text-purple-300 font-mono">#{referralCode}</strong>. Your referral code will be appended to your application name.
+                    </div>
+                  </div>
+                )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-300">Full Name *</label>
