@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import generatePdf from "../utils/genrateCoursePdf";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "../seo/SEOHead";
+import { useDynamicSEO } from "../seo/useDynamicSEO";
 import QueryForm from "../Components/Forms/QueryForm";
 import Loading from "../Components/Helpers/Loading";
 import { useCourse } from "../api/courseApi";
@@ -39,15 +40,13 @@ function CourseDetails() {
     fetchCourseDetails();
   }, [courseId]);
 
-  if (!course) return <Loading />;
+  const seoProps = useDynamicSEO('course', course);
 
+  if (!course) return <Loading />;
 
   return (
     <div className="bg-dark-background pb-10 overflow-x-hidden">
-      <Helmet>
-        <title>Course Details - Codementees</title>
-        <meta name="description" content={`Explore details about Course ${courseId} at Codementees.`} />
-      </Helmet>
+      <SEOHead path="/courses/:courseId" {...seoProps} />
       {showQuery && <QueryForm setQuery={setShowQuery} courseName={course.name} />}
 
       <div className="flex flex-col lg:flex-row gap-6 p-6 lg:p-12 mx-auto max-w-6xl bg-dark-background">

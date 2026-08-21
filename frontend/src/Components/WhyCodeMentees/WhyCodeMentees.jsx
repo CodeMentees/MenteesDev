@@ -62,7 +62,7 @@ function WhyCodeMentees() {
             <div className="text-dark-accent text-4xl mb-2">
               <i className={`fa-solid ${item.icon}`}></i>
             </div>
-            <h2 className="text-lg font-bold mb-2">{item.heading}</h2>
+            <h3 className="text-lg font-bold mb-2">{item.heading}</h3>
             <p className="text-dark-text">{item.description}</p>
           </div>
         ))}

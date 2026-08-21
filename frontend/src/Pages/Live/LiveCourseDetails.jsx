@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useLiveCourseAPI } from '../../api/liveCourseApi';
+import SEOHead from '../../seo/SEOHead';
+import { useDynamicSEO } from '../../seo/useDynamicSEO';
 import { FaPlay, FaFileAlt, FaLock, FaArrowLeft, FaVideo, FaInfoCircle } from 'react-icons/fa';
+
 
 const LiveCourseDetails = () => {
     const { id } = useParams();
@@ -34,6 +37,8 @@ const LiveCourseDetails = () => {
         getDetails();
     }, [id]);
 
+    const seoProps = useDynamicSEO('liveCourse', course);
+
     const handleContentAccess = (item) => {
         if (!isAuthenticated || !user?.isFullAccess) {
             setToast({ visible: true, message: "Please register for this course to access this content." });
@@ -62,6 +67,8 @@ const LiveCourseDetails = () => {
 
     return (
         <div className="bg-[#050810] min-h-screen pt-24 pb-20 text-white font-sans">
+            <SEOHead path="/live/:id" {...seoProps} />
+
             {toast.visible && (
                 <div className="fixed z-50 top-20 right-5 p-4 bg-gray-800 text-white border-l-4 border-red-500 rounded-lg shadow-2xl animate-fade-in-down">
                     <span className="text-xl">🔒</span> {toast.message}

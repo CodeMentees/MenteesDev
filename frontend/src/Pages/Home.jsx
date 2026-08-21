@@ -38,22 +38,22 @@ function Home() {
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "EducationalOrganization",
+          "@type": ["EducationalOrganization", "Organization"],
           "name": "CodeMentees",
           "url": "https://codementees.com/",
           "logo": "https://codementees.com/logo.png",
-          "description": "Learn coding, DSA, AI/ML, and Data Science from expert IIT/IIIT alumni. Offering live classes, certification, and placement preparation.",
+          "description": "Live 1:1 mentorship in Web Development, DSA & Interview Prep from engineers who've worked at JPMorgan and Freecharge. Build real, hireable skills — not just certificates.",
+          "foundingDate": "2023",
+          "areaServed": "Worldwide",
           "address": {
             "@type": "PostalAddress",
             "addressCountry": "IN"
           },
-          "offers": {
-            "@type": "Offer",
-            "category": "Coding Classes, AI/ML, Data Science, DSA"
-          },
-          "founder": {
-            "@type": "Person",
-            "name": "CodeMentees Team"
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "100",
+            "bestRating": "5"
           },
           "sameAs": [
             "https://www.facebook.com/codementees",

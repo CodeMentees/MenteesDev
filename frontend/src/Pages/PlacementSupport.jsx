@@ -4,6 +4,8 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { Briefcase, Link as LinkIcon, ExternalLink, Search, Zap, Clock, TrendingUp } from "lucide-react";
 import Loading from "../Components/Helpers/Loading";
+import SEOHead from "../seo/SEOHead";
+
 
 const PlacementSupport = () => {
   const [jobs, setJobs] = useState([]);
@@ -35,6 +37,8 @@ const PlacementSupport = () => {
 
   return (
     <div className="min-h-screen bg-dark-box text-white pt-20 pb-12 px-4 sm:px-6 lg:px-8">
+      <SEOHead path="/placement-support" />
+
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto text-center mb-16" data-aos="fade-down">
         <h1 className="text-4xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 text-transparent bg-clip-text">

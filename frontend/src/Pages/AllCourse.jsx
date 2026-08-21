@@ -55,12 +55,13 @@ function AllCourse() {
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Course",
-            "name": activeTabData?.name || "All Courses",
-            "description": activeTabData?.description || "Explore our wide range of coding courses.",
+            "@type": "ItemList",
+            "name": activeTabData?.name ? `${activeTabData.name} Courses | CodeMentees` : "All Courses | CodeMentees",
+            "description": activeTabData?.description || "Explore mentor-led courses in Web Development, DSA, and Interview Preparation at CodeMentees.",
+            "url": "https://codementees.com/courses",
             "provider": {
               "@type": "Organization",
-              "name": "Codementees",
+              "name": "CodeMentees",
               "url": "https://codementees.com"
             }
           })}

@@ -70,9 +70,9 @@ function Blog() {
       <div className="w-full max-w-[1920px] mx-auto px-6 xl:px-12">
         {/* Header Section */}
         <div className="mb-20 text-center">
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
             {category ? `${category} Insights` : "Insights & Guides"}
-          </h2>
+          </h1>
           <p className="text-gray-500 text-lg max-w-2xl mx-auto">
             {category
               ? `Exploring the latest in ${category} engineering and development.`

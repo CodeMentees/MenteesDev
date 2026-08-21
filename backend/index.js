@@ -8,6 +8,8 @@ import cron from "node-cron";
 import compression from "compression";
 import BlockedIp from "./middlewares/ipBlockMiddleware.js";
 import path from "path";
+import fs from "fs";
+
 import { init } from "./utils/socket.js";
 import http from "http";
 import routes from "./routes/index.js"
@@ -54,9 +56,39 @@ const frontendDistPath = path.join(process.cwd(), "frontend", "dist");
 
 app.use(express.static(frontendDistPath));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+// ── Pre-rendered route serving ────────────────────────────────────────────
+// For known public routes, serve the pre-rendered HTML file (dist/<route>/index.html)
+// so crawlers receive real content on first load.
+// Falls back to the SPA shell (dist/index.html) for all other routes.
+const PRE_RENDERED_ROUTES = [
+  '/courses',
+  '/live',
+  '/about',
+  '/placement-support',
+  '/summer-internships',
+  '/school-coding',
+  '/school-coding/catalog',
+  '/blogs',
+  '/faq',
+  '/contact',
+  '/register',
+];
+
+app.get('*', (req, res) => {
+  const reqPath = req.path;
+
+  // Check if this exact path has a pre-rendered HTML file
+  if (PRE_RENDERED_ROUTES.includes(reqPath)) {
+    const preRenderedFile = path.join(frontendDistPath, reqPath, 'index.html');
+    if (fs.existsSync(preRenderedFile)) {
+      return res.sendFile(preRenderedFile);
+    }
+  }
+
+  // Default SPA fallback
+  res.sendFile(path.join(frontendDistPath, 'index.html'));
 });
+
 
 // Clear blocked IPs older than 24 hours
 cron.schedule("0 0 * * *", async () => {

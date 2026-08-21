@@ -4,11 +4,14 @@ import { Helmet } from "react-helmet-async";
 import { useSelector } from "react-redux";
 import { FaHeart, FaRegHeart, FaTrash } from "react-icons/fa";
 import { useBlog } from "../api/blogApi";
+import SEOHead from "../seo/SEOHead";
+import { useDynamicSEO } from "../seo/useDynamicSEO";
 import BlogGridFour from "../Components/Blog/BlogGridFour";
 import Loading from "../Components/Helpers/Loading";
 import BlogSidebar from "../Components/Blog/BlogSidebar";
 import Toast from "../Components/UI/Toast";
 import BlogPromoSidebar from "../Components/Blog/BlogPromoSidebar";
+
 
 function BlogPage() {
   const { fetchBlog, likeBlog, addComment, deleteComment } = useBlog();
@@ -101,6 +104,8 @@ function BlogPage() {
     }
   };
 
+  const seoProps = useDynamicSEO('blog', blog);
+
   if (!blog) {
     return <Loading />;
   }
@@ -112,10 +117,7 @@ function BlogPage() {
     <main className="min-h-screen bg-white antialiased">
       <Toast visible={toast.visible} message={toast.message} type={toast.type} />
 
-      <Helmet>
-        <title>{blog.title} | Codementees</title>
-        <meta name="description" content={blog.content.substring(0, 150)} />
-      </Helmet>
+      <SEOHead path="/blogs/:id" {...seoProps} />
 
       <div className="w-full max-w-[1920px] mx-auto flex flex-col lg:flex-row gap-8 xl:gap-24 px-6 xl:px-12 py-12">
         {/* ✅ Left Sidebar: Categories Navigation */}
