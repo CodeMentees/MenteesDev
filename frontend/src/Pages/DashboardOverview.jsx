@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useUserAPI } from "../api/userApi";
-import { FaUsers, FaUserPlus, FaUserSlash, FaArrowRight, FaEdit } from "react-icons/fa";
+import { FaUsers, FaUserPlus, FaUserSlash, FaArrowRight, FaEdit, FaChartLine } from "react-icons/fa";
 import DeleteConfirmModal from "../Components/UI/DeleteConfirmModal";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+const dummyData = [
+  { name: 'Mon', users: 12 },
+  { name: 'Tue', users: 19 },
+  { name: 'Wed', users: 15 },
+  { name: 'Thu', users: 22 },
+  { name: 'Fri', users: 30 },
+  { name: 'Sat', users: 25 },
+  { name: 'Sun', users: 35 },
+];
 
 const DashboardOverview = () => {
     const { fetchUsers, deleteUser } = useUserAPI();
@@ -87,9 +98,42 @@ const DashboardOverview = () => {
                     </div>
                     <p className="mt-6 text-gray-500 text-sm">Onboard a new instructor or admin.</p>
                 </Link>
+
+                <div className="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-xl hover:border-pink-500/50 transition-all group">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-gray-400 text-sm font-medium uppercase tracking-wider">Engagement</p>
+                            <h3 className="text-2xl font-bold text-white mt-1">+24%</h3>
+                        </div>
+                        <div className="p-4 bg-pink-900/30 rounded-xl text-pink-500 group-hover:scale-110 transition-transform">
+                            <FaChartLine size={24} />
+                        </div>
+                    </div>
+                    <p className="mt-6 text-gray-500 text-sm">Active user sessions this week.</p>
+                </div>
+            </div>
+
+            {/* Chart Section */}
+            <div className="bg-gray-800 border border-gray-700 rounded-2xl shadow-xl p-6">
+                <h2 className="text-xl font-bold text-white mb-6">User Growth (7 Days)</h2>
+                <div className="h-72 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={dummyData}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={false} />
+                            <XAxis dataKey="name" stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} axisLine={false} tickLine={false} />
+                            <YAxis stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} axisLine={false} tickLine={false} />
+                            <Tooltip 
+                                contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151', color: '#fff', borderRadius: '0.5rem' }}
+                                itemStyle={{ color: '#60A5FA' }}
+                            />
+                            <Line type="monotone" dataKey="users" stroke="#3B82F6" strokeWidth={3} dot={{ r: 4, fill: '#3B82F6', strokeWidth: 2, stroke: '#1E3A8A' }} activeDot={{ r: 6 }} />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </div>
             </div>
 
             {/* Recent Users Table */}
+
             <div className="bg-gray-800 border border-gray-700 rounded-2xl shadow-xl overflow-hidden">
                 <div className="p-6 border-b border-gray-700 flex items-center justify-between">
                     <h2 className="text-xl font-bold text-white">Recent Users</h2>
