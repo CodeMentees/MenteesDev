@@ -39,13 +39,13 @@ import asyncHandler from "express-async-handler";
  */
 const createPost = asyncHandler(async (req, res) => {
   try {
-    const { title, content, image, categories } = req.body;
+    const { title, content, image, categories, seo } = req.body;
 
     if (!title || !content) {
       return res.status(400).json({ message: "Title and content are required" });
     }
 
-    const post = new Post({ title, content, image, categories });
+    const post = new Post({ title, content, image, categories, seo });
     const createdPost = await post.save();
 
     res.status(201).json({ data: createdPost, message: "Post created successfully" });
@@ -163,6 +163,7 @@ const updatePost = asyncHandler(async (req, res) => {
     post.content = req.body.content || post.content;
     post.image = req.body.image || post.image;
     post.categories = req.body.categories || post.categories;
+    if (req.body.seo) post.seo = req.body.seo;
 
     const updatedPost = await post.save();
     res.json({ data: updatedPost, message: "Post updated successfully" });

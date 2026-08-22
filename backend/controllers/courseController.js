@@ -44,7 +44,7 @@ import mongoose from "mongoose";
  *         description: Invalid input data
  */
 const createCourse = asyncHandler(async (req, res) => {
-  const { name, category, description, modules, details, tags, price } = req.body;
+  const { name, category, description, modules, details, tags, price, seo } = req.body;
   let image = req.file ? req.file.path : req.body.image;
 
   // Defensive check for image field
@@ -70,6 +70,7 @@ const createCourse = asyncHandler(async (req, res) => {
     details: detailsParsed,
     tags: tagsParsed,
     price,
+    seo: typeof seo === 'string' ? JSON.parse(seo) : seo,
   });
 
   const createdCourse = await course.save();
@@ -214,6 +215,7 @@ const updateCourse = asyncHandler(async (req, res) => {
   course.details = req.body.details ? (typeof req.body.details === 'string' ? JSON.parse(req.body.details) : req.body.details) : course.details;
   course.tags = req.body.tags ? (typeof req.body.tags === 'string' ? JSON.parse(req.body.tags) : req.body.tags) : course.tags;
   course.price = req.body.price || course.price;
+  if (req.body.seo) course.seo = typeof req.body.seo === 'string' ? JSON.parse(req.body.seo) : req.body.seo;
 
   const updatedCourse = await course.save();
   res.json({ data: updatedCourse, message: "Course updated successfully" });

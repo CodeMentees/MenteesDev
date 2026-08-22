@@ -4,6 +4,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { Briefcase, Link as LinkIcon, ExternalLink, Search, Zap, Clock, TrendingUp } from "lucide-react";
 import Loading from "../Components/Helpers/Loading";
+import { SkeletonGrid } from "../Components/UI/LoadingSpinner";
 import SEOHead from "../seo/SEOHead";
 
 
@@ -33,7 +34,7 @@ const PlacementSupport = () => {
     (job.company && job.company.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  if (loading) return <Loading />;
+
 
   return (
     <div className="min-h-screen bg-dark-box text-white pt-20 pb-12 px-4 sm:px-6 lg:px-8">
@@ -99,7 +100,9 @@ const PlacementSupport = () => {
           <h2 className="text-2xl font-bold">Latest Opportunities</h2>
         </div>
 
-        {filteredJobs.length > 0 ? (
+        {loading ? (
+          <SkeletonGrid count={6} />
+        ) : filteredJobs.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredJobs.map((job, index) => (
               <div

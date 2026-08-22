@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { useLiveCourseAPI } from '../../api/liveCourseApi';
 import SEOHead from '../../seo/SEOHead';
 import { useDynamicSEO } from '../../seo/useDynamicSEO';
+import LoadingSpinner from '../../Components/UI/LoadingSpinner';
 import { FaPlay, FaFileAlt, FaLock, FaArrowLeft, FaVideo, FaInfoCircle } from 'react-icons/fa';
 
 
@@ -50,8 +51,9 @@ const LiveCourseDetails = () => {
 
     if (isLoading) {
         return (
-            <div className="bg-dark-background min-h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            <div className="min-h-screen flex items-center justify-center"
+                style={{ background: "rgb(var(--bg))" }}>
+                <LoadingSpinner size="lg" />
             </div>
         );
     }

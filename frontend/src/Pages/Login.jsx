@@ -186,7 +186,7 @@ function LoginPage() {
                 </button>
               </div>
             </form>
-{/* <div className="mt-6">
+            <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                 </div>
@@ -204,7 +204,7 @@ function LoginPage() {
                   onError={() => console.error("Google Login Failed")}
                 />
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
       </div>

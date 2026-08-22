@@ -70,113 +70,127 @@ const DashboardOverview = () => {
             </header>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-xl hover:border-blue-500/50 transition-all group">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 stagger">
+                <div className="stat-card">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-gray-400 text-sm font-medium uppercase tracking-wider">Total Users</p>
-                            <h3 className="text-4xl font-black text-white mt-1">{stats.totalUsers}</h3>
+                            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "rgb(var(--dash-muted))" }}>Total Users</p>
+                            <h3 className="stat-number mt-1">{stats.totalUsers}</h3>
                         </div>
-                        <div className="p-4 bg-blue-900/30 rounded-xl text-blue-500 group-hover:scale-110 transition-transform">
-                            <FaUsers size={24} />
+                        <div className="p-3 rounded-xl" style={{ background: "rgba(249,115,22,0.12)", border: "1px solid rgba(249,115,22,0.2)" }}>
+                            <FaUsers size={22} style={{ color: "rgb(249,115,22)" }} />
                         </div>
                     </div>
-                    <Link to="/admin/users" className="mt-6 flex items-center text-blue-400 hover:text-blue-300 text-sm font-semibold transition-colors">
-                        Manage Users <FaArrowRight className="ml-2 h-3 w-3" />
+                    <Link to="/admin/users" className="mt-5 flex items-center gap-2 text-sm font-semibold transition-colors"
+                        style={{ color: "rgb(249,115,22)" }}>
+                        Manage Users <FaArrowRight className="h-3 w-3" />
                     </Link>
                 </div>
 
-                <Link to="/admin/users/create" className="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-xl hover:border-green-500/50 transition-all group">
+                <Link to="/admin/users/create" className="stat-card block">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-gray-400 text-sm font-medium uppercase tracking-wider">Add User</p>
-                            <h3 className="text-2xl font-bold text-white mt-1">New Member</h3>
+                            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "rgb(var(--dash-muted))" }}>Add User</p>
+                            <h3 className="stat-number mt-1 text-2xl">New Member</h3>
                         </div>
-                        <div className="p-4 bg-green-900/30 rounded-xl text-green-500 group-hover:scale-110 transition-transform">
-                            <FaUserPlus size={24} />
+                        <div className="p-3 rounded-xl" style={{ background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.2)" }}>
+                            <FaUserPlus size={22} style={{ color: "rgb(34,197,94)" }} />
                         </div>
                     </div>
-                    <p className="mt-6 text-gray-500 text-sm">Onboard a new instructor or admin.</p>
+                    <p className="mt-5 text-sm" style={{ color: "rgb(var(--dash-muted))" }}>Onboard a new instructor or admin.</p>
                 </Link>
 
-                <div className="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-xl hover:border-pink-500/50 transition-all group">
+                <div className="stat-card">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-gray-400 text-sm font-medium uppercase tracking-wider">Engagement</p>
-                            <h3 className="text-2xl font-bold text-white mt-1">+24%</h3>
+                            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "rgb(var(--dash-muted))" }}>Engagement</p>
+                            <h3 className="stat-number mt-1 text-2xl">+24%</h3>
                         </div>
-                        <div className="p-4 bg-pink-900/30 rounded-xl text-pink-500 group-hover:scale-110 transition-transform">
-                            <FaChartLine size={24} />
+                        <div className="p-3 rounded-xl" style={{ background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.2)" }}>
+                            <FaChartLine size={22} style={{ color: "rgb(99,102,241)" }} />
                         </div>
                     </div>
-                    <p className="mt-6 text-gray-500 text-sm">Active user sessions this week.</p>
+                    <p className="mt-5 text-sm" style={{ color: "rgb(var(--dash-muted))" }}>Active user sessions this week.</p>
                 </div>
             </div>
 
             {/* Chart Section */}
-            <div className="bg-gray-800 border border-gray-700 rounded-2xl shadow-xl p-6">
-                <h2 className="text-xl font-bold text-white mb-6">User Growth (7 Days)</h2>
+            <div className="panel">
+                <h2 className="text-xl font-bold mb-6" style={{ color: "rgb(var(--dash-ink))" }}>User Growth (7 Days)</h2>
                 <div className="h-72 w-full">
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={dummyData}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={false} />
-                            <XAxis dataKey="name" stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} axisLine={false} tickLine={false} />
-                            <YAxis stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} axisLine={false} tickLine={false} />
-                            <Tooltip 
-                                contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151', color: '#fff', borderRadius: '0.5rem' }}
-                                itemStyle={{ color: '#60A5FA' }}
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
+                            <XAxis dataKey="name" stroke="rgba(140,140,140,0.5)" tick={{fill: 'rgb(140,140,140)'}} axisLine={false} tickLine={false} />
+                            <YAxis stroke="rgba(140,140,140,0.5)" tick={{fill: 'rgb(140,140,140)'}} axisLine={false} tickLine={false} />
+                            <Tooltip
+                                contentStyle={{ backgroundColor: 'rgb(3,20,40)', borderColor: 'rgba(249,115,22,0.2)', color: '#fff', borderRadius: '0.75rem' }}
+                                itemStyle={{ color: 'rgb(249,115,22)' }}
                             />
-                            <Line type="monotone" dataKey="users" stroke="#3B82F6" strokeWidth={3} dot={{ r: 4, fill: '#3B82F6', strokeWidth: 2, stroke: '#1E3A8A' }} activeDot={{ r: 6 }} />
+                            <Line type="monotone" dataKey="users" stroke="rgb(249,115,22)" strokeWidth={2.5}
+                                dot={{ r: 4, fill: 'rgb(249,115,22)', strokeWidth: 2, stroke: 'rgb(234,88,12)' }}
+                                activeDot={{ r: 6, fill: 'rgb(249,115,22)' }} />
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
             </div>
 
             {/* Recent Users Table */}
-
-            <div className="bg-gray-800 border border-gray-700 rounded-2xl shadow-xl overflow-hidden">
-                <div className="p-6 border-b border-gray-700 flex items-center justify-between">
-                    <h2 className="text-xl font-bold text-white">Recent Users</h2>
-                    <Link to="/admin/users" className="text-sm text-blue-400 hover:underline">View All</Link>
+            <div className="panel overflow-hidden">
+                <div className="flex items-center justify-between mb-5">
+                    <h2 className="text-xl font-bold" style={{ color: "rgb(var(--dash-ink))" }}>Recent Users</h2>
+                    <Link to="/admin/users" className="text-sm font-semibold transition-colors"
+                        style={{ color: "rgb(249,115,22)" }}>View All</Link>
                 </div>
                 <div className="overflow-x-auto">
                     {loading ? (
-                        <div className="p-10 text-center text-gray-400">Loading users...</div>
+                        <div className="py-10 text-center" style={{ color: "rgb(var(--dash-muted))" }}>Loading users...</div>
                     ) : (
                         <table className="w-full text-left">
-                            <thead className="bg-gray-900/50 text-gray-400 text-xs uppercase tracking-wider">
-                                <tr>
-                                    <th className="px-6 py-4 font-semibold">Name</th>
-                                    <th className="px-6 py-4 font-semibold">Email</th>
-                                    <th className="px-6 py-4 font-semibold text-right">Actions</th>
+                            <thead>
+                                <tr style={{ borderBottom: "1px solid rgba(var(--dash-border))" }}>
+                                    <th className="pb-3 text-xs font-semibold uppercase tracking-wider" style={{ color: "rgb(var(--dash-muted))" }}>Name</th>
+                                    <th className="pb-3 text-xs font-semibold uppercase tracking-wider" style={{ color: "rgb(var(--dash-muted))" }}>Email</th>
+                                    <th className="pb-3 text-xs font-semibold uppercase tracking-wider text-right" style={{ color: "rgb(var(--dash-muted))" }}>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-700">
+                            <tbody>
                                 {stats.recentUsers.map((user) => (
-                                    <tr key={user._id} className="hover:bg-gray-700/30 transition-colors">
-                                        <td className="px-6 py-4 text-white font-medium">{user.name}</td>
-                                        <td className="px-6 py-4 text-gray-400">{user.email}</td>
-                                        <td className="px-6 py-4 text-right flex justify-end gap-2">
+                                    <tr key={user._id}
+                                        className="transition-colors"
+                                        style={{ borderBottom: "1px solid rgba(var(--dash-border))" }}
+                                        onMouseEnter={(e) => e.currentTarget.style.background = "rgba(249,115,22,0.04)"}
+                                        onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                                    >
+                                        <td className="py-3 font-medium" style={{ color: "rgb(var(--dash-ink))" }}>{user.name}</td>
+                                        <td className="py-3 text-sm" style={{ color: "rgb(var(--dash-muted))" }}>{user.email}</td>
+                                        <td className="py-3 text-right flex justify-end gap-2">
                                             <Link
                                                 to={`/admin/users/edit/${user._id}`}
-                                                className="text-blue-500 hover:text-blue-400 p-2 hover:bg-blue-900/20 rounded-lg transition-all"
+                                                className="p-2 rounded-lg transition-all"
+                                                style={{ color: "rgb(249,115,22)" }}
                                                 title="Edit User"
+                                                onMouseEnter={(e) => e.currentTarget.style.background = "rgba(249,115,22,0.1)"}
+                                                onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
                                             >
-                                                <FaEdit size={18} />
+                                                <FaEdit size={16} />
                                             </Link>
                                             <button
                                                 onClick={() => handleDeleteClick(user)}
-                                                className="text-red-500 hover:text-red-400 p-2 hover:bg-red-900/20 rounded-lg transition-all"
+                                                className="p-2 rounded-lg transition-all"
+                                                style={{ color: "rgb(239,68,68)" }}
                                                 title="Delete User"
+                                                onMouseEnter={(e) => e.currentTarget.style.background = "rgba(239,68,68,0.1)"}
+                                                onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
                                             >
-                                                <FaUserSlash size={18} />
+                                                <FaUserSlash size={16} />
                                             </button>
                                         </td>
                                     </tr>
                                 ))}
                                 {stats.recentUsers.length === 0 && (
                                     <tr>
-                                        <td colSpan="3" className="px-6 py-10 text-center text-gray-500 italic">No users found.</td>
+                                        <td colSpan="3" className="py-10 text-center italic" style={{ color: "rgb(var(--dash-muted))" }}>No users found.</td>
                                     </tr>
                                 )}
                             </tbody>

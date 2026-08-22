@@ -55,15 +55,13 @@ function PostList() {
   ];
 
   return (
-    <div className="mx-auto max-w-screen-xl px-2 py-10">
+    <div className="p-6 lg:p-8 w-full max-w-[1600px] mx-auto">
       {toast.visible && (
         <div className="fixed z-50 top-5 right-5 p-4  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
           {toast.message}
         </div>
       )}
-      <section className="p-3 sm:p-5">
-        <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-          <div className="relative shadow-md sm:rounded-lg overflow-hidden">
+      <div className="relative shadow-lg sm:rounded-2xl overflow-hidden border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
             <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
               <Link
                 to={"/admin/posts/create"}
@@ -89,9 +87,7 @@ function PostList() {
               <ReusableTable headers={headers} data={Posts} actions={actions} isLoading={isLoading} />
               <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
             </div>
-          </div>
-        </div>
-      </section>
+      </div>
     </div>
   );
 }

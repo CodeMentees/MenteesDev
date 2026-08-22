@@ -46,6 +46,11 @@ const courseSchema = new mongoose.Schema({
       ],
     },
   ],
+  seo: {
+    metaTitle: { type: String },
+    metaDescription: { type: String },
+    keywords: { type: String }
+  }
 });
 
 courseSchema.index({ name: 1 });

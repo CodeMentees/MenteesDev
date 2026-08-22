@@ -3,6 +3,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Toast from "../UI/Toast";
+import { useAuth } from "../../api/authApi";
 
 function Register() {
   const navigate = useNavigate();
@@ -12,10 +13,9 @@ function Register() {
     email: "",
     password: "",
     phoneNumber: "",
-    credential: "",
-    client_id: "",
   });
 
+  const { loginUser } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const [toast, setToast] = useState({
@@ -81,6 +81,19 @@ function Register() {
       showToast("An error occurred. Please try again.", "error");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const googleSignUpHandler = async (googleResponse) => {
+    try {
+      const data = await loginUser({
+        credential: googleResponse.credential,
+        client_id: googleResponse.clientId,
+      });
+      showToast(data.message || "Registration successful!", "success");
+      setTimeout(() => navigate("/"), 1500);
+    } catch (error) {
+      showToast("Google Registration failed", "error");
     }
   };
 
@@ -204,12 +217,13 @@ function Register() {
                 </Link>
               </p>
             </div>
-            {/* <div className="mt-4">
+            <div className="mt-4">
               <GoogleLogin
-                onSuccess={signUpHandler}
+                onSuccess={googleSignUpHandler}
+                text="signup_with"
                 onError={() => showToast("Google Login Failed", "error")}
               />
-            </div> */}
+            </div>
           </form>
         </div>
       </div>
