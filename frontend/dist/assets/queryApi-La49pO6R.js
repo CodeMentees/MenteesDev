@@ -1,1 +1,0 @@
-import{u as m}from"./useCRUD-_avfl9rD.js";const y="/queries",o=()=>{const{getItems:r,getItemById:u,createItem:s,updateItem:I,deleteItem:c}=m(y);return{fetchQueries:(e=1,t=10)=>r(e,t),fetchQuery:e=>u(e),createQuery:e=>s(e),updateQuery:(e,t)=>I(e,t),deleteQuery:e=>c(e)}};export{o as u};

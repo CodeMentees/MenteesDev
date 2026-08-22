@@ -11,7 +11,9 @@ import Loading from "../Components/Helpers/Loading";
 import BlogSidebar from "../Components/Blog/BlogSidebar";
 import Toast from "../Components/UI/Toast";
 import BlogPromoSidebar from "../Components/Blog/BlogPromoSidebar";
-
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
 function BlogPage() {
   const { fetchBlog, likeBlog, addComment, deleteComment } = useBlog();
@@ -153,7 +155,11 @@ function BlogPage() {
                 )}
               </header>
 
-              <section className="prose prose-lg max-w-none article-content" dangerouslySetInnerHTML={{ __html: blog.content }} />
+              <section className="prose prose-lg max-w-none article-content">
+                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                  {blog.content}
+                </ReactMarkdown>
+              </section>
 
               {/* ✅ Floating Like Button */}
               <div className="mt-12 py-6 border-t border-gray-100 flex items-center gap-4">
