@@ -1,0 +1,1 @@
+import{u as c}from"./useCRUD-_avfl9rD.js";const I="/categories",u=()=>{const{getItems:r,getItemById:a,createItem:o,updateItem:g,deleteItem:s}=c(I);return{fetchCategories:(e=1,t=10)=>r(e,t),fetchCategory:e=>a(e),createCategory:e=>o(e),updateCategory:(e,t)=>g(e,t),deleteCategory:e=>s(e)}};export{u};

@@ -1,0 +1,1 @@
+import{u as o,j as s}from"./index-C6Bty2QJ.js";import{N as i}from"./vendor-DyouE7zY.js";import"./utils-lnHr28T5.js";const c=({children:t})=>o(e=>e.auth.isAuthenticated)?t:s.jsx(i,{to:"/login"});export{c as default};

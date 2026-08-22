@@ -1,0 +1,1 @@
+import{u as r}from"./useCRUD-_avfl9rD.js";const u="/events",a=()=>{const{getItems:n,getItemById:s,createItem:v,updateItem:c,deleteItem:m}=r(u);return{fetchEvents:(e=1,t=6)=>n(e,t),fetchEvent:e=>s(e),createEvent:e=>v(e),updateEvent:(e,t)=>c(e,t),deleteEvent:e=>m(e)}};export{a as u};

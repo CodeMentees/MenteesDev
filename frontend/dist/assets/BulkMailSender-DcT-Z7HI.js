@@ -1,0 +1,65 @@
+import{j as e}from"./index-C6Bty2QJ.js";import{b as n}from"./vendor-DyouE7zY.js";import{b as R}from"./utils-lnHr28T5.js";function T({emails:s,onChange:l}){const[o,d]=n.useState(""),p=n.useRef(null),b=r=>{const c=r.split(/[\s,;]+/).map(m=>m.trim().toLowerCase()).filter(m=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m));c.length&&l([...new Set([...s,...c])])},i=r=>{["Enter",",",";"," ","Tab"].includes(r.key)?(r.preventDefault(),o.trim()&&(b(o),d(""))):r.key==="Backspace"&&!o&&s.length&&l(s.slice(0,-1))},g=r=>{r.preventDefault(),b(r.clipboardData.getData("text")),d("")},f=r=>l(s.filter(c=>c!==r));return e.jsxs("div",{className:"email-tag-box",onClick:()=>{var r;return(r=p.current)==null?void 0:r.focus()},children:[s.map(r=>e.jsxs("span",{className:"email-tag",children:[r,e.jsx("button",{type:"button",onClick:()=>f(r),className:"email-tag-remove",children:"×"})]},r)),e.jsx("input",{ref:p,value:o,onChange:r=>d(r.target.value),onKeyDown:i,onPaste:g,onBlur:()=>{o.trim()&&(b(o),d(""))},placeholder:s.length===0?"Type email & press Enter, or paste many…":"",className:"email-tag-input"})]})}function M(){var z,S;const[s,l]=n.useState([]),[o,d]=n.useState(""),[p,b]=n.useState(""),[i,g]=n.useState(null),[f,r]=n.useState(!1),[c,m]=n.useState(!1),[x,j]=n.useState(null),[v,u]=n.useState(null),k=n.useRef(null),[y,w]=n.useState(""),P=()=>{const a=y.split(/[\s,;]+/).map(t=>t.trim().toLowerCase()).filter(t=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(t));l(t=>[...new Set([...t,...a])]),w("")},N=a=>{a&&a.type==="application/pdf"?g(a):alert("Only PDF files are allowed.")},C=a=>{a.preventDefault(),r(!1);const t=a.dataTransfer.files[0];t&&N(t)},E=async a=>{var D,B,F;if(a.preventDefault(),j(null),u(null),s.length===0)return u("Please add at least one recipient email.");if(!o.trim())return u("Subject is required.");if(!p.trim())return u("Email body is required.");const t=new FormData;t.append("recipients",s.join(",")),t.append("subject",o),t.append("bodyText",p),t.append("bodyHtml",p.replace(/\n/g,"<br/>")),i&&t.append("brochure",i);try{m(!0);const h=await R.post("/api/bulk-mail/send",t,{withCredentials:!0,headers:{"Content-Type":"multipart/form-data"}});j(h.data),((D=h.data.failed)==null?void 0:D.length)===0&&(l([]),d(""),b(""),g(null))}catch(h){u(((F=(B=h.response)==null?void 0:B.data)==null?void 0:F.message)||"Failed to send emails. Please try again.")}finally{m(!1)}};return e.jsxs(e.Fragment,{children:[e.jsx("style",{children:`
+        /* ── Page Layout ── */
+        .bm-page { min-height:100vh; background:linear-gradient(135deg,#0f0c29,#302b63,#24243e); padding:40px 20px; font-family:'Inter',system-ui,sans-serif; }
+        .bm-card { max-width:820px; margin:0 auto; background:rgba(255,255,255,0.05); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.1); border-radius:24px; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.4); }
+        /* ── Header ── */
+        .bm-header { background:linear-gradient(135deg,#6c3de8,#3b82f6); padding:32px 40px; }
+        .bm-header-title { font-size:26px; font-weight:800; color:#fff; margin:0; letter-spacing:-0.5px; }
+        .bm-header-sub { color:rgba(255,255,255,0.8); font-size:14px; margin:6px 0 0; }
+        /* ── Body ── */
+        .bm-body { padding:36px 40px; }
+        /* ── Labels ── */
+        .bm-label { display:block; color:#c4b5fd; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px; }
+        .bm-group { margin-bottom:24px; }
+        /* ── Inputs ── */
+        .bm-input { width:100%; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15); border-radius:12px; padding:12px 16px; color:#f3f4f6; font-size:15px; outline:none; transition:border-color .2s,box-shadow .2s; box-sizing:border-box; }
+        .bm-input:focus { border-color:#818cf8; box-shadow:0 0 0 3px rgba(129,140,248,0.2); }
+        .bm-input::placeholder { color:#6b7280; }
+        textarea.bm-input { resize:vertical; min-height:140px; line-height:1.7; }
+        /* ── Email Tag Box ── */
+        .email-tag-box { display:flex; flex-wrap:wrap; gap:8px; align-items:center; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15); border-radius:12px; padding:10px 14px; cursor:text; min-height:52px; transition:border-color .2s,box-shadow .2s; }
+        .email-tag-box:focus-within { border-color:#818cf8; box-shadow:0 0 0 3px rgba(129,140,248,0.2); }
+        .email-tag { background:rgba(109,93,236,0.35); border:1px solid rgba(109,93,236,0.5); color:#c4b5fd; font-size:13px; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:6px; }
+        .email-tag-remove { background:none; border:none; color:#a78bfa; cursor:pointer; font-size:16px; line-height:1; padding:0; }
+        .email-tag-remove:hover { color:#f472b6; }
+        .email-tag-input { background:none; border:none; outline:none; color:#f3f4f6; font-size:14px; flex:1; min-width:180px; padding:2px 0; }
+        .email-tag-input::placeholder { color:#6b7280; }
+        /* ── Bulk paste row ── */
+        .bm-bulk-row { display:flex; gap:10px; margin-bottom:24px; }
+        .bm-bulk-area { flex:1; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15); border-radius:12px; padding:10px 14px; color:#f3f4f6; font-size:13px; resize:none; height:72px; outline:none; }
+        .bm-bulk-area::placeholder { color:#6b7280; }
+        .bm-bulk-btn { background:rgba(109,93,236,0.3); border:1px solid rgba(109,93,236,0.5); color:#c4b5fd; padding:0 18px; border-radius:12px; font-size:13px; font-weight:600; cursor:pointer; transition:background .2s; white-space:nowrap; }
+        .bm-bulk-btn:hover { background:rgba(109,93,236,0.55); }
+        /* ── PDF Drop Zone ── */
+        .bm-dropzone { border:2px dashed rgba(255,255,255,0.15); border-radius:14px; padding:28px 20px; text-align:center; cursor:pointer; transition:border-color .2s,background .2s; }
+        .bm-dropzone.drag { border-color:#818cf8; background:rgba(129,140,248,0.1); }
+        .bm-dropzone-icon { font-size:36px; margin-bottom:10px; }
+        .bm-dropzone-text { color:#9ca3af; font-size:14px; }
+        .bm-dropzone-text strong { color:#c4b5fd; }
+        .bm-file-name { color:#a78bfa; font-size:14px; margin-top:8px; font-weight:500; }
+        .bm-remove-file { background:none; border:none; color:#f87171; font-size:12px; cursor:pointer; margin-left:8px; }
+        /* ── Stats row ── */
+        .bm-stats { display:flex; gap:12px; margin-bottom:28px; flex-wrap:wrap; }
+        .bm-stat { flex:1; min-width:120px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:14px 18px; text-align:center; }
+        .bm-stat-num { font-size:28px; font-weight:800; color:#c4b5fd; }
+        .bm-stat-label { font-size:12px; color:#9ca3af; margin-top:2px; }
+        /* ── Send Button ── */
+        .bm-send-btn { width:100%; padding:16px; background:linear-gradient(135deg,#6c3de8,#3b82f6); border:none; border-radius:14px; color:#fff; font-size:16px; font-weight:700; cursor:pointer; letter-spacing:.3px; transition:opacity .2s,transform .2s; display:flex; align-items:center; justify-content:center; gap:10px; }
+        .bm-send-btn:hover:not(:disabled) { opacity:.9; transform:translateY(-1px); }
+        .bm-send-btn:disabled { opacity:.55; cursor:not-allowed; }
+        /* ── Alerts ── */
+        .bm-error { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.35); color:#fca5a5; border-radius:12px; padding:14px 18px; font-size:14px; margin-bottom:20px; }
+        .bm-success { background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.35); color:#6ee7b7; border-radius:12px; padding:18px 22px; font-size:14px; margin-bottom:20px; }
+        .bm-success h4 { margin:0 0 10px; font-size:16px; color:#34d399; }
+        .bm-chip-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+        .bm-chip { font-size:12px; padding:3px 10px; border-radius:999px; }
+        .bm-chip.ok { background:rgba(16,185,129,0.2); color:#6ee7b7; }
+        .bm-chip.fail { background:rgba(239,68,68,0.2); color:#fca5a5; }
+        /* ── Spinner ── */
+        @keyframes spin { to { transform:rotate(360deg); } }
+        .spinner { width:20px; height:20px; border:3px solid rgba(255,255,255,.3); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; }
+        /* ── Divider ── */
+        .bm-divider { border:none; border-top:1px solid rgba(255,255,255,0.08); margin:28px 0; }
+      `}),e.jsx("div",{className:"bm-page",children:e.jsxs("div",{className:"bm-card",children:[e.jsxs("div",{className:"bm-header",children:[e.jsx("h1",{className:"bm-header-title",children:"✉️ Bulk Email Sender"}),e.jsxs("p",{className:"bm-header-sub",children:["Send personalized emails to multiple recipients from ",e.jsx("strong",{children:"codementees@gmail.com"})]})]}),e.jsxs("form",{onSubmit:E,className:"bm-body",children:[x&&e.jsxs("div",{className:"bm-success",children:[e.jsxs("h4",{children:["📬 ",x.message]}),((z=x.success)==null?void 0:z.length)>0&&e.jsxs(e.Fragment,{children:[e.jsx("div",{style:{color:"#86efac",fontSize:12,marginBottom:4},children:"Delivered to:"}),e.jsx("div",{className:"bm-chip-list",children:x.success.map(a=>e.jsx("span",{className:"bm-chip ok",children:a},a))})]}),((S=x.failed)==null?void 0:S.length)>0&&e.jsxs(e.Fragment,{children:[e.jsx("div",{style:{color:"#fca5a5",fontSize:12,marginTop:10,marginBottom:4},children:"Failed:"}),e.jsx("div",{className:"bm-chip-list",children:x.failed.map(a=>e.jsx("span",{className:"bm-chip fail",children:a},a))})]})]}),v&&e.jsxs("div",{className:"bm-error",children:["⚠️ ",v]}),e.jsxs("div",{className:"bm-stats",children:[e.jsxs("div",{className:"bm-stat",children:[e.jsx("div",{className:"bm-stat-num",children:s.length}),e.jsx("div",{className:"bm-stat-label",children:"Recipients Added"})]}),e.jsxs("div",{className:"bm-stat",children:[e.jsx("div",{className:"bm-stat-num",children:i?"1":"0"}),e.jsx("div",{className:"bm-stat-label",children:"PDF Attached"})]})]}),e.jsxs("div",{className:"bm-group",children:[e.jsx("label",{className:"bm-label",children:"Recipients"}),e.jsx(T,{emails:s,onChange:l}),e.jsxs("div",{style:{color:"#6b7280",fontSize:12,marginTop:6},children:["Press ",e.jsx("kbd",{style:{background:"rgba(255,255,255,0.1)",padding:"1px 5px",borderRadius:4},children:"Enter"}),", ",e.jsx("kbd",{style:{background:"rgba(255,255,255,0.1)",padding:"1px 5px",borderRadius:4},children:","})," or ",e.jsx("kbd",{style:{background:"rgba(255,255,255,0.1)",padding:"1px 5px",borderRadius:4},children:"Space"})," after each email · Or paste a list below"]})]}),e.jsxs("div",{className:"bm-bulk-row",children:[e.jsx("textarea",{className:"bm-bulk-area",placeholder:"Paste many emails at once (comma / newline / space separated)…",value:y,onChange:a=>w(a.target.value)}),e.jsx("button",{type:"button",className:"bm-bulk-btn",onClick:P,children:"+ Add All"})]}),e.jsx("hr",{className:"bm-divider"}),e.jsxs("div",{className:"bm-group",children:[e.jsx("label",{className:"bm-label",children:"Subject"}),e.jsx("input",{id:"bm-subject",className:"bm-input",placeholder:"e.g. Exciting Summer Internship Opportunity at CodeMentees 🚀",value:o,onChange:a=>d(a.target.value)})]}),e.jsxs("div",{className:"bm-group",children:[e.jsx("label",{className:"bm-label",children:"Email Body"}),e.jsx("textarea",{id:"bm-body",className:"bm-input",placeholder:`Dear Student,
+
+We are excited to announce our Summer Internship Program…`,value:p,onChange:a=>b(a.target.value)}),e.jsx("div",{style:{color:"#6b7280",fontSize:12,marginTop:6},children:"Line breaks are preserved in the email."})]}),e.jsxs("div",{className:"bm-group",children:[e.jsx("label",{className:"bm-label",children:"Attach Brochure (PDF · optional · up to 100 MB, auto-compressed to ≤25 MB)"}),e.jsxs("div",{id:"bm-dropzone",className:`bm-dropzone${f?" drag":""}`,onDragOver:a=>{a.preventDefault(),r(!0)},onDragLeave:()=>r(!1),onDrop:C,onClick:()=>{var a;return(a=k.current)==null?void 0:a.click()},children:[e.jsx("div",{className:"bm-dropzone-icon",children:"📎"}),i?e.jsxs(e.Fragment,{children:[e.jsxs("div",{className:"bm-file-name",children:["📄 ",i.name," (",(i.size/1024).toFixed(1)," KB)"]}),e.jsx("button",{type:"button",className:"bm-remove-file",onClick:a=>{a.stopPropagation(),g(null)},children:"✕ Remove"})]}):e.jsxs("p",{className:"bm-dropzone-text",children:[e.jsx("strong",{children:"Drag & drop"})," a PDF here, or ",e.jsx("strong",{children:"click to browse"}),e.jsx("br",{}),e.jsx("span",{style:{fontSize:12,marginTop:4,display:"block"},children:"Max 25 MB"})]})]}),e.jsx("input",{ref:k,type:"file",accept:"application/pdf",style:{display:"none"},onChange:a=>N(a.target.files[0])})]}),e.jsx("button",{id:"bm-send-btn",className:"bm-send-btn",type:"submit",disabled:c,children:c?e.jsxs(e.Fragment,{children:[e.jsx("div",{className:"spinner"})," Sending to ",s.length," recipient",s.length!==1?"s":"","…"]}):e.jsxs(e.Fragment,{children:["🚀 Send Bulk Email to ",s.length," Recipient",s.length!==1?"s":""]})})]})]})})]})}export{M as default};

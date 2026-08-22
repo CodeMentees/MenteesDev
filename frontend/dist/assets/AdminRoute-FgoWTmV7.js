@@ -1,0 +1,1 @@
+import{u as o,j as a}from"./index-C6Bty2QJ.js";import{N as r}from"./vendor-DyouE7zY.js";import"./utils-lnHr28T5.js";const d=({children:e})=>{const t=o(i=>i.auth.user);let s=!1;return t!=null&&t.isAdmin&&(s=t.isAdmin),s?e:a.jsx(r,{to:"/unauth"})};export{d as default};

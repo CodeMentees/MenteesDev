@@ -1,0 +1,1 @@
+import{u as s}from"./useCRUD-_avfl9rD.js";const c="/blog-categories",m=()=>{const{getItems:o,getItemById:g,createItem:r,updateItem:a,deleteItem:l}=s(c);return{fetchBlogCategories:(e=1,t=10)=>o(e,t),fetchBlogCategory:e=>g(e),createBlogCategory:e=>r(e),updateBlogCategory:(e,t)=>a(e,t),deleteBlogCategory:e=>l(e)}};export{m as u};

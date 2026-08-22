@@ -10,6 +10,7 @@ frontend/node_modules/
 .env.*.local
 
 # Build & System
+UI-reference/
 dist/
 .vercel/
 .DS_Store
