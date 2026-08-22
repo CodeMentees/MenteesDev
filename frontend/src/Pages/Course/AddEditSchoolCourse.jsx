@@ -120,10 +120,10 @@ function AddEditSchoolCourse() {
     };
 
     return (
-        <section className="bg-white text-gray-800 p-6 rounded-lg shadow-lg max-w-4xl mx-auto my-10 border border-gray-200">
+        <section className="p-6 rounded-lg shadow-lg max-w-4xl mx-auto my-10 border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))", color: "rgb(var(--text-primary))" }}>
             <Toast visible={toast.visible} message={toast.message} />
             <div className="py-2 px-4">
-                <h2 className="mb-6 text-2xl font-bold text-gray-900">
+                <h2 className="mb-6 text-2xl font-bold" style={{ color: "rgb(var(--text-primary))" }}>
                     {id ? "Edit School Course" : "Add School Course"}
                 </h2>
 
@@ -261,7 +261,7 @@ function AddEditSchoolCourse() {
                     </div>
 
                     {/* Units Section */}
-                    <div className="border border-gray-200 rounded-lg p-4 bg-white">
+                    <div className="border rounded-lg p-4" style={{ borderColor: "rgba(var(--dash-border))", backgroundColor: "rgb(var(--dash-panel))" }}>
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-lg font-bold">Units (Modules)</h3>
                             <button type="button" onClick={addUnit} className="text-blue-500 flex items-center gap-2 text-sm">
@@ -302,7 +302,7 @@ function AddEditSchoolCourse() {
                     </div>
 
                     {/* Syllabus Section */}
-                    <div className="border border-gray-200 rounded-lg p-4 bg-white">
+                    <div className="border rounded-lg p-4" style={{ borderColor: "rgba(var(--dash-border))", backgroundColor: "rgb(var(--dash-panel))" }}>
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-lg font-bold">Syllabus Details</h3>
                             <button type="button" onClick={addSyllabusItem} className="text-blue-500 flex items-center gap-2 text-sm">

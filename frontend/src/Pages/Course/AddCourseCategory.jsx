@@ -70,7 +70,7 @@ function AddCourseCategory() {
     };
 
     return (
-        <section className="bg-gray-50 dark:bg-gray-900 min-h-screen p-6">
+        <section className="min-h-screen p-6" style={{ backgroundColor: "rgb(var(--dash-bg))" }}>
             <Toast visible={toast.visible} message={toast.message} type={toast.type} />
             <div className="max-w-3xl mx-auto">
                 <button
@@ -80,7 +80,7 @@ function AddCourseCategory() {
                     <FaArrowLeft className="mr-2" /> Back to Categories
                 </button>
 
-                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
+                <div className="rounded-2xl shadow-xl p-8 border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
                     <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-8 flex items-center">
                         <span className="bg-primary-100 dark:bg-primary-900/30 text-primary-600 p-3 rounded-xl mr-4">
                             {id ? "✏️" : "➕"}
@@ -99,7 +99,8 @@ function AddCourseCategory() {
                                     placeholder="e.g. Web Development"
                                     value={categoryData.name}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 transition-all outline-none"
+                                    className="w-full px-4 py-3 rounded-xl border transition-all outline-none"
+                                    style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                                 />
                             </div>
                             <div>
@@ -111,7 +112,8 @@ function AddCourseCategory() {
                                     placeholder="https://example.com/image.png"
                                     value={categoryData.image}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 transition-all outline-none"
+                                    className="w-full px-4 py-3 rounded-xl border transition-all outline-none"
+                                    style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                                 />
                             </div>
                             <div>
@@ -122,7 +124,8 @@ function AddCourseCategory() {
                                     placeholder="Tell more about this category..."
                                     value={categoryData.description}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 transition-all outline-none resize-none"
+                                    className="w-full px-4 py-3 rounded-xl border transition-all outline-none resize-none"
+                                    style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                                 ></textarea>
                             </div>
                         </div>

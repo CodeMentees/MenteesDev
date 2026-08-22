@@ -16,6 +16,11 @@ const postSchema = new mongoose.Schema(
     categories: [String],
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     comments: [commentSchema],
+    seo: {
+      metaTitle: { type: String },
+      metaDescription: { type: String },
+      keywords: { type: String }
+    }
   },
   { timestamps: true }
 );

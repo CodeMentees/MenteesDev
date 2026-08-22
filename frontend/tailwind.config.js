@@ -1,3 +1,5 @@
+import typography from '@tailwindcss/typography';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -18,14 +20,14 @@ export default {
         },
         dark: {
           text: "#ffffff",
-          h1: "#6eacda",
-          background: "#021526",
-          primary: "#6EACDA",
-          box: "#031c35",
-          btn: "#CD0094",
-          secondary: "#03346E",
-          accent: "#E2E2B6",
-          h: "#6eacda"
+          h1: "#ffffff",
+          background: "#000000",
+          primary: "#F97316",
+          box: "#0E0E0E",
+          btn: "#F97316",
+          secondary: "#EA580C",
+          accent: "#F97316",
+          h: "#ffffff"
         },
       },
     },
@@ -78,6 +80,6 @@ export default {
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
+    typography,
   ],
 };

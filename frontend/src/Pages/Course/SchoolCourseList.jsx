@@ -35,9 +35,9 @@ function SchoolCourseList() {
     ];
 
     return (
-        <div className="mx-auto max-w-screen-xl px-2 py-10">
+        <div className="p-6 lg:p-8 w-full max-w-[1600px] mx-auto">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold text-gray-800">School Coding Courses</h1>
+                <h1 className="text-2xl font-bold" style={{ color: "rgb(var(--dash-ink))" }}>School Coding Courses</h1>
                 <button
                     onClick={() => navigate('/admin/school-courses/add')}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition"
@@ -46,20 +46,16 @@ function SchoolCourseList() {
                 </button>
             </div>
 
-            <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
-                <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-                    <Toast message="Course deleted successfully" visible={isToast} />
-                    <div className="bg-white relative shadow-md sm:rounded-lg overflow-hidden border border-gray-200">
-                        <div className="overflow-x-auto">
-                            <ReusableTable
-                                headers={headers}
-                                data={courses}
-                                actions={actions}
-                            />
-                        </div>
-                    </div>
+            <div className="relative shadow-lg sm:rounded-2xl overflow-hidden border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
+                <Toast message="Course deleted successfully" visible={isToast} />
+                <div className="overflow-x-auto">
+                    <ReusableTable
+                        headers={headers}
+                        data={courses}
+                        actions={actions}
+                    />
                 </div>
-            </section>
+            </div>
         </div>
     );
 }

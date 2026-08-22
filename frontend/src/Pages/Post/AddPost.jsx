@@ -20,6 +20,7 @@ function AddPost() {
     categories: [],
     image: "",
     content: "",
+    seo: { metaTitle: "", metaDescription: "", keywords: "" }
   });
   const [editorContent, setEditorContent] = useState("");
   const [categories, setCategories] = useState([]);
@@ -43,7 +44,10 @@ function AddPost() {
     try {
       const response = await fetch(`/api/posts/${postId}`);
       const data = await response.json();
-      setPostData(data.data);
+      setPostData({
+        ...data.data,
+        seo: data.data.seo || { metaTitle: "", metaDescription: "", keywords: "" }
+      });
       setEditorContent(data.data.content);
     } catch (error) {
       console.error("Error fetching post:", error);
@@ -73,7 +77,12 @@ function AddPost() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPostData((prev) => ({ ...prev, [name]: value }));
+    if (name.startsWith('seo.')) {
+      const seoField = name.split('.')[1];
+      setPostData({ ...postData, seo: { ...postData.seo, [seoField]: value } });
+    } else {
+      setPostData({ ...postData, [name]: value });
+    }
   };
 
   const handleSubmit = async () => {
@@ -106,7 +115,7 @@ function AddPost() {
   };
 
   return (
-    <section className="bg-gray-900 text-white min-h-screen p-6">
+    <section className="min-h-screen p-6" style={{ backgroundColor: "rgb(var(--dash-bg))", color: "rgb(var(--text-primary))" }}>
       {toast.visible && (
         <div
           className={`fixed z-50 top-5 right-5 p-4 rounded-lg shadow-md ${toast.type === "error"
@@ -118,7 +127,7 @@ function AddPost() {
         </div>
       )}
 
-      <div className="max-w-3xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
+      <div className="max-w-3xl mx-auto p-6 rounded-lg shadow-lg border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
         <h2 className="text-2xl font-bold text-white mb-6">
           {isEditing ? "✏️ Edit Blog Post" : "📝 Add a Blog Post"}
         </h2>
@@ -134,7 +143,8 @@ function AddPost() {
                 name="title"
                 onChange={handleChange}
                 value={postData.title}
-                className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5"
+                className="w-full border rounded-lg p-2.5 transition-all outline-none"
+                style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                 placeholder="Enter post title"
               />
             </div>
@@ -205,6 +215,41 @@ function AddPost() {
                 placeholder="Write your content here..."
                 className="bg-gray-700 text-white"
               />
+            </div>
+
+            {/* SEO Manager Section */}
+            <div className="mt-8 pt-6 border-t" style={{ borderColor: "rgba(var(--dash-border))" }}>
+              <h3 className="text-xl font-bold mb-4" style={{ color: "rgb(var(--text-primary))" }}>SEO Settings</h3>
+              
+              <div className="grid gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-400">Meta Title</label>
+                  <input
+                    type="text" name="seo.metaTitle" value={postData.seo.metaTitle} onChange={handleChange}
+                    className="w-full border rounded-lg p-2.5 transition-all outline-none"
+                    style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
+                    placeholder="SEO Title (60 chars max)"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-400">Meta Description</label>
+                  <textarea
+                    name="seo.metaDescription" value={postData.seo.metaDescription} onChange={handleChange}
+                    className="w-full border rounded-lg p-2.5 transition-all outline-none resize-none h-24"
+                    style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
+                    placeholder="Brief description for search engines (160 chars max)"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-400">Keywords (Comma separated)</label>
+                  <input
+                    type="text" name="seo.keywords" value={postData.seo.keywords} onChange={handleChange}
+                    className="w-full border rounded-lg p-2.5 transition-all outline-none"
+                    style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
+                    placeholder="react, web development, coding"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 

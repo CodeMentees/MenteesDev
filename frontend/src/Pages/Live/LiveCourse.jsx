@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useLiveCourseAPI } from '../../api/liveCourseApi';
 import SEOHead from '../../seo/SEOHead';
+import { SkeletonGrid } from '../../Components/UI/LoadingSpinner';
 import { FaPlayCircle, FaCalendarAlt, FaLock, FaGlobe, FaLaptopCode, FaVideo, FaClock, FaCheckCircle } from 'react-icons/fa';
 
 
@@ -163,9 +164,7 @@ function LiveCourse() {
                 </div>
 
                 {isLoading ? (
-                    <div className="flex justify-center py-20">
-                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-                    </div>
+                    <SkeletonGrid count={3} />
                 ) : liveSessions.length === 0 ? (
                     <div className="text-center py-10 bg-gray-800/30 rounded-xl border border-gray-700/50">
                         <p className="text-gray-400 italic">No live interactive lectures available right now.</p>
@@ -196,9 +195,7 @@ function LiveCourse() {
                 </div>
 
                 {isLoading ? (
-                    <div className="flex justify-center py-20">
-                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-                    </div>
+                    <SkeletonGrid count={3} />
                 ) : recordedSessions.length === 0 ? (
                     <div className="text-center py-10 bg-gray-800/30 rounded-xl border border-gray-700/50">
                         <p className="text-gray-400 italic">No self-paced learning content available yet.</p>

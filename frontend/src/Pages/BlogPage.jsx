@@ -114,7 +114,7 @@ function BlogPage() {
   const likeCount = blog.likes?.length || 0;
 
   return (
-    <main className="min-h-screen bg-white antialiased">
+    <main className="min-h-screen bg-white antialiased overflow-x-hidden w-full">
       <Toast visible={toast.visible} message={toast.message} type={toast.type} />
 
       <SEOHead path="/blogs/:id" {...seoProps} />
@@ -153,7 +153,7 @@ function BlogPage() {
                 )}
               </header>
 
-              <section className="article-content" dangerouslySetInnerHTML={{ __html: blog.content }} />
+              <section className="prose prose-lg max-w-none article-content" dangerouslySetInnerHTML={{ __html: blog.content }} />
 
               {/* ✅ Floating Like Button */}
               <div className="mt-12 py-6 border-t border-gray-100 flex items-center gap-4">

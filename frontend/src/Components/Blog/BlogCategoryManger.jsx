@@ -88,7 +88,7 @@ const BlogCategoryManager = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
+    <div className="p-6 lg:p-8 w-full max-w-[1600px] mx-auto">
       <Toast visible={toast.visible} message={toast.message} type={toast.type} />
       <div className="max-w-3xl mx-auto">
         <div className="flex justify-between items-center mb-8">
@@ -100,7 +100,7 @@ const BlogCategoryManager = () => {
           )}
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700 mb-8">
+        <form onSubmit={handleSubmit} className="p-6 rounded-xl shadow-lg border mb-8" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
           <label className="block text-sm font-medium text-gray-400 mb-2">
             {editingId ? "Edit Category Name" : "New Category Name"}
           </label>
@@ -140,24 +140,23 @@ const BlogCategoryManager = () => {
           </div>
         </form>
 
-        <div className="bg-gray-800 rounded-xl shadow-xl border border-gray-700 overflow-hidden">
-          <div className="p-4 border-b border-gray-700 bg-gray-800/50">
-            <h3 className="text-lg font-semibold text-gray-300">Existing Categories</h3>
+        <div className="border rounded-xl p-6" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold" style={{ color: "rgb(var(--dash-ink))" }}>Existing Categories</h3>
           </div>
-          <ul className="divide-y divide-gray-700">
-            {categories.length === 0 ? (
-              <li className="p-8 text-center text-gray-500 italic">
-                {isFetching ? "Loading categories..." : "No categories found. Add your first one above!"}
-              </li>
-            ) : (
-              categories.map((category) => (
-                <li
+          {categories.length === 0 ? (
+            <div className="text-center py-10 rounded-lg border border-dashed" style={{ color: "rgb(var(--text-secondary))", borderColor: "rgba(var(--dash-border))" }}>
+              No categories found.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {categories.map((category) => (
+                <div
                   key={category._id}
-                  className="flex justify-between items-center p-4 hover:bg-gray-700/30 transition-colors group"
+                  className="p-5 rounded-xl border flex justify-between items-center group transition-all"
+                  style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}
                 >
-                  <span className="text-gray-200 font-medium group-hover:text-white transition-colors">
-                    {category.name}
-                  </span>
+                  <span className="font-medium text-lg truncate" style={{ color: "rgb(var(--dash-ink))" }}>{category.name}</span>
                   <div className="flex gap-1">
                     <button
                       className="p-2 text-gray-400 hover:text-green-400 hover:bg-green-400/10 rounded-lg transition-all"
@@ -174,10 +173,10 @@ const BlogCategoryManager = () => {
                       <FaTrash className="w-4 h-4" />
                     </button>
                   </div>
-                </li>
-              ))
-            )}
-          </ul>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

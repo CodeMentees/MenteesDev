@@ -61,24 +61,22 @@ function InternshipList() {
   };
 
   return (
-    <div className="bg-white shadow rounded-lg p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">Summer Internship Applications</h2>
-        <span className="bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full">
-          Total: {interns.length}
-        </span>
+    <div className="p-6 lg:p-8 w-full max-w-[1600px] mx-auto">
+      <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold" style={{ color: "rgb(var(--dash-ink))" }}>Internship Applications</h2>
       </div>
 
+      <div className="relative shadow-lg sm:rounded-2xl overflow-hidden border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
       {loading ? (
-        <div className="text-center py-10 text-gray-500">Loading applications...</div>
+        <div className="text-center py-10" style={{ color: "rgb(var(--text-secondary))" }}>Loading applications...</div>
       ) : interns.length === 0 ? (
-        <div className="text-center py-10 text-gray-500 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+        <div className="text-center py-10 rounded-lg border border-dashed" style={{ color: "rgb(var(--text-secondary))", borderColor: "rgba(var(--dash-border))" }}>
           No applications received yet.
         </div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left text-gray-500 border rounded-lg">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+          <table className="w-full text-sm text-left border-b" style={{ color: "rgb(var(--text-primary))", borderColor: "rgba(var(--dash-border))" }}>
+            <thead className="text-xs uppercase" style={{ backgroundColor: "rgba(var(--dash-border))", color: "rgb(var(--text-secondary))" }}>
               <tr>
                 <th className="px-6 py-3">Applicant Name</th>
                 <th className="px-6 py-3">Contact Details</th>
@@ -90,14 +88,14 @@ function InternshipList() {
             </thead>
             <tbody>
               {interns.map((intern) => (
-                <tr key={intern._id} className="bg-white border-b hover:bg-gray-50">
-                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                <tr key={intern._id} className="border-b transition-colors hover:bg-white/5" style={{ borderColor: "rgba(var(--dash-border))" }}>
+                  <td className="px-6 py-4 font-medium whitespace-nowrap">
                     {intern.name}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex flex-col">
-                      <a href={`mailto:${intern.email}`} className="text-blue-600 hover:underline">{intern.email}</a>
-                      <a href={`tel:${intern.phone}`} className="text-gray-500 hover:underline">{intern.phone}</a>
+                      <a href={`mailto:${intern.email}`} className="text-blue-500 hover:underline">{intern.email}</a>
+                      <a href={`tel:${intern.phone}`} className="hover:underline" style={{ color: "rgb(var(--text-secondary))" }}>{intern.phone}</a>
                     </div>
                   </td>
                   <td className="px-6 py-4">
@@ -145,13 +143,14 @@ function InternshipList() {
           </table>
         </div>
       )}
+      </div>
 
       {/* Edit Modal */}
       {isEditModalOpen && editingIntern && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md m-4 p-6 relative">
+          <div className="rounded-xl shadow-2xl w-full max-w-md m-4 p-6 relative border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
             <div className="flex justify-between items-center mb-5">
-              <h3 className="text-xl font-semibold text-gray-900">Edit Application</h3>
+              <h3 className="text-xl font-bold" style={{ color: "rgb(var(--dash-ink))" }}>Edit Application</h3>
               <button 
                 onClick={() => setIsEditModalOpen(false)}
                 className="text-gray-400 hover:text-gray-900 focus:outline-none"

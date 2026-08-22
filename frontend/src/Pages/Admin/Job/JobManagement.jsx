@@ -65,17 +65,15 @@ function JobManagement() {
   ];
 
   return (
-    <div className="mx-auto max-w-screen-xl px-2 py-10">
+    <div className="p-6 lg:p-8 w-full max-w-[1600px] mx-auto">
       {toast.visible && (
         <div className={`fixed z-50 top-5 right-5 p-4 ${toast.type === "error" ? "bg-red-500" : "bg-green-500"} text-white px-4 py-2 rounded-lg shadow-lg`}>
           {toast.message}
         </div>
       )}
-      <section className="p-3 sm:p-5">
-        <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-          <div className="relative shadow-md sm:rounded-lg overflow-hidden bg-white dark:bg-gray-800">
-            <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-               <h2 className="text-xl font-bold text-gray-800 dark:text-white">Manage Job Opportunities</h2>
+      <div className="relative shadow-lg sm:rounded-2xl overflow-hidden border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
+        <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+          <h2 className="text-xl font-bold" style={{ color: "rgb(var(--dash-ink))" }}>Manage Job Opportunities</h2>
               <Link
                 to={"/admin/jobs/create"}
                 className="flex items-center justify-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 transition-colors"
@@ -88,11 +86,8 @@ function JobManagement() {
             </div>
             <div className="overflow-x-auto">
               <ReusableTable headers={headers} data={jobs} actions={actions} isLoading={isLoading} />
-            </div>
-          </div>
         </div>
-      </section>
-
+      </div>
       <DeleteConfirmModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}

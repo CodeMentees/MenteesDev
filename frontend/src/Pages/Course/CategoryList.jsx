@@ -57,14 +57,12 @@ function CategoryList() {
     }, [Categories]);
 
     return (
-        <div className="mx-auto max-w-screen-xl px-2 py-10">
-            <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
-                <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-                    <div>
-                        <Toast message="Category deleted successfully" visible={isToast} />
-                    </div>
-                    {/* Start coding here */}
-                    <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg">
+        <div className="p-6 lg:p-8 w-full max-w-[1600px] mx-auto">
+            <div>
+                <Toast message="Category deleted successfully" visible={isToast} />
+            </div>
+            {/* Start coding here */}
+            <div className="relative shadow-lg sm:rounded-2xl overflow-hidden border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
                         <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
 
                             <div className="w-full md:w-auto text-gray-100        flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
@@ -99,9 +97,7 @@ function CategoryList() {
                             />
                         </div>
                         <Pagination currentPage={currentPage} totalPages={totalPage} onPageChange={setCurrentPage} />
-                    </div>
-                </div>
-            </section>
+            </div>
 
             <DeleteConfirmModal
                 isOpen={!!itemToDelete}

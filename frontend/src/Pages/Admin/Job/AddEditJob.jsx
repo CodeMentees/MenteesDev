@@ -65,7 +65,7 @@ function AddEditJob() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: "rgb(var(--dash-bg))" }}>
       <div className="max-w-2xl mx-auto">
         <button
           onClick={() => navigate("/admin/jobs")}
@@ -75,8 +75,8 @@ function AddEditJob() {
           Back to list
         </button>
 
-        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
-          <div className="bg-blue-600 px-8 py-6">
+        <div className="rounded-3xl shadow-xl overflow-hidden border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
+          <div className="px-8 py-6" style={{ backgroundColor: "rgb(var(--accent))" }}>
             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
               <Briefcase />
               {isEditMode ? "Edit Job Opportunity" : "Post New Job Opportunity"}
@@ -100,7 +100,8 @@ function AddEditJob() {
                 name="role"
                 required
                 placeholder="e.g. Frontend Developer Intern"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                 value={formData.role}
                 onChange={handleChange}
               />
@@ -115,7 +116,8 @@ function AddEditJob() {
                 type="text"
                 name="company"
                 placeholder="e.g. Google, Microsoft, or Recruiting Agency"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                 value={formData.company}
                 onChange={handleChange}
               />
@@ -131,7 +133,8 @@ function AddEditJob() {
                 name="applyLink"
                 required
                 placeholder="https://..."
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                 value={formData.applyLink}
                 onChange={handleChange}
               />
@@ -141,7 +144,8 @@ function AddEditJob() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex items-center justify-center gap-2 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all transform active:scale-95 disabled:opacity-50 shadow-lg shadow-blue-500/30"
+                className="w-full flex items-center justify-center gap-2 py-4 text-white font-bold rounded-xl transition-all transform active:scale-95 disabled:opacity-50 shadow-lg"
+                style={{ backgroundColor: "rgb(var(--accent))" }}
               >
                 {isLoading ? (
                   <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>

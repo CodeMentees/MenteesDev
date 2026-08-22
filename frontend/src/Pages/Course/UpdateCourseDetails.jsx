@@ -96,16 +96,17 @@ const UpdateCourseDetails = () => {
 
 
   return (
-    <div className="max-w-xxl grid grid-cols-2 mx-auto bg-white p-8 rounded-lg shadow-md">
+    <div className="max-w-xxl grid grid-cols-2 mx-auto p-8 rounded-lg shadow-md border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))", color: "rgb(var(--text-primary))" }}>
 
       <form className="col-span-1" onSubmit={handleSubmit}>
         <h1 className="text-2xl font-bold text-center mb-6">Update Course Details</h1>
         {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         <div className="mb-4">
-          <label htmlFor="id" className="block text-sm font-medium text-gray-700">Course Name </label>
+          <label htmlFor="id" className="block text-sm font-medium">Course Name </label>
           <input
             type="text"
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+            className="mt-1 block w-full px-3 py-2 border rounded-md"
+            style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
             value={courseName} // id taken from URL
             disabled
           />

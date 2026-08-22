@@ -80,15 +80,13 @@ function SchoolCodingLeadList() {
     const paginatedLeads = tableData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     return (
-        <div className="mx-auto max-w-screen-xl px-2 py-10">
+        <div className="p-6 lg:p-8 w-full max-w-[1600px] mx-auto">
             {toast.visible && <Toast message={toast.message} type={toast.type} visible={toast.visible} />}
-            <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
-                <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-                    <div className="flex flex-col md:flex-row items-center justify-between mb-6">
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">School Coding Leads</h2>
-                    </div>
-                    
-                    <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+            <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold" style={{ color: "rgb(var(--dash-ink))" }}>School Coding Leads</h2>
+            </div>
+            
+            <div className="relative shadow-lg sm:rounded-2xl overflow-hidden border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
                         <div className="overflow-x-auto">
                             <ReusableTable
                                 headers={headers}
@@ -110,8 +108,6 @@ function SchoolCodingLeadList() {
                             </div>
                         )}
                     </div>
-                </div>
-            </section>
         </div>
     );
 }

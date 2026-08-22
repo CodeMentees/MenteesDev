@@ -9,7 +9,6 @@ import RatingSection from "../Components/RatingSection/RatingSection";
 import { useCategoryAPI } from "../api/categoryApi";
 import { setCategory } from "../Slices/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "../Components/Helpers/Loading";
 import ComprehensiveTraining from "../Components/Training/ComprehensiveTraining";
 import UpcomingEvents from "../Components/Event/UpcomingEvents";
 import SummerInternshipModal from "../Components/Modals/SummerInternshipModal";
@@ -30,7 +29,7 @@ function Home() {
     fetchData();
   }, [dispatch]);
 
-  if (!categoryData) return <Loading />;
+
 
   return (
     <main className="bg-dark-background pb-10 overflow-x-hidden">

@@ -40,11 +40,8 @@ function QueryList() {
     }, [Queries]);
 
     return (
-        <div className="mx-auto max-w-screen-xl px-2 py-10">
-            <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
-                <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-                    {/* Start coding here */}
-                    <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+        <div className="p-6 lg:p-8 w-full max-w-[1600px] mx-auto">
+            <div className="relative shadow-lg sm:rounded-2xl overflow-hidden border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
                         <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                             <div className="w-full md:w-1/2">
                                 <form className="flex items-center">
@@ -274,9 +271,7 @@ function QueryList() {
                             />
                         </div>
                         <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
-                    </div>
-                </div>
-            </section>
+            </div>
         </div>
     )
 }

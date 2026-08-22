@@ -59,55 +59,50 @@ function CourseList() {
     // Reinitialize Flowbite dropdowns when Queries change
     useEffect(() => {
         initFlowbite();
-    }, [Courses,]);
+    }, [Courses]);
 
     return (
-        <div className="mx-auto max-w-screen-xl px-2 py-10">
-            <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
-                <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-                    <div>
-                        <Toast message="deleted" visible={isToast} />
-                    </div>
-                    {/* Start coding here */}
-                    <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg">
-                        <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-                            <button
-                                onClick={() => navigate("/admin/courses/create")}
-                                className="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-                            >
-                                <svg
-                                    className="h-3.5 w-3.5 mr-2"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                        clipRule="evenodd"
-                                        fillRule="evenodd"
-                                        d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                                    />
-                                </svg>
-                                Add Course
-                            </button>
-                        </div>
-                        <div className="overflow-x-auto pb-44">
-                            <ReusableTable
-                                headers={headers}
-                                data={Courses}
-                                actions={actions}
-                                isLoading={isLoading}
+        <div className="p-6 lg:p-8 w-full max-w-[1600px] mx-auto">
+            <div>
+                <Toast message="deleted" visible={isToast} />
+            </div>
+            <div className="relative shadow-lg sm:rounded-2xl overflow-hidden border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
+                <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                    <button
+                        onClick={() => navigate("/admin/courses/create")}
+                        className="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+                    >
+                        <svg
+                            className="h-3.5 w-3.5 mr-2"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                        >
+                            <path
+                                clipRule="evenodd"
+                                fillRule="evenodd"
+                                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                             />
-                        </div>
-
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            onPageChange={setCurrentPage}
-                        />
-                    </div>
+                        </svg>
+                        Add Course
+                    </button>
                 </div>
-            </section>
+                <div className="overflow-x-auto pb-44">
+                    <ReusableTable
+                        headers={headers}
+                        data={Courses}
+                        actions={actions}
+                        isLoading={isLoading}
+                    />
+                </div>
+
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                />
+            </div>
             
             <DeleteConfirmModal
                 isOpen={isDeleteModalOpen}

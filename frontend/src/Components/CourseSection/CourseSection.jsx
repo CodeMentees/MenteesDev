@@ -4,7 +4,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useSelector } from 'react-redux';
 import { fetchCourseByCategory } from '../../api/courseApi';
-import Loading from '../Helpers/Loading';
+import { SkeletonGrid } from '../UI/LoadingSpinner';
 
 function CourseSection() {
     const [activeTab, setActiveTab] = useState(0);
@@ -25,7 +25,7 @@ function CourseSection() {
     };
     
     useEffect(() => {
-        AOS.init();
+        AOS.init({ once: false, mirror: true });
         if (categoryData?.length > 0) {
             fetchCourseData(categoryData[0]._id);
         }
@@ -48,10 +48,10 @@ function CourseSection() {
                                 <li key={tab._id} className="me-2">
                                     <button
                                         onClick={() => fetchCourseData(tab._id)}
-                                        className={`m items-center justify-center flex p-1 lg:p-4 border-b-2 ${
+                                        className={`flex items-center justify-center p-3 text-sm border-b-2 transition-all duration-200 ${
                                             activeTab === tab._id
-                                                ? "border-blue-500 text-blue-600"
-                                                : "border-transparent hover:text-gray-600 hover:border-gray-300"
+                                                ? "border-orange-500 text-orange-400 font-semibold"
+                                                : "border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500"
                                             } rounded-t-lg group`}
                                     >
                                         <img
@@ -69,7 +69,7 @@ function CourseSection() {
                     {/* Tab Content */}
                     <div className="mt-4">
                         {loading ? (
-                            <Loading />
+                            <SkeletonGrid count={3} />
                         ) : courseData.length > 0 ? (
                             <div
                                 data-aos="flip-up"
