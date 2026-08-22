@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useLiveCourseAPI } from '../../api/liveCourseApi';
+import SEOHead from '../../seo/SEOHead';
 import { FaPlayCircle, FaCalendarAlt, FaLock, FaGlobe, FaLaptopCode, FaVideo, FaClock, FaCheckCircle } from 'react-icons/fa';
+
 
 const CourseCard = ({ course, handleAction, actionLabel, actionIcon, isRecorded }) => (
     <div className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 shadow-lg hover:shadow-2xl hover:border-gray-600 transition-all duration-300 group flex flex-col">
@@ -112,6 +114,8 @@ function LiveCourse() {
 
     return (
         <div className="bg-dark-background min-h-screen pt-8 pb-20 font-sans relative">
+            <SEOHead path="/live" />
+
             {toast.visible && (
                 <div className="fixed z-50 top-20 right-5 p-4 bg-gray-800 text-white border-l-4 border-blue-500 rounded-lg shadow-2xl flex items-center gap-3 animate-fade-in-down">
                     <span className="text-xl">🔒</span> {toast.message}

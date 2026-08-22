@@ -1,6 +1,14 @@
 User-agent: *
+
+# Block admin and auth utility routes
+Disallow: /admin
+Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /api/
+Disallow: /verify-otp
+Disallow: /forgot-password
+
+# Allow all public routes
 Allow: /
 
 Sitemap: https://codementees.com/sitemap.xml

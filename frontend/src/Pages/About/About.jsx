@@ -1,39 +1,31 @@
 import React from "react";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "../../seo/SEOHead";
+import { SITE_URL } from "../../seo/seo.config";
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "CodeMentees",
+  url: SITE_URL,
+  description:
+    "CodeMentees connects self-taught and early-career developers with experienced mentors to build real, hireable skills — not just certificates.",
+  logo: `${SITE_URL}/logo.png`,
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+91 6396934224",
+    contactType: "customer support",
+  },
+  sameAs: [
+    "https://www.facebook.com/codementees",
+    "https://twitter.com/codementees",
+    "https://www.linkedin.com/company/codementees",
+  ],
+};
 
 const About = () => {
   return (
     <div className="p-8 bg-white">
-      {/* ✅ SEO Meta Tags */}
-      <Helmet>
-        <title>About Us | Codementees</title>
-        <meta name="description" content="Learn more about Codementees. We are dedicated to providing top-notch coding education and mentorship." />
-        <meta property="og:title" content="About Us | Codementees" />
-        <meta property="og:description" content="Learn more about Codementees. We are dedicated to providing top-notch coding education and mentorship." />
-        <meta property="og:image" content="/about-us-image.jpg" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://codementees.com/about" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="About Us | Codementees" />
-        <meta name="twitter:description" content="Discover Codementees, your go-to platform for coding education and mentorship." />
-      </Helmet>
-
-      {/* ✅ Schema Markup for SEO */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          "name": "Codementees",
-          "url": "https://codementees.com",
-          "description": "We provide top-notch coding education and mentorship.",
-          "logo": "https://codementees.com/logo.png",
-          "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+91 6396934224",
-            "contactType": "customer support"
-          }
-        })}
-      </script>
+      <SEOHead path="/about" jsonLd={organizationJsonLd} />
 
       {/* ✅ Content */}
       <section className="max-w-4xl mx-auto text-gray-800">

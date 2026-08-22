@@ -74,6 +74,10 @@ export default {
         "Courier New",
         "monospace",
       ],
+      heading: ["Outfit", "sans-serif"],
     },
   },
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 };

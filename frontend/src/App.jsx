@@ -150,9 +150,9 @@ function App() {
                   path="/"
                   element={
                     <HelmetWrapper
-                      title="Learn Coding, DSA, AI/ML & Data Science | CodeMentees"
-                      description="Master Coding, Data Structures & Algorithms (DSA), AI/ML, and Python Programming with CodeMentees. Expert-led live classes, internships, and placement preparation."
-                      keywords="coding classes, DSA, AI/ML courses, AI/ML classes, Data Science, Data Analyst, Java Programming, Python Programming, Computer Coding Live Classes, Internships, Certification, placement preparation, jobs"
+                      title="Learn to Code. Get Job-Ready. Work From Anywhere. | CodeMentees"
+                      description="Live 1:1 mentorship in Web Development, DSA & Interview Prep — from engineers at JPMorgan and Freecharge. Join 500+ developers already learning."
+                      keywords="coding mentorship, 1:1 mentorship, web development, DSA, interview prep, job ready, remote coding, JavaScript, React"
                       canonical="/"
                     >
                       <Home />
@@ -245,9 +245,9 @@ function App() {
                   path="/courses/:courseId"
                   element={
                     <HelmetWrapper
-                      title={`CodeMentees course`}
-                      description={`Learn  with our comprehensive course`}
-                      canonical="/courses/:courseId"
+                      title="Course Details | Learn with Expert Mentors | CodeMentees"
+                      description="Explore this mentor-led course at CodeMentees. Build real, hireable skills with 1:1 guidance from industry engineers."
+                      canonical="/courses"
                     >
                       <CourseDetails />
                     </HelmetWrapper>
@@ -407,9 +407,9 @@ function App() {
                   path="/blogs/:id"
                   element={
                     <HelmetWrapper
-                      title={`CodeMentees Blog`}
-                      description={`Read our article about`}
-                      canonical="/blogs/:id"
+                      title="Blog Post | CodeMentees"
+                      description="Read the latest coding guides, DSA tips, and web development articles from the CodeMentees mentor community."
+                      canonical="/blogs"
                     >
                       <BlogPage />
                     </HelmetWrapper>
