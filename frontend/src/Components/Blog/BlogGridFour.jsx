@@ -68,8 +68,16 @@ function BlogGridFour() {
         {latestBlogs.blogs.length === 0 ? (
           <p className="text-center" style={{ color: "rgba(255,255,255,0.35)" }}>No blogs available.</p>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {latestBlogs.blogs.map((latest) => (
+          <AnimatePresence mode="wait">
+            {!selectedId ? (
+              <motion.div 
+                key="grid"
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+              >
+                {latestBlogs.blogs.map((latest) => (
               <motion.article
                 key={latest._id}
                 layoutId={`blog-card-${latest._id}`}
@@ -102,52 +110,56 @@ function BlogGridFour() {
                 </div>
               </motion.article>
             ))}
-          </div>
-        )}
-
-        <AnimatePresence>
-          {selectedId && (
-            <>
-              {/* Backdrop */}
-              <motion.div
+          </motion.div>
+            ) : (
+              <motion.div 
+                key="preview"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                onClick={() => setSelectedId(null)}
-                className="fixed inset-0 z-40"
-                style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(10px)" }}
-              />
-              {/* Expanded Card */}
-              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+                className="w-full flex justify-center"
+              >
                 {latestBlogs.blogs.filter(b => b._id === selectedId).map(blog => (
                   <motion.div
                     key={blog._id}
                     layoutId={`blog-card-${blog._id}`}
-                    className="flex flex-col rounded-3xl overflow-hidden pointer-events-auto shadow-2xl relative w-full max-w-2xl max-h-[85vh] overflow-y-auto"
+                    className="flex flex-col md:flex-row rounded-3xl overflow-hidden shadow-2xl relative w-full max-w-5xl"
                     style={{ background: "rgb(15,15,20)", border: "1px solid rgba(255,255,255,0.1)" }}
                   >
-                    <button
-                      onClick={() => setSelectedId(null)}
-                      className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/80 transition-colors"
-                    >
-                      ✕
-                    </button>
-                    <motion.div layoutId={`blog-image-${blog._id}`} className="w-full h-64 shrink-0 relative">
+                    {/* Left: Image */}
+                    <motion.div layoutId={`blog-image-${blog._id}`} className="w-full md:w-1/2 h-64 md:h-auto relative shrink-0">
                       <motion.img
                         src={blog.image || "https://placehold.co/800x400?text=No+Image"}
                         className="w-full h-full object-cover"
                         alt={blog.title || "Blog Image"}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f14] to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#0f0f14] to-transparent" />
                     </motion.div>
-                    <div className="p-8 flex flex-col pt-0 -mt-10 relative z-10">
+                    
+                    {/* Right: Content */}
+                    <div className="p-8 md:p-10 flex flex-col flex-grow relative z-10 w-full md:w-1/2">
+                      <button
+                        onClick={() => setSelectedId(null)}
+                        className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                        title="Close Preview"
+                      >
+                        ✕
+                      </button>
+                      <p className="text-xs font-bold tracking-widest uppercase mb-3 text-orange-400">Preview</p>
                       <motion.h3 layoutId={`blog-title-${blog._id}`} className="text-2xl md:text-3xl font-black text-white mb-4 leading-tight">
                         {blog.title}
                       </motion.h3>
                       <motion.div layoutId={`blog-content-${blog._id}`} className="text-sm md:text-base mb-8 leading-relaxed" style={{ color: "rgba(255,255,255,0.7)" }}>
-                        <div dangerouslySetInnerHTML={{ __html: blog.content?.substring(0, 500) + "..." }} />
+                        <div dangerouslySetInnerHTML={{ __html: blog.content?.substring(0, 300) + "..." }} />
                       </motion.div>
-                      <div className="mt-auto pt-4 flex gap-4">
+                      
+                      <div className="mt-auto pt-6 flex flex-col sm:flex-row gap-4">
+                        <button
+                          onClick={() => setSelectedId(null)}
+                          className="px-6 py-3 rounded-full text-sm font-bold transition hover:bg-white/5 border border-white/10 flex-1 text-center text-white"
+                        >
+                          Go Back
+                        </button>
                         <Link
                           to={`/blogs/${blog._id}`}
                           className="px-6 py-3 rounded-full text-sm font-bold transition hover:opacity-90 flex-1 text-center"
@@ -159,10 +171,10 @@ function BlogGridFour() {
                     </div>
                   </motion.div>
                 ))}
-              </div>
-            </>
-          )}
-        </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
 
         <div className="text-center mt-8 sm:hidden">
           <Link to="/blogs" className="text-sm font-bold" style={{ color: "rgba(255,255,255,0.5)" }}>See All Articles →</Link>
