@@ -9,9 +9,7 @@ import RatingSection from "../Components/RatingSection/RatingSection";
 import { useCategoryAPI } from "../api/categoryApi";
 import { setCategory } from "../Slices/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
-import ComprehensiveTraining from "../Components/Training/ComprehensiveTraining";
 import UpcomingEvents from "../Components/Event/UpcomingEvents";
-import SummerInternshipModal from "../Components/Modals/SummerInternshipModal";
 
 function Home() {
   const { fetchCategories } = useCategoryAPI();
@@ -32,7 +30,7 @@ function Home() {
 
 
   return (
-    <main className="bg-dark-background pb-10 overflow-x-hidden">
+    <main className="overflow-x-hidden" style={{ background: "#000005" }}>
       {/* JSON-LD Structured Data for SEO */}
       <script type="application/ld+json">
         {JSON.stringify({
@@ -62,10 +60,8 @@ function Home() {
         })}
       </script>
 
-      <SummerInternshipModal />
       <Carousel />
       <UpcomingEvents />
-      <ComprehensiveTraining />
       <CourseSection />
       <Learning />
       <WhyCodeMentees />
