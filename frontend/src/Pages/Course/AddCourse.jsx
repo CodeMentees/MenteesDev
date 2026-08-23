@@ -89,11 +89,16 @@ function AddCourse() {
   };
 
   return (
-    <section className="bg-gray-900 text-white p-6 rounded-lg shadow-lg max-w-3xl mx-auto">
-
+    <section className="p-6 max-w-3xl mx-auto">
       <Toast visible={toast.visible} message={toast.message} />
-      <div className="py-2 px-4">
-        <h2 className="mb-4 text-2xl font-bold text-gray-100">
+      <div
+        className="rounded-2xl p-8"
+        style={{
+          background: "rgb(var(--dash-panel))",
+          border: "1px solid rgba(var(--dash-border))",
+        }}
+      >
+        <h2 className="mb-6 text-2xl font-bold" style={{ color: "rgb(var(--dash-ink))" }}>
           {id ? "Update Course" : "Create a Course"}
         </h2>
         <form className="grid gap-4 sm:grid-cols-2">
@@ -103,7 +108,12 @@ function AddCourse() {
             placeholder="Course Name"
             value={courseData.name}
             onChange={handleChange}
-            className="border border-gray-700 bg-gray-800 text-white p-2 w-full rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+            className="border rounded-lg p-2.5 w-full text-sm focus:ring-2 focus:outline-none"
+            style={{
+              background: "rgba(var(--dash-border), 0.3)",
+              borderColor: "rgba(var(--dash-border))",
+              color: "rgb(var(--dash-ink))",
+            }}
           />
           <div className="flex gap-2">
             <input
@@ -112,7 +122,12 @@ function AddCourse() {
               placeholder="Image URL"
               value={courseData.image}
               onChange={handleChange}
-              className="flex-1 border border-gray-700 bg-gray-800 text-white p-2 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+            className="flex-1 border rounded-lg p-2.5 text-sm focus:ring-2 focus:outline-none"
+            style={{
+              background: "rgba(var(--dash-border), 0.3)",
+              borderColor: "rgba(var(--dash-border))",
+              color: "rgb(var(--dash-ink))",
+            }}
             />
             <label className="cursor-pointer bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg flex items-center justify-center transition-colors font-semibold">
               Upload
@@ -130,20 +145,35 @@ function AddCourse() {
             placeholder="Price"
             value={courseData.price}
             onChange={handleChange}
-            className="border border-gray-700 bg-gray-800 text-white p-2 w-full rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+            className="border rounded-lg p-2.5 w-full text-sm focus:ring-2 focus:outline-none"
+            style={{
+              background: "rgba(var(--dash-border), 0.3)",
+              borderColor: "rgba(var(--dash-border))",
+              color: "rgb(var(--dash-ink))",
+            }}
           />
           <textarea
             name="description"
             placeholder="Description"
             value={courseData.description}
             onChange={handleChange}
-            className="border border-gray-700 bg-gray-800 text-white p-2 w-full rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+            className="border rounded-lg p-2.5 w-full text-sm focus:ring-2 focus:outline-none"
+            style={{
+              background: "rgba(var(--dash-border), 0.3)",
+              borderColor: "rgba(var(--dash-border))",
+              color: "rgb(var(--dash-ink))",
+            }}
           ></textarea>
           <select
             name="category"
             value={courseData.category}
             onChange={handleChange}
-            className="border border-gray-700 bg-gray-800 text-white p-2 w-full rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+            className="border rounded-lg p-2.5 w-full text-sm focus:ring-2 focus:outline-none"
+            style={{
+              background: "rgba(var(--dash-border), 0.3)",
+              borderColor: "rgba(var(--dash-border))",
+              color: "rgb(var(--dash-ink))",
+            }}
           >
             <option value="">Select Category</option>
             {categories.map((category) => (
@@ -156,7 +186,8 @@ function AddCourse() {
         <button
           type="button"
           onClick={handleSubmit}
-          className="mt-4 px-4 py-2 bg-dark-btn text-black font-semibold rounded-lg hover:bg-yellow-400 transition w-full"
+          className="mt-5 px-6 py-3 font-bold rounded-xl text-white w-full transition-all hover:opacity-90"
+          style={{ background: "linear-gradient(135deg, #7c3aed, #a78bfa)" }}
         >
           {id ? "Update Course" : "Create Course"}
         </button>

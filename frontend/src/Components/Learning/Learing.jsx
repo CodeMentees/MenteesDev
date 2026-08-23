@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const tabs = [
   { label: "Referrals", key: "referrals" },
@@ -81,12 +82,13 @@ function Learning() {
         </div>
 
         {/* CTA */}
-        <button
+        <Link
+          to="/courses"
           className="inline-flex items-center gap-2 text-sm font-bold text-white px-6 py-3 rounded-full transition-all hover:scale-105"
           style={{ background: "rgba(249,115,22,0.15)", border: "1px solid rgba(249,115,22,0.3)" }}
         >
           Explore All Programs →
-        </button>
+        </Link>
       </div>
     </section>
   );
