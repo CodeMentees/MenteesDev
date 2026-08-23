@@ -1,11 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import React, { lazy, Suspense, useState } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 import RouteProgressBar from './Components/UI/RouteProgressBar';
 import Loading from './Components/Helpers/Loading';
 import useScrollReveal from './hooks/useScrollReveal';
 import ScrollToTop from './Components/UI/ScrollToTop';
-import SplashScreen from './Components/UI/SplashScreen';
 
 // Lazy load components
 const Home = lazy(() => import('./Pages/Home'));
@@ -149,13 +148,8 @@ function AppInner() {
 }
 
 function App() {
-  const [splashDone, setSplashDone] = useState(
-    !!sessionStorage.getItem("splashShown")
-  );
-
   return (
     <>
-      {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
       <Router>
         <div className="flex flex-col min-h-screen" style={{ background: "#000005" }}>
           <RouteProgressBar />

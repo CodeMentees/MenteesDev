@@ -99,55 +99,45 @@ function Carousel() {
 
       {/* ── Layered animated background orbs ── */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* Primary large violet haze — breathes and drifts */}
+        {/* Primary large purple haze */}
         <div style={{
           position: "absolute",
-          top: "-25%", left: "-20%",
-          width: "80%", height: "90%",
+          top: "-20%", left: "-15%",
+          width: "70%", height: "80%",
           borderRadius: "50%",
-          background: "radial-gradient(circle at 40% 40%, rgba(124,58,237,0.35) 0%, rgba(109,40,217,0.15) 40%, transparent 70%)",
-          animation: "hazeBreath 9s ease-in-out infinite",
-          filter: "blur(50px)",
-        }} />
-        {/* Indigo orb top-right — drifts */}
-        <div style={{
-          position: "absolute",
-          top: "0%", right: "-15%",
-          width: "55%", height: "65%",
-          borderRadius: "50%",
-          background: "radial-gradient(circle at 60% 30%, rgba(99,102,241,0.25) 0%, rgba(139,92,246,0.1) 50%, transparent 70%)",
-          animation: "hazeDrift 13s ease-in-out infinite alternate",
-          filter: "blur(55px)",
-        }} />
-        {/* Cyan-blue bottom-left pulse */}
-        <div style={{
-          position: "absolute",
-          bottom: "-15%", left: "10%",
-          width: "60%", height: "50%",
-          borderRadius: "50%",
-          background: "radial-gradient(circle at 50% 60%, rgba(6,182,212,0.18) 0%, rgba(59,130,246,0.1) 50%, transparent 70%)",
-          animation: "hazeBreath 11s ease-in-out infinite reverse",
-          filter: "blur(60px)",
-        }} />
-        {/* Pink-rose accent top-center — flickers */}
-        <div style={{
-          position: "absolute",
-          top: "5%", left: "30%",
-          width: "40%", height: "35%",
-          borderRadius: "50%",
-          background: "radial-gradient(circle at 50% 40%, rgba(236,72,153,0.18) 0%, rgba(244,114,182,0.08) 50%, transparent 70%)",
-          animation: "haze3 7s ease-in-out infinite",
+          background: "radial-gradient(circle at center, rgba(124,58,237,0.28) 0%, rgba(109,40,217,0.12) 40%, transparent 70%)",
+          animation: "hazeBreath 8s ease-in-out infinite",
           filter: "blur(40px)",
         }} />
-        {/* Emerald accent bottom-right */}
+        {/* Secondary purple orb */}
         <div style={{
           position: "absolute",
-          bottom: "5%", right: "5%",
-          width: "30%", height: "30%",
+          top: "10%", right: "-10%",
+          width: "50%", height: "60%",
           borderRadius: "50%",
-          background: "radial-gradient(circle at 50% 50%, rgba(16,185,129,0.12) 0%, transparent 70%)",
-          animation: "hazeDrift 8s ease-in-out infinite",
-          filter: "blur(45px)",
+          background: "radial-gradient(circle at center, rgba(167,139,250,0.18) 0%, rgba(139,92,246,0.08) 50%, transparent 70%)",
+          animation: "hazeDrift 12s ease-in-out infinite alternate",
+          filter: "blur(60px)",
+        }} />
+        {/* Blue accent bottom-center */}
+        <div style={{
+          position: "absolute",
+          bottom: "-10%", left: "25%",
+          width: "50%", height: "40%",
+          borderRadius: "50%",
+          background: "radial-gradient(circle at center, rgba(59,130,246,0.14) 0%, transparent 70%)",
+          animation: "hazeBreath 10s ease-in-out infinite reverse",
+          filter: "blur(50px)",
+        }} />
+        {/* Pink flicker top-right */}
+        <div style={{
+          position: "absolute",
+          top: "5%", right: "20%",
+          width: "25%", height: "30%",
+          borderRadius: "50%",
+          background: "radial-gradient(circle at center, rgba(236,72,153,0.12) 0%, transparent 70%)",
+          animation: "hazeDrift 7s ease-in-out infinite",
+          filter: "blur(35px)",
         }} />
 
         {/* Fine grid overlay */}
@@ -285,18 +275,12 @@ function Carousel() {
       <style>{`
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
         @keyframes hazeBreath {
-          0%,100% { transform: translate(0,0) scale(1) rotate(0deg); opacity: 0.75; }
-          33% { transform: translate(25px,-35px) scale(1.1) rotate(2deg); opacity: 1; }
-          66% { transform: translate(-15px,20px) scale(0.95) rotate(-1deg); opacity: 0.85; }
+          0%,100% { transform: translate(0,0) scale(1); opacity: 0.8; }
+          50% { transform: translate(20px,-30px) scale(1.08); opacity: 1; }
         }
         @keyframes hazeDrift {
           0% { transform: translate(0,0) scale(1) rotate(0deg); }
-          50% { transform: translate(-30px,35px) scale(1.08) rotate(3deg); }
-          100% { transform: translate(20px,-20px) scale(1.12) rotate(-2deg); }
-        }
-        @keyframes haze3 {
-          0%,100% { transform: scale(1) rotate(0deg); opacity: 0.8; }
-          50% { transform: scale(1.15) rotate(5deg); opacity: 1; }
+          100% { transform: translate(-40px,25px) scale(1.1) rotate(5deg); }
         }
       `}</style>
     </div>
