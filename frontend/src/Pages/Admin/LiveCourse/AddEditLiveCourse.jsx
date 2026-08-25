@@ -83,90 +83,100 @@ function AddEditLiveCourse() {
   };
 
   return (
-    <section className="bg-gray-900 text-white min-h-screen p-6">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: "rgb(var(--dash-bg))" }}>
       {toast.visible && (
         <div className={`fixed z-50 top-5 right-5 p-4 rounded-lg shadow-md ${toast.type === "error" ? "bg-red-700 text-red-200" : "bg-green-700 text-green-200"}`}>
           {toast.message}
         </div>
       )}
 
-      <div className="max-w-3xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700">
-        <h2 className="text-2xl font-bold mb-6">{isEditing ? "✏️ Edit Live Course" : "➕ Add Live Course"}</h2>
+      <div className="max-w-3xl mx-auto rounded-3xl shadow-xl overflow-hidden border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
+        <div className="px-8 py-6" style={{ backgroundColor: "rgb(var(--accent))" }}>
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              {isEditing ? "✏️ Edit Live Course" : "➕ Add Live Course"}
+            </h2>
+        </div>
 
         {isLoading && !courseData.name && isEditing ? (
-          <div className="text-center py-10">Loading course data...</div>
+          <div className="text-center py-10" style={{ color: "rgb(var(--text-secondary))" }}>Loading course data...</div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="p-8 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-400 mb-2">Course Name</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: "rgb(var(--text-secondary))" }}>Course Name</label>
                 <input
                   type="text"
                   name="name"
                   required
                   onChange={handleChange}
                   value={courseData.name}
-                  className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5"
+                  className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                   placeholder="e.g. Master React in 30 Days"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-400 mb-2">Description</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: "rgb(var(--text-secondary))" }}>Description</label>
                 <textarea
                   name="description"
                   required
                   onChange={handleChange}
                   value={courseData.description}
                   rows="3"
-                  className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5"
+                  className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                   placeholder="Course description..."
                 ></textarea>
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-400 mb-2">Image URL</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: "rgb(var(--text-secondary))" }}>Image URL</label>
                 <input
                   type="url"
                   name="image"
                   required
                   onChange={handleChange}
                   value={courseData.image}
-                  className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5"
+                  className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                   placeholder="https://example.com/image.jpg"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-400 mb-2">Meeting Link (Google Meet / Jio Meet)</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: "rgb(var(--text-secondary))" }}>Meeting Link (Google Meet / Jio Meet)</label>
                 <input
                   type="url"
                   name="meetLink"
                   onChange={handleChange}
                   value={courseData.meetLink}
-                  className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5"
+                  className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                   placeholder="https://meet.google.com/xxx-xxxx-xxx"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">Next Schedule Time</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: "rgb(var(--text-secondary))" }}>Next Schedule Time</label>
                 <input
                   type="datetime-local"
                   name="schedule"
                   onChange={handleChange}
                   value={courseData.schedule}
-                  className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5"
+                  className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">Course Category</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: "rgb(var(--text-secondary))" }}>Course Category</label>
                 <select
                   name="courseType"
                   value={courseData.courseType}
                   onChange={handleChange}
-                  className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5"
+                  className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                 >
                   <option value="live">Live Interactive Class</option>
                   <option value="recorded">Self-Paced (Recorded)</option>
@@ -198,18 +208,19 @@ function AddEditLiveCourse() {
               </div>
             </div>
 
-            <div className="flex gap-4 pt-4">
+            <div className="flex gap-4 pt-8">
               <button
                 type="submit"
                 disabled={isLoading}
-                className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all"
+                className="flex-1 flex items-center justify-center gap-2 py-4 text-white font-bold rounded-xl transition-all transform active:scale-95 disabled:opacity-50 shadow-lg"
+                style={{ backgroundColor: "rgb(var(--accent))" }}
               >
                 {isLoading ? "Saving..." : (isEditing ? "Update Course" : "Create Course")}
               </button>
               <button
                 type="button"
                 onClick={() => navigate("/admin/live-courses")}
-                className="flex-1 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-all"
+                className="flex-1 py-4 bg-gray-600 hover:bg-gray-700 text-white font-bold rounded-xl transition-all shadow-lg"
               >
                 Cancel
               </button>
@@ -217,7 +228,7 @@ function AddEditLiveCourse() {
           </form>
         )}
       </div>
-    </section>
+    </div>
   );
 }
 

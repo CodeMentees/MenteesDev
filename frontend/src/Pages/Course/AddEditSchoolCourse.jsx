@@ -130,7 +130,7 @@ function AddEditSchoolCourse() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div>
-                            <label className="block text-sm font-medium mb-1">Course Title</label>
+                            <label className="block text-sm font-medium mb-2" style={{ color: "rgb(var(--text-secondary))" }}>Course Title</label>
                             <input
                                 type="text"
                                 name="title"
@@ -138,11 +138,12 @@ function AddEditSchoolCourse() {
                                 value={courseData.title}
                                 onChange={handleChange}
                                 required
-                                className="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
+                                className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Icon/Image URL</label>
+                            <label className="block text-sm font-medium mb-2" style={{ color: "rgb(var(--text-secondary))" }}>Icon/Image URL</label>
                             <div className="space-y-3">
                                 <div className="flex gap-2">
                                     <input
@@ -151,9 +152,10 @@ function AddEditSchoolCourse() {
                                         placeholder="URL to image"
                                         value={courseData.image}
                                         onChange={handleChange}
-                                        className="flex-1 bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
+                                        className="flex-1 px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                        style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                                     />
-                                    <label className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center justify-center transition-colors">
+                                    <label className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl flex items-center justify-center transition-colors">
                                         <FaPlus className="mr-2" /> Upload
                                         <input
                                             type="file"
@@ -189,12 +191,13 @@ function AddEditSchoolCourse() {
                             </div>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Grade Level</label>
+                            <label className="block text-sm font-medium mb-2" style={{ color: "rgb(var(--text-secondary))" }}>Grade Level</label>
                             <select
                                 name="level"
                                 value={courseData.level}
                                 onChange={handleChange}
-                                className="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-2.5"
+                                className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                             >
                                 <option value="Elementary">Elementary</option>
                                 <option value="Middle School">Middle School</option>
@@ -202,12 +205,13 @@ function AddEditSchoolCourse() {
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Duration</label>
+                            <label className="block text-sm font-medium mb-2" style={{ color: "rgb(var(--text-secondary))" }}>Duration</label>
                             <select
                                 name="duration"
                                 value={courseData.duration}
                                 onChange={handleChange}
-                                className="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-2.5"
+                                className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                             >
                                 <option value="Full Year">Full Year</option>
                                 <option value="Semester">Semester</option>
@@ -215,77 +219,82 @@ function AddEditSchoolCourse() {
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Contact Hours</label>
+                            <label className="block text-sm font-medium mb-2" style={{ color: "rgb(var(--text-secondary))" }}>Contact Hours</label>
                             <input
                                 type="text"
                                 name="contactHours"
                                 placeholder="e.g. 125-175"
                                 value={courseData.contactHours}
                                 onChange={handleChange}
-                                className="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-2.5"
+                                className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Language</label>
+                            <label className="block text-sm font-medium mb-2" style={{ color: "rgb(var(--text-secondary))" }}>Language</label>
                             <input
                                 type="text"
                                 name="language"
                                 placeholder="e.g. Python, Scratch"
                                 value={courseData.language}
                                 onChange={handleChange}
-                                className="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-2.5"
+                                className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Category</label>
+                            <label className="block text-sm font-medium mb-2" style={{ color: "rgb(var(--text-secondary))" }}>Category</label>
                             <input
                                 type="text"
                                 name="category"
                                 placeholder="e.g. Foundations, AP"
                                 value={courseData.category}
                                 onChange={handleChange}
-                                className="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-2.5"
+                                className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Description</label>
+                        <label className="block text-sm font-medium mb-2" style={{ color: "rgb(var(--text-secondary))" }}>Description</label>
                         <textarea
                             name="description"
                             rows="3"
                             value={courseData.description}
                             onChange={handleChange}
-                            className="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-2.5"
+                            className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                            style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                         ></textarea>
                     </div>
 
                     {/* Units Section */}
-                    <div className="border rounded-lg p-4" style={{ borderColor: "rgba(var(--dash-border))", backgroundColor: "rgb(var(--dash-panel))" }}>
+                    <div className="border rounded-xl p-6" style={{ borderColor: "rgba(var(--dash-border))", backgroundColor: "rgb(var(--surface-1))" }}>
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-bold">Units (Modules)</h3>
-                            <button type="button" onClick={addUnit} className="text-blue-500 flex items-center gap-2 text-sm">
+                            <h3 className="text-lg font-bold" style={{ color: "rgb(var(--text-primary))" }}>Units (Modules)</h3>
+                            <button type="button" onClick={addUnit} className="text-blue-500 hover:text-blue-400 flex items-center gap-2 text-sm transition-colors">
                                 <FaPlus /> Add Unit
                             </button>
                         </div>
                         <div className="space-y-4">
                             {courseData.units.map((unit, index) => (
-                                <div key={index} className="bg-gray-800 p-3 rounded-lg relative">
+                                <div key={index} className="p-4 rounded-xl relative border" style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))" }}>
                                     <button
                                         type="button"
                                         onClick={() => removeUnit(index)}
-                                        className="absolute top-2 right-2 text-red-500 hover:text-red-400"
+                                        className="absolute top-4 right-4 text-red-500 hover:text-red-400 transition-colors"
                                     >
                                         <FaTrash />
                                     </button>
-                                    <div className="grid gap-3">
+                                    <div className="grid gap-4 mt-2">
                                         <input
                                             type="text"
                                             name="title"
                                             placeholder="Unit Title"
                                             value={unit.title}
                                             onChange={(e) => handleUnitChange(index, e)}
-                                            className="bg-white border border-gray-300 text-gray-900 rounded p-2 text-sm focus:ring-1 focus:ring-blue-500"
+                                            className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                                            style={{ backgroundColor: "rgb(var(--surface-3))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                                         />
                                         <textarea
                                             name="description"
@@ -293,7 +302,8 @@ function AddEditSchoolCourse() {
                                             rows="2"
                                             value={unit.description}
                                             onChange={(e) => handleUnitChange(index, e)}
-                                            className="bg-white border border-gray-300 text-gray-900 rounded p-2 text-sm focus:ring-1 focus:ring-blue-500"
+                                            className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                                            style={{ backgroundColor: "rgb(var(--surface-3))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                                         ></textarea>
                                     </div>
                                 </div>
@@ -302,31 +312,32 @@ function AddEditSchoolCourse() {
                     </div>
 
                     {/* Syllabus Section */}
-                    <div className="border rounded-lg p-4" style={{ borderColor: "rgba(var(--dash-border))", backgroundColor: "rgb(var(--dash-panel))" }}>
+                    <div className="border rounded-xl p-6" style={{ borderColor: "rgba(var(--dash-border))", backgroundColor: "rgb(var(--surface-1))" }}>
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-bold">Syllabus Details</h3>
-                            <button type="button" onClick={addSyllabusItem} className="text-blue-500 flex items-center gap-2 text-sm">
+                            <h3 className="text-lg font-bold" style={{ color: "rgb(var(--text-primary))" }}>Syllabus Details</h3>
+                            <button type="button" onClick={addSyllabusItem} className="text-blue-500 hover:text-blue-400 flex items-center gap-2 text-sm transition-colors">
                                 <FaPlus /> Add Item
                             </button>
                         </div>
                         <div className="space-y-4">
                             {courseData.syllabus.map((item, index) => (
-                                <div key={index} className="bg-gray-800 p-3 rounded-lg relative">
+                                <div key={index} className="p-4 rounded-xl relative border" style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))" }}>
                                     <button
                                         type="button"
                                         onClick={() => removeSyllabusItem(index)}
-                                        className="absolute top-2 right-2 text-red-500 hover:text-red-400"
+                                        className="absolute top-4 right-4 text-red-500 hover:text-red-400 transition-colors"
                                     >
                                         <FaTrash />
                                     </button>
-                                    <div className="grid gap-3">
+                                    <div className="grid gap-4 mt-2">
                                         <input
                                             type="text"
                                             name="title"
                                             placeholder="Section Title (e.g. Unit 1: Programming)"
                                             value={item.title}
                                             onChange={(e) => handleSyllabusChange(index, e)}
-                                            className="bg-white border border-gray-300 text-gray-900 rounded p-2 text-sm focus:ring-1 focus:ring-blue-500"
+                                            className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                                            style={{ backgroundColor: "rgb(var(--surface-3))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                                         />
                                         <textarea
                                             name="content"
@@ -334,7 +345,8 @@ function AddEditSchoolCourse() {
                                             rows="3"
                                             value={item.content}
                                             onChange={(e) => handleSyllabusChange(index, e)}
-                                            className="bg-white border border-gray-300 text-gray-900 rounded p-2 text-sm focus:ring-1 focus:ring-blue-500"
+                                            className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                                            style={{ backgroundColor: "rgb(var(--surface-3))", borderColor: "rgba(var(--dash-border))", color: "white" }}
                                         ></textarea>
                                     </div>
                                 </div>
@@ -344,7 +356,8 @@ function AddEditSchoolCourse() {
 
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition"
+                        className="w-full flex items-center justify-center gap-2 py-4 text-white font-bold rounded-xl transition-all transform active:scale-95 disabled:opacity-50 shadow-lg"
+                        style={{ backgroundColor: "rgb(var(--accent))" }}
                     >
                         {id ? "Update Course" : "Create Course"}
                     </button>

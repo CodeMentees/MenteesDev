@@ -16,6 +16,58 @@ import rehypeRaw from "rehype-raw";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
+const rehypeCodeTabs = () => {
+  return (tree) => {
+    if (!tree.children) return;
+    const newChildren = [];
+    let currentGroup = [];
+
+    const flushGroup = () => {
+      if (currentGroup.length > 1) {
+        const languages = currentGroup.map(preNode => {
+          const codeNode = preNode.children?.find(c => c.tagName === 'code');
+          let lang = 'text';
+          if (codeNode && codeNode.properties && codeNode.properties.className) {
+            const match = codeNode.properties.className.find(c => String(c).startsWith('language-'));
+            if (match) lang = String(match).replace('language-', '');
+          }
+          if (codeNode) {
+            codeNode.properties = codeNode.properties || {};
+            codeNode.properties['data-intab'] = "true";
+          }
+          return lang;
+        });
+
+        newChildren.push({
+          type: 'element',
+          tagName: 'code-tabs',
+          properties: { 'data-languages': languages.join(',') },
+          children: currentGroup
+        });
+      } else if (currentGroup.length === 1) {
+        newChildren.push(currentGroup[0]);
+      }
+      currentGroup = [];
+    };
+
+    tree.children.forEach((node) => {
+      if (node.type === 'element' && node.tagName === 'pre') {
+        currentGroup.push(node);
+      } else if (node.type === 'text' && /^\s*$/.test(node.value)) {
+        if (currentGroup.length === 0) {
+          newChildren.push(node);
+        }
+      } else {
+        flushGroup();
+        newChildren.push(node);
+      }
+    });
+
+    flushGroup();
+    tree.children = newChildren;
+  };
+};
+
 function BlogPage() {
   const { fetchBlog, likeBlog, addComment, deleteComment } = useBlog();
   const { id } = useParams();
@@ -148,8 +200,32 @@ function BlogPage() {
               <section className="prose max-w-none article-content prose-headings:text-gray-900 prose-headings:font-bold prose-h1:text-4xl prose-h2:text-3xl prose-a:text-pink-600 hover:prose-a:text-pink-500 prose-img:rounded-2xl prose-img:shadow-xl prose-blockquote:border-l-4 prose-blockquote:border-pink-500 prose-blockquote:bg-pink-50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-xl prose-blockquote:text-gray-700 prose-blockquote:italic">
                 <ReactMarkdown 
                   remarkPlugins={[remarkGfm]} 
-                  rehypePlugins={[rehypeRaw]}
+                  rehypePlugins={[rehypeRaw, rehypeCodeTabs]}
                   components={{
+                    'code-tabs': ({node, children, ...props}) => {
+                      const [activeTab, setActiveTab] = useState(0);
+                      const langs = (props['data-languages'] || '').split(',');
+                      const childArray = React.Children.toArray(children).filter(child => React.isValidElement(child));
+
+                      return (
+                        <div className="rounded-xl overflow-hidden shadow-lg my-8 border border-gray-200/20 bg-[#1e1e1e]">
+                          <div className="flex bg-[#2d2d2d] border-b border-[#3d3d3d] overflow-x-auto scrollbar-hide">
+                            {langs.map((lang, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => setActiveTab(idx)}
+                                className={`px-5 py-3 text-xs font-mono font-bold uppercase tracking-wider transition-colors border-b-2 whitespace-nowrap focus:outline-none ${activeTab === idx ? 'text-white border-pink-500 bg-[#1e1e1e]' : 'text-gray-400 border-transparent hover:text-gray-200 hover:bg-[#3d3d3d]'}`}
+                              >
+                                {lang === 'text' ? `Snippet ${idx + 1}` : lang}
+                              </button>
+                            ))}
+                          </div>
+                          <div>
+                            {childArray[activeTab]}
+                          </div>
+                        </div>
+                      );
+                    },
                     code({node, inline, className, children, ...props}) {
                       const match = /language-(\w+)/.exec(className || '');
                       const extractText = (child) => {
@@ -160,9 +236,9 @@ function BlogPage() {
                         return '';
                       };
                       const rawText = extractText(children);
-                      // Remove trailing newlines and strip accidental literal backticks 
                       let codeText = rawText.replace(/\n$/, '').replace(/^`+|`+$/g, '').trim();
                       const isBlock = match || codeText.includes('\n') || codeText.length > 60;
+                      const inTab = node.properties?.['data-intab'] === 'true' || props['data-intab'] === 'true';
                       
                       const CopyButton = ({ text }) => {
                         const [copied, setCopied] = useState(false);
@@ -174,7 +250,7 @@ function BlogPage() {
                         return (
                           <button
                             onClick={handleCopy}
-                            className="p-1.5 hover:bg-gray-700 text-gray-400 hover:text-white rounded-md transition-colors flex items-center gap-1.5 text-xs font-medium"
+                            className="p-1.5 hover:bg-gray-600 text-gray-400 hover:text-white rounded-md transition-colors flex items-center gap-1.5 text-xs font-medium bg-black/20"
                             title="Copy code"
                           >
                             {copied ? <FaCheck className="text-green-400" /> : <FaCopy />}
@@ -184,31 +260,47 @@ function BlogPage() {
                       };
 
                       return (!inline && isBlock) ? (
-                        <div className="rounded-xl overflow-hidden shadow-lg my-8 border border-gray-200/20 bg-[#1e1e1e]">
-                          <div className="flex items-center justify-between px-4 py-2 bg-[#2d2d2d] border-b border-[#3d3d3d]">
-                            <div className="flex items-center gap-2">
-                              <div className="flex gap-1.5">
-                                <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
-                                <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
-                                <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
-                              </div>
-                              {match && (
-                                <span className="ml-2 text-xs font-mono font-medium text-gray-400 uppercase tracking-wider">
-                                  {match[1]}
-                                </span>
-                              )}
+                        inTab ? (
+                          <div className="relative group">
+                            <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                              <CopyButton text={codeText} />
                             </div>
-                            <CopyButton text={codeText} />
+                            <SyntaxHighlighter
+                              children={codeText}
+                              style={vscDarkPlus}
+                              language={match ? match[1] : 'text'}
+                              PreTag="div"
+                              className="!m-0 !p-5 !bg-[#1e1e1e] text-sm overflow-x-auto"
+                              {...props}
+                            />
                           </div>
-                          <SyntaxHighlighter
-                            children={codeText}
-                            style={vscDarkPlus}
-                            language={match ? match[1] : 'text'}
-                            PreTag="div"
-                            className="!m-0 !p-5 !bg-[#1e1e1e] text-sm overflow-x-auto"
-                            {...props}
-                          />
-                        </div>
+                        ) : (
+                          <div className="rounded-xl overflow-hidden shadow-lg my-8 border border-gray-200/20 bg-[#1e1e1e]">
+                            <div className="flex items-center justify-between px-4 py-2 bg-[#2d2d2d] border-b border-[#3d3d3d]">
+                              <div className="flex items-center gap-2">
+                                <div className="flex gap-1.5">
+                                  <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
+                                  <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
+                                  <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
+                                </div>
+                                {match && (
+                                  <span className="ml-2 text-xs font-mono font-medium text-gray-400 uppercase tracking-wider">
+                                    {match[1]}
+                                  </span>
+                                )}
+                              </div>
+                              <CopyButton text={codeText} />
+                            </div>
+                            <SyntaxHighlighter
+                              children={codeText}
+                              style={vscDarkPlus}
+                              language={match ? match[1] : 'text'}
+                              PreTag="div"
+                              className="!m-0 !p-5 !bg-[#1e1e1e] text-sm overflow-x-auto"
+                              {...props}
+                            />
+                          </div>
+                        )
                       ) : (
                         <code className={`${className || ''} bg-[#f6f8fa] text-gray-800 border border-gray-200 px-1.5 py-0.5 rounded-md font-mono text-sm break-words`.trim()} {...props}>
                           {children}
