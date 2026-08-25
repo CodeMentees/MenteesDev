@@ -17,6 +17,7 @@ import jobRoutes from "./jobRoutes.js";
 import testRoutes from "./test.js";
 import internshipRoutes from "./internshipRoutes.js";
 import bulkMailRoutes from "./bulkMailRoutes.js";
+import visitorRoutes from "./visitorRoutes.js";
 
 const router = express.Router();
 router.use("/home", homeRoutes);
@@ -38,5 +39,6 @@ router.use("/events", eventRoutes);
 router.use("/test", testRoutes);
 router.use("/internships", internshipRoutes);
 router.use("/bulk-mail", bulkMailRoutes);
+router.use("/visitors", visitorRoutes);
 
 export default router;

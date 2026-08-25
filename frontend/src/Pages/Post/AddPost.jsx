@@ -91,6 +91,7 @@ function AddPost() {
     try {
       const response = await fetch(`/api/posts${isEditing ? `/${id}` : ""}`, {
         method: isEditing ? "PUT" : "POST",
+        credentials: "include",
         headers: { 
           "Content-Type": "application/json",
           "Authorization": `Bearer ${user?.token}`
@@ -107,9 +108,10 @@ function AddPost() {
           navigate("/admin/posts");
         }, 2000);
       } else {
+        const errorData = await response.json();
         setToast({
           visible: true,
-          message: "Something went wrong!",
+          message: errorData.message || "Something went wrong!",
           type: "error",
         });
       }

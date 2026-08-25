@@ -8,6 +8,7 @@ import { useBlog } from "../api/blogApi";
 import SEOHead from "../seo/SEOHead";
 import { useDynamicSEO } from "../seo/useDynamicSEO";
 import BlogGridFour from "../Components/Blog/BlogGridFour";
+import BlogPromoSidebar from "../Components/Blog/BlogPromoSidebar";
 import Loading from "../Components/Helpers/Loading";
 import Toast from "../Components/UI/Toast";
 import ReactMarkdown from "react-markdown";
@@ -81,12 +82,7 @@ function BlogPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
 
-  // Guard: redirect to login if not signed in
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login", { state: { from: `/blogs/${id}` } });
-    }
-  }, [isAuthenticated, navigate, id]);
+  // Auth guard removed per user request for temporary public access
 
   useEffect(() => {
     const fetchData = async () => {
@@ -169,13 +165,19 @@ function BlogPage() {
   const likeCount = blog.likes?.length || 0;
 
   return (
-    <main className="min-h-screen bg-white antialiased overflow-x-hidden w-full">
+    <main className="min-h-screen bg-white antialiased w-full">
       <Toast visible={toast.visible} message={toast.message} type={toast.type} />
 
       <SEOHead path="/blogs/:id" {...seoProps} />
 
-      <div className="w-full max-w-4xl mx-auto px-6 xl:px-12 py-12">
-        <article className="w-full relative">
+      <div className="w-full max-w-[1600px] mx-auto px-4 lg:px-6 xl:px-12 py-12 flex flex-col lg:flex-row gap-6 lg:gap-10 xl:gap-16 items-start justify-between">
+        {/* Left Sidebar */}
+        <div className="hidden xl:block w-64 shrink-0 sticky top-24 self-start">
+            <BlogPromoSidebar />
+        </div>
+
+        {/* Main Content */}
+        <article className="w-full relative flex-1 min-w-0">
               <header className="mb-12">
                 <div className="flex items-center space-x-2 text-sm text-pink-600 font-bold mb-6 uppercase tracking-widest bg-pink-50 w-fit px-4 py-1.5 rounded-full">
                   <span>Article</span>
@@ -209,16 +211,23 @@ function BlogPage() {
 
                       return (
                         <div className="rounded-xl overflow-hidden shadow-lg my-8 border border-gray-200/20 bg-[#1e1e1e]">
-                          <div className="flex bg-[#2d2d2d] border-b border-[#3d3d3d] overflow-x-auto scrollbar-hide">
-                            {langs.map((lang, idx) => (
-                              <button
-                                key={idx}
-                                onClick={() => setActiveTab(idx)}
-                                className={`px-5 py-3 text-xs font-mono font-bold uppercase tracking-wider transition-colors border-b-2 whitespace-nowrap focus:outline-none ${activeTab === idx ? 'text-white border-pink-500 bg-[#1e1e1e]' : 'text-gray-400 border-transparent hover:text-gray-200 hover:bg-[#3d3d3d]'}`}
-                              >
-                                {lang === 'text' ? `Snippet ${idx + 1}` : lang}
-                              </button>
-                            ))}
+                          <div className="flex bg-[#2d2d2d] border-b border-[#3d3d3d] overflow-x-auto scrollbar-hide items-center relative h-12">
+                            <div className="absolute left-4 flex gap-1.5 z-10">
+                              <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
+                              <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
+                              <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
+                            </div>
+                            <div className="flex pl-20 w-full h-full">
+                              {langs.map((lang, idx) => (
+                                <button
+                                  key={idx}
+                                  onClick={() => setActiveTab(idx)}
+                                  className={`px-5 py-3 text-xs font-mono font-bold uppercase tracking-wider transition-colors border-b-2 whitespace-nowrap focus:outline-none ${activeTab === idx ? 'text-white border-pink-500 bg-[#1e1e1e]' : 'text-gray-400 border-transparent hover:text-gray-200 hover:bg-[#3d3d3d]'}`}
+                                >
+                                  {lang === 'text' ? `Snippet ${idx + 1}` : lang}
+                                </button>
+                              ))}
+                            </div>
                           </div>
                           <div>
                             {childArray[activeTab]}
@@ -390,17 +399,28 @@ function BlogPage() {
               </section>
             </article>
 
-            <footer className="mt-16 pt-12 border-t border-gray-100">
-              <div className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-[2rem] p-8 flex flex-col md:flex-row items-center gap-8 border border-pink-100">
-                <div className="w-24 h-24 bg-gradient-to-br from-pink-500 to-purple-600 rounded-3xl shrink-0 flex items-center justify-center text-white text-3xl font-bold shadow-xl shadow-pink-200">
-                  CM
-                </div>
-                <div>
-                  <h4 className="text-2xl font-bold text-gray-900 mb-2">Codementees Team</h4>
-                  <p className="text-gray-600 text-lg leading-relaxed">Expert developers sharing insights and guides to help you master modern technology and engineering practices. Join our community to learn more.</p>
-                </div>
+            {/* Right Sidebar - Ads */}
+            <aside className="hidden lg:block w-72 shrink-0 sticky top-24 self-start">
+
+              {/* Explore Programs Ad */}
+              <div className="bg-gradient-to-br from-pink-50 to-orange-50 border border-pink-100 rounded-2xl p-6 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group hover:shadow-[0_8px_30px_rgb(236,72,153,0.1)] transition-all duration-300">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-pink-400/20 rounded-full blur-xl -mr-10 -mt-10 pointer-events-none group-hover:bg-pink-400/30 transition-colors duration-500"></div>
+                <div className="absolute bottom-0 left-0 w-20 h-20 bg-orange-400/20 rounded-full blur-xl -ml-10 -mb-10 pointer-events-none"></div>
+                
+                <span className="relative z-10 text-[10px] font-black text-pink-600 uppercase tracking-widest mb-4 block">Explore Programs</span>
+                
+                <h4 className="relative z-10 font-bold text-gray-900 text-lg mb-2 leading-tight">Accelerate Your Tech Career</h4>
+                <p className="relative z-10 text-xs text-gray-600 mb-6 px-2">Join our exclusive cohort to crack top product companies.</p>
+                
+                <Link
+                    to="/courses"
+                    className="relative z-10 inline-block w-full py-3 bg-white border border-pink-200 hover:border-pink-400 text-pink-600 hover:text-white hover:bg-gradient-to-r hover:from-pink-500 hover:to-orange-500 rounded-xl font-bold text-xs shadow-sm transition-all duration-300"
+                >
+                    View Details
+                </Link>
               </div>
-            </footer>
+            </aside>
+
       </div>
 
       <div className="bg-gray-50 py-24 mt-24">

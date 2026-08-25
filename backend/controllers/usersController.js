@@ -199,4 +199,54 @@ const bulkDeleteUsers = asyncHandler(async (req, res) => {
   }
 });
 
-export { createUser, deleteUser, getUser, getUsers, updateUser, bulkDeleteUsers };
+/**
+ * @swagger
+ * /api/users/growth:
+ *   get:
+ *     summary: Get user growth over the last 7 days
+ *     tags: [Users]
+ */
+const getUserGrowth = asyncHandler(async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 6);
+    sevenDaysAgo.setHours(0, 0, 0, 0);
+
+    const users = await User.find({
+      createdAt: { $gte: sevenDaysAgo, $lte: today },
+    }).select("createdAt");
+
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const growthData = {};
+
+    // Initialize array of last 7 days
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(today.getDate() - i);
+      const dayName = days[d.getDay()];
+      growthData[dayName] = 0;
+    }
+
+    // Populate data
+    users.forEach((user) => {
+      const d = new Date(user.createdAt);
+      const dayName = days[d.getDay()];
+      if (growthData[dayName] !== undefined) {
+        growthData[dayName]++;
+      }
+    });
+
+    const result = Object.keys(growthData).map(key => ({
+      name: key,
+      users: growthData[key],
+    }));
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+export { createUser, deleteUser, getUser, getUsers, updateUser, bulkDeleteUsers, getUserGrowth };

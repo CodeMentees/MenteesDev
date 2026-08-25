@@ -193,7 +193,7 @@ export const resendOTP = asyncHandler(async (req, res) => {
  *         description: User not found
  */
 export const authUser = asyncHandler(async (req, res) => {
-  const { email, password, credential, client_id } = req.body;
+  const { email, password, credential, client_id, remember_me } = req.body;
 
   let user;
   if (credential) {
@@ -222,14 +222,19 @@ export const authUser = asyncHandler(async (req, res) => {
     return;
   }
 
-  res.cookie("token", generateToken(user), { maxAge: 86400000, httpOnly: true })
+  const expiresInDays = remember_me ? 30 : 1;
+  const cookieMaxAge = expiresInDays * 24 * 60 * 60 * 1000;
+  const tokenExpiresIn = `${expiresInDays}d`;
+  const token = generateToken(user, tokenExpiresIn);
+
+  res.cookie("token", token, { maxAge: cookieMaxAge, httpOnly: true })
     .json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
       isFullAccess: user.isFullAccess,
-      token: generateToken(user),
+      token: token,
       message: "User signed in successfully",
     });
 });

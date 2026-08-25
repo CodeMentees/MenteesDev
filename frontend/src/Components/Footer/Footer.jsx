@@ -1,6 +1,20 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 function Footer() {
+    const [stats, setStats] = useState({ todayVisitors: 0, totalVisitors: 0 });
+
+    useEffect(() => {
+        fetch("/api/visitors/stats")
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    setStats(data.data);
+                }
+            })
+            .catch(err => console.error("Failed to fetch visitor stats:", err));
+    }, []);
+
     return (
         <footer className="bg-dark-box border-t shadow-lg border-dark-box  ">
             <div className="mx-auto w-full max-w-screen-xl">
@@ -105,9 +119,15 @@ function Footer() {
                     </div>
                 </div>
                 <div className="px-4 py-6 bg-dark-background md:flex md:items-center md:justify-between">
-                    <span className="text-sm text-gray-500 dark:text-gray-300 sm:text-center">
-                        © 2025 <Link to="/">CodeMentees</Link>
-                    </span>D
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                        <span className="text-sm text-gray-500 dark:text-gray-300 sm:text-center">
+                            © 2025 <Link to="/">CodeMentees</Link>
+                        </span>
+                        <div className="flex flex-col text-xs text-gray-400 text-center sm:text-left border-t sm:border-t-0 sm:border-l border-gray-700 pt-2 sm:pt-0 sm:pl-4">
+                            <span>Today's Visitors: {stats.todayVisitors}</span>
+                            <span>Total Visitors: {stats.totalVisitors}</span>
+                        </div>
+                    </div>
                     <div className="flex mt-4 sm:justify-center md:mt-0 space-x-5 rtl:space-x-reverse">
                         <a
                             href="#"

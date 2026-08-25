@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { useUserAPI } from "../api/userApi";
-import { FaUsers, FaUserPlus, FaUserSlash, FaArrowRight, FaEdit, FaChartLine } from "react-icons/fa";
+import { FaUsers, FaUserPlus, FaUserSlash, FaArrowRight, FaEdit, FaChartLine, FaBriefcase, FaBook, FaGlobe } from "react-icons/fa";
 import DeleteConfirmModal from "../Components/UI/DeleteConfirmModal";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-const dummyData = [
-  { name: 'Mon', users: 12 },
-  { name: 'Tue', users: 19 },
-  { name: 'Wed', users: 15 },
-  { name: 'Thu', users: 22 },
-  { name: 'Fri', users: 30 },
-  { name: 'Sat', users: 25 },
-  { name: 'Sun', users: 35 },
-];
-
 const DashboardOverview = () => {
-    const { fetchUsers, deleteUser } = useUserAPI();
+    const { fetchUsers, deleteUser, fetchGrowth } = useUserAPI();
+    const user = useSelector((state) => state.auth.user);
     const [stats, setStats] = useState({ totalUsers: 0, recentUsers: [] });
+    const [growthData, setGrowthData] = useState([]);
+    const [visitorStats, setVisitorStats] = useState({ todayVisitors: 0, totalVisitors: 0 });
     const [loading, setLoading] = useState(true);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [userToDelete, setUserToDelete] = useState(null);
@@ -35,6 +29,17 @@ const DashboardOverview = () => {
                 totalUsers: data.totalUsers || 0,
                 recentUsers: data.data || [],
             });
+
+            // Fetch user growth data
+            const growth = await fetchGrowth();
+            setGrowthData(growth || []);
+
+            // Fetch visitor stats
+            const visitorRes = await fetch("/api/visitors/stats");
+            const visitorData = await visitorRes.json();
+            if (visitorData.success) {
+                setVisitorStats(visitorData.data);
+            }
         } catch (error) {
             console.error("Error loading dashboard data:", error);
         } finally {
@@ -103,14 +108,43 @@ const DashboardOverview = () => {
                 <div className="stat-card">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "rgb(var(--dash-muted))" }}>Engagement</p>
-                            <h3 className="stat-number mt-1 text-2xl">+24%</h3>
+                            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "rgb(var(--dash-muted))" }}>Site Visitors (Today / Total)</p>
+                            <h3 className="stat-number mt-1 text-2xl">{visitorStats.todayVisitors} <span className="text-sm text-gray-500">/ {visitorStats.totalVisitors}</span></h3>
                         </div>
                         <div className="p-3 rounded-xl" style={{ background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.2)" }}>
-                            <FaChartLine size={22} style={{ color: "rgb(99,102,241)" }} />
+                            <FaGlobe size={22} style={{ color: "rgb(99,102,241)" }} />
                         </div>
                     </div>
-                    <p className="mt-5 text-sm" style={{ color: "rgb(var(--dash-muted))" }}>Active user sessions this week.</p>
+                    <p className="mt-5 text-sm" style={{ color: "rgb(var(--dash-muted))" }}>Track traffic across the site.</p>
+                </div>
+            </div>
+
+            {/* Quick Actions Grid */}
+            <div className="panel">
+                <h2 className="text-xl font-bold mb-6" style={{ color: "rgb(var(--dash-ink))" }}>Quick Actions</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {(user?.isAdmin || user?.isFullAccess) && (
+                        <Link to="/admin/posts" className="p-4 rounded-xl border hover:bg-gray-800 transition flex flex-col items-center justify-center text-center gap-3" style={{ borderColor: "rgba(var(--dash-border))", background: "rgba(255,255,255,0.02)" }}>
+                            <FaEdit size={24} style={{ color: "rgb(249,115,22)" }} />
+                            <span className="font-semibold text-white">Manage Blogs</span>
+                        </Link>
+                    )}
+                    {(user?.isAdmin || user?.isFullAccess) && (
+                        <Link to="/admin/jobs" className="p-4 rounded-xl border hover:bg-gray-800 transition flex flex-col items-center justify-center text-center gap-3" style={{ borderColor: "rgba(var(--dash-border))", background: "rgba(255,255,255,0.02)" }}>
+                            <FaBriefcase size={24} style={{ color: "rgb(34,197,94)" }} />
+                            <span className="font-semibold text-white">Manage Jobs</span>
+                        </Link>
+                    )}
+                    {(user?.isAdmin || user?.isFullAccess) && (
+                        <Link to="/admin/courses" className="p-4 rounded-xl border hover:bg-gray-800 transition flex flex-col items-center justify-center text-center gap-3" style={{ borderColor: "rgba(var(--dash-border))", background: "rgba(255,255,255,0.02)" }}>
+                            <FaBook size={24} style={{ color: "rgb(99,102,241)" }} />
+                            <span className="font-semibold text-white">Manage Courses</span>
+                        </Link>
+                    )}
+                    <Link to="/admin/users" className="p-4 rounded-xl border hover:bg-gray-800 transition flex flex-col items-center justify-center text-center gap-3" style={{ borderColor: "rgba(var(--dash-border))", background: "rgba(255,255,255,0.02)" }}>
+                        <FaUsers size={24} style={{ color: "rgb(234,179,8)" }} />
+                        <span className="font-semibold text-white">Manage Users</span>
+                    </Link>
                 </div>
             </div>
 
@@ -119,7 +153,7 @@ const DashboardOverview = () => {
                 <h2 className="text-xl font-bold mb-6" style={{ color: "rgb(var(--dash-ink))" }}>User Growth (7 Days)</h2>
                 <div className="h-72 w-full">
                     <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={dummyData}>
+                        <LineChart data={growthData}>
                             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
                             <XAxis dataKey="name" stroke="rgba(140,140,140,0.5)" tick={{fill: 'rgb(140,140,140)'}} axisLine={false} tickLine={false} />
                             <YAxis stroke="rgba(140,140,140,0.5)" tick={{fill: 'rgb(140,140,140)'}} axisLine={false} tickLine={false} />

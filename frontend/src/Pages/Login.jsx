@@ -30,14 +30,16 @@ function LoginPage() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    remember_me: false,
     credential: null,
     client_id: null,
   });
 
   const handleFormChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
@@ -158,6 +160,8 @@ function LoginPage() {
                     id="remember_me"
                     name="remember_me"
                     type="checkbox"
+                    checked={formData.remember_me}
+                    onChange={handleFormChange}
                     className="h-4 w-4 text-dark-btn border-gray-300 rounded"
                   />
                   <label

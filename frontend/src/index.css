@@ -374,7 +374,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ─── Blog / Article prose ────────────────────────────────────── */
 .article-content {
-  @apply prose prose-lg prose-pink max-w-none prose-headings:font-heading prose-img:rounded-xl prose-img:shadow-md prose-img:mx-auto prose-pre:bg-[#1a1b26] prose-pre:text-gray-200 prose-pre:p-6 prose-pre:rounded-xl prose-pre:border prose-pre:border-gray-800 prose-pre:shadow-lg text-gray-800 prose-p:my-3;
+  @apply prose prose-lg prose-pink prose-headings:font-heading prose-img:rounded-xl prose-img:shadow-md prose-img:mx-auto prose-pre:bg-[#1a1b26] prose-pre:text-gray-200 prose-pre:p-6 prose-pre:rounded-xl prose-pre:border prose-pre:border-gray-800 prose-pre:shadow-lg text-gray-800 prose-p:my-3;
+  max-width: none !important;
+  width: 100% !important;
 }
 .article-content a {
   @apply text-pink-600 hover:text-pink-700 underline decoration-pink-300 underline-offset-4 transition;

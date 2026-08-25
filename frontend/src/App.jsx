@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import RouteProgressBar from './Components/UI/RouteProgressBar';
 import Loading from './Components/Helpers/Loading';
@@ -144,6 +144,19 @@ const adminRoutes = [
 // Inner component so hooks can access Router context
 function AppInner() {
   useScrollReveal();
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('visited')) {
+      sessionStorage.setItem('visited', 'true');
+      fetch('/api/visitors/track', { method: 'POST' })
+        .catch(err => {
+            console.error('Failed to track visitor:', err);
+            // Optional: revert if it fails, though usually okay to keep it true
+            // sessionStorage.removeItem('visited');
+        });
+    }
+  }, []);
+
   return <ScrollToTop />;
 }
 
