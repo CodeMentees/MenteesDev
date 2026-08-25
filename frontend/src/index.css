@@ -378,11 +378,19 @@ h1, h2, h3, h4, h5, h6 {
   max-width: none !important;
   width: 100% !important;
 }
+.code-tab-content pre {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+}
 .article-content a {
   @apply text-pink-600 hover:text-pink-700 underline decoration-pink-300 underline-offset-4 transition;
 }
-.article-content code:not(pre code) {
-  @apply bg-gray-100 text-pink-600 px-1.5 py-0.5 rounded font-mono text-sm dark:bg-gray-800 dark:text-pink-400;
+.article-content code::before,
+.article-content code::after {
+  content: none !important;
 }
 
 /* ─── Misc ────────────────────────────────────────────────────── */

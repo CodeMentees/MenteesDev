@@ -204,6 +204,7 @@ function BlogPage() {
                   remarkPlugins={[remarkGfm]} 
                   rehypePlugins={[rehypeRaw, rehypeCodeTabs]}
                   components={{
+                    pre: ({children}) => <>{children}</>,
                     'code-tabs': ({node, children, ...props}) => {
                       const [activeTab, setActiveTab] = useState(0);
                       const langs = (props['data-languages'] || '').split(',');
@@ -229,7 +230,7 @@ function BlogPage() {
                               ))}
                             </div>
                           </div>
-                          <div>
+                          <div className="code-tab-content bg-[#1a1b26]">
                             {childArray[activeTab]}
                           </div>
                         </div>
@@ -311,7 +312,7 @@ function BlogPage() {
                           </div>
                         )
                       ) : (
-                        <code className={`${className || ''} bg-[#f6f8fa] text-gray-800 border border-gray-200 px-1.5 py-0.5 rounded-md font-mono text-sm break-words`.trim()} {...props}>
+                        <code className={`${className || ''} bg-gray-100 text-pink-600 dark:bg-gray-800 dark:text-pink-400 border border-gray-200 dark:border-gray-700 px-1.5 py-0.5 rounded-md font-mono text-sm break-words`.trim()} {...props}>
                           {children}
                         </code>
                       )
