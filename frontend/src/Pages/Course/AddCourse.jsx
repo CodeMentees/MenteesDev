@@ -2,14 +2,16 @@ import { initFlowbite } from "flowbite";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useCourse } from "../../api/courseApi";
-import { useCategoryAPI } from "../../api/categoryApi";
 import Toast from "../../Components/UI/Toast";
+import { BookOpen, Tag, DollarSign, List, Save, ArrowLeft, Image as ImageIcon } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 
 function AddCourse() {
   const { createCourse, fetchCourse, updateCourse } = useCourse();
   const { fetchCategories: getCourseCategories } = useCategoryAPI();
   const { id } = useParams();
+  const navigate = useNavigate();
   const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
   const [courseData, setCourseData] = useState({
     name: "",
@@ -89,110 +91,140 @@ function AddCourse() {
   };
 
   return (
-    <section className="p-6 max-w-3xl mx-auto">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: "rgb(var(--dash-bg))" }}>
       <Toast visible={toast.visible} message={toast.message} />
-      <div
-        className="rounded-2xl p-8"
-        style={{
-          background: "rgb(var(--dash-panel))",
-          border: "1px solid rgba(var(--dash-border))",
-        }}
-      >
-        <h2 className="mb-6 text-2xl font-bold" style={{ color: "rgb(var(--dash-ink))" }}>
-          {id ? "Update Course" : "Create a Course"}
-        </h2>
-        <form className="grid gap-4 sm:grid-cols-2">
-          <input
-            type="text"
-            name="name"
-            placeholder="Course Name"
-            value={courseData.name}
-            onChange={handleChange}
-            className="border rounded-lg p-2.5 w-full text-sm focus:ring-2 focus:outline-none"
-            style={{
-              background: "rgba(var(--dash-border), 0.3)",
-              borderColor: "rgba(var(--dash-border))",
-              color: "rgb(var(--dash-ink))",
-            }}
-          />
-          <div className="flex gap-2">
-            <input
-              type="text"
-              name="image"
-              placeholder="Image URL"
-              value={courseData.image}
-              onChange={handleChange}
-            className="flex-1 border rounded-lg p-2.5 text-sm focus:ring-2 focus:outline-none"
-            style={{
-              background: "rgba(var(--dash-border), 0.3)",
-              borderColor: "rgba(var(--dash-border))",
-              color: "rgb(var(--dash-ink))",
-            }}
-            />
-            <label className="cursor-pointer bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg flex items-center justify-center transition-colors font-semibold">
-              Upload
-              <input
-                type="file"
-                className="hidden"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-            </label>
-          </div>
-          <input
-            type="number"
-            name="price"
-            placeholder="Price"
-            value={courseData.price}
-            onChange={handleChange}
-            className="border rounded-lg p-2.5 w-full text-sm focus:ring-2 focus:outline-none"
-            style={{
-              background: "rgba(var(--dash-border), 0.3)",
-              borderColor: "rgba(var(--dash-border))",
-              color: "rgb(var(--dash-ink))",
-            }}
-          />
-          <textarea
-            name="description"
-            placeholder="Description"
-            value={courseData.description}
-            onChange={handleChange}
-            className="border rounded-lg p-2.5 w-full text-sm focus:ring-2 focus:outline-none"
-            style={{
-              background: "rgba(var(--dash-border), 0.3)",
-              borderColor: "rgba(var(--dash-border))",
-              color: "rgb(var(--dash-ink))",
-            }}
-          ></textarea>
-          <select
-            name="category"
-            value={courseData.category}
-            onChange={handleChange}
-            className="border rounded-lg p-2.5 w-full text-sm focus:ring-2 focus:outline-none"
-            style={{
-              background: "rgba(var(--dash-border), 0.3)",
-              borderColor: "rgba(var(--dash-border))",
-              color: "rgb(var(--dash-ink))",
-            }}
-          >
-            <option value="">Select Category</option>
-            {categories.map((category) => (
-              <option key={category._id} value={category._id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </form>
+      <div className="max-w-2xl mx-auto">
         <button
-          type="button"
-          onClick={handleSubmit}
-          className="mt-5 px-6 py-3 font-bold rounded-xl text-white w-full transition-all hover:opacity-90"
-          style={{ background: "linear-gradient(135deg, #7c3aed, #a78bfa)" }}
+          onClick={() => navigate("/admin/courses")}
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-8 transition-colors"
         >
-          {id ? "Update Course" : "Create Course"}
+          <ArrowLeft size={20} />
+          Back to list
         </button>
+
+        <div className="rounded-3xl shadow-xl overflow-hidden border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
+          <div className="px-8 py-6" style={{ backgroundColor: "rgb(var(--accent))" }}>
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <BookOpen />
+              {id ? "Update Course" : "Create a Course"}
+            </h2>
+          </div>
+
+          <form className="p-8 space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                <BookOpen size={16} className="text-blue-500" />
+                Course Name *
+              </label>
+              <input
+                type="text"
+                name="name"
+                required
+                placeholder="e.g. Full Stack Web Development"
+                value={courseData.name}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                <ImageIcon size={16} className="text-purple-500" />
+                Course Cover Image
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  name="image"
+                  placeholder="Image URL"
+                  value={courseData.image}
+                  onChange={handleChange}
+                  className="flex-1 px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
+                />
+                <label className="cursor-pointer bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-3 rounded-xl flex items-center justify-center transition-colors font-semibold shadow-lg">
+                  Upload File
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                  <DollarSign size={16} className="text-green-500" />
+                  Price (Optional)
+                </label>
+                <input
+                  type="number"
+                  name="price"
+                  placeholder="e.g. 4999"
+                  value={courseData.price}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                  <List size={16} className="text-orange-500" />
+                  Category
+                </label>
+                <select
+                  name="category"
+                  value={courseData.category}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                <Tag size={16} className="text-pink-500" />
+                Description
+              </label>
+              <textarea
+                name="description"
+                placeholder="Write a brief overview of the course..."
+                value={courseData.description}
+                onChange={handleChange}
+                rows={4}
+                className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
+              ></textarea>
+            </div>
+
+            <div className="pt-4">
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="w-full flex items-center justify-center gap-2 py-4 text-white font-bold rounded-xl transition-all transform active:scale-95 shadow-lg"
+                style={{ backgroundColor: "rgb(var(--accent))" }}
+              >
+                <Save size={20} />
+                {id ? "Update Course" : "Create Course"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
 

@@ -328,6 +328,14 @@ const getCoursesByCategory = asyncHandler(async (req, res) => {
 
   res.json({ data: courses, message: "Courses fetched successfully" });
 });
+const bulkDeleteCourses = asyncHandler(async (req, res) => {
+  const { ids } = req.body;
+  if (!ids || !Array.isArray(ids)) {
+    return res.status(400).json({ message: "Invalid payload" });
+  }
+  await Course.deleteMany({ _id: { $in: ids } });
+  res.json({ message: "Courses deleted successfully" });
+});
 
 export {
   createCourse,
@@ -337,4 +345,5 @@ export {
   deleteCourse,
   updateCourseDetails,
   getCoursesByCategory,
+  bulkDeleteCourses,
 };

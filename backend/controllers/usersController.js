@@ -173,4 +173,30 @@ const getUsers = asyncHandler(async (req, res) => {
   }
 });
 
-export { createUser, deleteUser, getUser, getUsers, updateUser };
+/**
+ * @swagger
+ * /api/users/bulk:
+ *   post:
+ *     summary: Bulk delete users
+ *     tags: [Users]
+ */
+const bulkDeleteUsers = asyncHandler(async (req, res) => {
+  const { ids } = req.body;
+  if (!ids || !Array.isArray(ids)) {
+    return res.status(400).json({ message: "No user IDs provided" });
+  }
+
+  // Prevent deleting self if admin
+  if (req.userId && ids.includes(req.userId.toString())) {
+    return res.status(400).json({ message: "Action denied: You cannot delete your own admin account in bulk." });
+  }
+
+  try {
+    await User.deleteMany({ _id: { $in: ids } });
+    res.status(200).json({ success: true, message: "Users deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message || "Failed to delete users" });
+  }
+});
+
+export { createUser, deleteUser, getUser, getUsers, updateUser, bulkDeleteUsers };

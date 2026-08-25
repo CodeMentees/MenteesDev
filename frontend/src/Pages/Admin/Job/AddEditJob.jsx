@@ -12,6 +12,7 @@ function AddEditJob() {
     role: "",
     company: "",
     applyLink: "",
+    expirationDate: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -32,6 +33,7 @@ function AddEditJob() {
           role: job.role,
           company: job.company || "",
           applyLink: job.applyLink,
+          expirationDate: job.expirationDate ? new Date(job.expirationDate).toISOString().split('T')[0] : "",
         });
       }
     } catch (err) {
@@ -138,6 +140,22 @@ function AddEditJob() {
                 value={formData.applyLink}
                 onChange={handleChange}
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                <span className="text-red-500">⏳</span>
+                Expiration Date (Optional)
+              </label>
+              <input
+                type="date"
+                name="expirationDate"
+                className="w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                style={{ backgroundColor: "rgb(var(--surface-2))", borderColor: "rgba(var(--dash-border))", color: "white" }}
+                value={formData.expirationDate}
+                onChange={handleChange}
+              />
+              <p className="text-xs text-gray-500 mt-2">After this date, the job post will be hidden automatically.</p>
             </div>
 
             <div className="pt-4">

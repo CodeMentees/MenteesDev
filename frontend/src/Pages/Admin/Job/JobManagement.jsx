@@ -58,7 +58,20 @@ function JobManagement() {
     }
   };
 
-  const headers = ["role", "company", "applyLink", "postedAt"];
+  const handleBulkDelete = async (ids) => {
+    try {
+      await axios.post("/api/jobs/bulk", { ids });
+      setToast({ visible: true, message: "Jobs deleted successfully!", type: "success" });
+      setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 3000);
+      fetchData();
+    } catch (error) {
+      console.error("Error bulk deleting jobs:", error);
+      setToast({ visible: true, message: error.response?.data?.message || "Failed to delete jobs.", type: "error" });
+      setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 3000);
+    }
+  };
+
+  const headers = ["role", "company", "applyLink", "createdAt"];
   const actions = [
     { label: "Edit", handler: (id) => navigate(`/admin/jobs/edit/${id}`) },
     { label: "Delete", handler: handleDelete },
@@ -85,7 +98,14 @@ function JobManagement() {
               </Link>
             </div>
             <div className="overflow-x-auto">
-              <ReusableTable headers={headers} data={jobs} actions={actions} isLoading={isLoading} />
+              <ReusableTable 
+                headers={headers} 
+                data={jobs} 
+                actions={actions} 
+                isLoading={isLoading} 
+                enableMultiSelect={true}
+                onBulkDelete={handleBulkDelete}
+              />
         </div>
       </div>
       <DeleteConfirmModal

@@ -5,6 +5,7 @@ import {
   deleteJob,
   getJobs,
   updateJob,
+  bulkDeleteJobs,
 } from "../controllers/jobController.js";
 
 const router = Router();
@@ -14,6 +15,7 @@ router.get("/", getJobs);
 
 // Protected admin routes
 router.use(isAdmin);
+router.post("/bulk", bulkDeleteJobs);
 router.post("/", createJob);
 router.put("/:id", updateJob);
 router.delete("/:id", deleteJob);

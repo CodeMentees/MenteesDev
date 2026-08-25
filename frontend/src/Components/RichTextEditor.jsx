@@ -39,6 +39,16 @@ const RichTextEditor = ({ value, onChange, placeholder }) => {
           border-right: 1px solid rgba(var(--dash-border));
           border-left: 1px solid rgba(var(--dash-border));
         }
+        .CodeMirror-cursor {
+          border-left-color: white !important;
+        }
+        .editor-preview, .editor-preview-side {
+          background-color: rgb(var(--surface-2)) !important;
+          color: rgb(var(--text-primary)) !important;
+        }
+        .editor-preview h1, .editor-preview h2, .editor-preview h3, .editor-preview-side h1, .editor-preview-side h2, .editor-preview-side h3 {
+          color: white !important;
+        }
       `}</style>
       <SimpleMDE
         value={value}

@@ -34,7 +34,7 @@ import asyncHandler from "express-async-handler";
  *         description: Job created successfully
  */
 const createJob = asyncHandler(async (req, res) => {
-  const { role, applyLink, company } = req.body;
+  const { role, applyLink, company, expirationDate } = req.body;
 
   if (!role || !applyLink) {
     res.status(400);
@@ -45,6 +45,7 @@ const createJob = asyncHandler(async (req, res) => {
     role,
     applyLink,
     company: company || "Hiring Partner",
+    expirationDate: expirationDate || null,
   });
 
   const createdJob = await job.save();
@@ -67,7 +68,18 @@ const createJob = asyncHandler(async (req, res) => {
  */
 const getJobs = asyncHandler(async (req, res) => {
   try {
-    const jobs = await JobOpportunity.find().sort({ postedAt: -1 });
+    let query = {};
+    if (req.query.admin !== 'true') {
+      query = {
+        $or: [
+          { expirationDate: { $gt: new Date() } },
+          { expirationDate: null },
+          { expirationDate: { $exists: false } }
+        ]
+      };
+    }
+    
+    const jobs = await JobOpportunity.find(query).sort({ postedAt: -1 });
 
     res.json({
       data: jobs,
@@ -105,6 +117,9 @@ const updateJob = asyncHandler(async (req, res) => {
   job.role = req.body.role || job.role;
   job.applyLink = req.body.applyLink || job.applyLink;
   job.company = req.body.company || job.company;
+  if (req.body.expirationDate !== undefined) {
+    job.expirationDate = req.body.expirationDate;
+  }
 
   const updatedJob = await job.save();
   res.json({ data: updatedJob, message: "Job opportunity updated successfully" });
@@ -140,9 +155,34 @@ const deleteJob = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/jobs/bulk:
+ *   post:
+ *     summary: Bulk delete job opportunities
+ *     tags: [Job]
+ *     responses:
+ *       200:
+ *         description: Jobs deleted successfully
+ */
+const bulkDeleteJobs = asyncHandler(async (req, res) => {
+  const { ids } = req.body;
+  if (!ids || !Array.isArray(ids)) {
+    return res.status(400).json({ success: false, message: "No job IDs provided" });
+  }
+
+  try {
+    await JobOpportunity.deleteMany({ _id: { $in: ids } });
+    res.status(200).json({ success: true, message: "Jobs deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message || "Failed to delete jobs" });
+  }
+});
+
 export {
   createJob,
   getJobs,
   updateJob,
   deleteJob,
+  bulkDeleteJobs,
 };

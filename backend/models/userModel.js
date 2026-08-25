@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   phoneNumber: String,
   verificationOTP: String,
   otpExpiresAt: Date,
-});
+}, { timestamps: true });
 
 userSchema.pre("save", async function (next) {
   try {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { FaCopy, FaCheck } from "react-icons/fa";
 import { Helmet } from "react-helmet-async";
 import { useSelector } from "react-redux";
 import { FaHeart, FaRegHeart, FaTrash } from "react-icons/fa";
@@ -8,12 +9,12 @@ import SEOHead from "../seo/SEOHead";
 import { useDynamicSEO } from "../seo/useDynamicSEO";
 import BlogGridFour from "../Components/Blog/BlogGridFour";
 import Loading from "../Components/Helpers/Loading";
-import BlogSidebar from "../Components/Blog/BlogSidebar";
 import Toast from "../Components/UI/Toast";
-import BlogPromoSidebar from "../Components/Blog/BlogPromoSidebar";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 function BlogPage() {
   const { fetchBlog, likeBlog, addComment, deleteComment } = useBlog();
@@ -121,42 +122,101 @@ function BlogPage() {
 
       <SEOHead path="/blogs/:id" {...seoProps} />
 
-      <div className="w-full max-w-[1920px] mx-auto flex flex-col lg:flex-row gap-8 xl:gap-24 px-6 xl:px-12 py-12">
-        {/* ✅ Left Sidebar: Categories Navigation */}
-        <div className="w-full lg:w-64 shrink-0">
-          <BlogSidebar
-            selectedCategory={blog.categories && blog.categories[0]}
-            onCategoryClick={handleCategoryClick}
-          />
-        </div>
-
-        {/* ✅ Main Content Area */}
-        <div className="flex-1 w-full flex justify-center lg:justify-start">
-          <div className="w-full max-w-3xl">
-            <article className="w-full relative">
+      <div className="w-full max-w-4xl mx-auto px-6 xl:px-12 py-12">
+        <article className="w-full relative">
               <header className="mb-12">
-                <div className="flex items-center space-x-2 text-sm text-pink-500 font-semibold mb-4 uppercase tracking-wider">
+                <div className="flex items-center space-x-2 text-sm text-pink-600 font-bold mb-6 uppercase tracking-widest bg-pink-50 w-fit px-4 py-1.5 rounded-full">
                   <span>Article</span>
                   <span>•</span>
-                  <span className="text-gray-500">{new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                  <span className="text-gray-600">{new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                 </div>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 leading-[1.1] mb-8">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 leading-[1.1] mb-8 tracking-tight">
                   {blog.title}
                 </h1>
 
                 {blog.image && (
-                  <div className="rounded-3xl overflow-hidden shadow-2xl mb-12 aspect-[21/9]">
+                  <div className="rounded-[2rem] overflow-hidden shadow-2xl mb-14 aspect-[21/9] border border-gray-100">
                     <img
                       src={blog.image}
                       alt={blog.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
                     />
                   </div>
                 )}
               </header>
 
-              <section className="prose prose-lg max-w-none article-content">
-                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+              <section className="prose max-w-none article-content prose-headings:text-gray-900 prose-headings:font-bold prose-h1:text-4xl prose-h2:text-3xl prose-a:text-pink-600 hover:prose-a:text-pink-500 prose-img:rounded-2xl prose-img:shadow-xl prose-blockquote:border-l-4 prose-blockquote:border-pink-500 prose-blockquote:bg-pink-50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-xl prose-blockquote:text-gray-700 prose-blockquote:italic">
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]} 
+                  rehypePlugins={[rehypeRaw]}
+                  components={{
+                    code({node, inline, className, children, ...props}) {
+                      const match = /language-(\w+)/.exec(className || '');
+                      const extractText = (child) => {
+                        if (typeof child === 'string') return child;
+                        if (Array.isArray(child)) return child.map(extractText).join('');
+                        if (child && child.type === 'br') return '\n';
+                        if (child && child.props && child.props.children) return extractText(child.props.children);
+                        return '';
+                      };
+                      const rawText = extractText(children);
+                      // Remove trailing newlines and strip accidental literal backticks 
+                      let codeText = rawText.replace(/\n$/, '').replace(/^`+|`+$/g, '').trim();
+                      const isBlock = match || codeText.includes('\n') || codeText.length > 60;
+                      
+                      const CopyButton = ({ text }) => {
+                        const [copied, setCopied] = useState(false);
+                        const handleCopy = () => {
+                          navigator.clipboard.writeText(text);
+                          setCopied(true);
+                          setTimeout(() => setCopied(false), 2000);
+                        };
+                        return (
+                          <button
+                            onClick={handleCopy}
+                            className="p-1.5 hover:bg-gray-700 text-gray-400 hover:text-white rounded-md transition-colors flex items-center gap-1.5 text-xs font-medium"
+                            title="Copy code"
+                          >
+                            {copied ? <FaCheck className="text-green-400" /> : <FaCopy />}
+                            {copied ? 'Copied' : 'Copy'}
+                          </button>
+                        );
+                      };
+
+                      return (!inline && isBlock) ? (
+                        <div className="rounded-xl overflow-hidden shadow-lg my-8 border border-gray-200/20 bg-[#1e1e1e]">
+                          <div className="flex items-center justify-between px-4 py-2 bg-[#2d2d2d] border-b border-[#3d3d3d]">
+                            <div className="flex items-center gap-2">
+                              <div className="flex gap-1.5">
+                                <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
+                                <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
+                                <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
+                              </div>
+                              {match && (
+                                <span className="ml-2 text-xs font-mono font-medium text-gray-400 uppercase tracking-wider">
+                                  {match[1]}
+                                </span>
+                              )}
+                            </div>
+                            <CopyButton text={codeText} />
+                          </div>
+                          <SyntaxHighlighter
+                            children={codeText}
+                            style={vscDarkPlus}
+                            language={match ? match[1] : 'text'}
+                            PreTag="div"
+                            className="!m-0 !p-5 !bg-[#1e1e1e] text-sm overflow-x-auto"
+                            {...props}
+                          />
+                        </div>
+                      ) : (
+                        <code className={`${className || ''} bg-[#f6f8fa] text-gray-800 border border-gray-200 px-1.5 py-0.5 rounded-md font-mono text-sm break-words`.trim()} {...props}>
+                          {children}
+                        </code>
+                      )
+                    }
+                  }}
+                >
                   {blog.content}
                 </ReactMarkdown>
               </section>
@@ -239,23 +299,16 @@ function BlogPage() {
             </article>
 
             <footer className="mt-16 pt-12 border-t border-gray-100">
-              <div className="bg-gray-50 rounded-3xl p-8 flex flex-col md:flex-row items-center gap-6">
-                <div className="w-20 h-20 bg-pink-500 rounded-2xl shrink-0 flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-pink-100">
+              <div className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-[2rem] p-8 flex flex-col md:flex-row items-center gap-8 border border-pink-100">
+                <div className="w-24 h-24 bg-gradient-to-br from-pink-500 to-purple-600 rounded-3xl shrink-0 flex items-center justify-center text-white text-3xl font-bold shadow-xl shadow-pink-200">
                   CM
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-1">Codementees Team</h4>
-                  <p className="text-gray-600 text-sm leading-relaxed">Expert developers sharing insights and guides to help you master modern technology and engineering practices.</p>
+                  <h4 className="text-2xl font-bold text-gray-900 mb-2">Codementees Team</h4>
+                  <p className="text-gray-600 text-lg leading-relaxed">Expert developers sharing insights and guides to help you master modern technology and engineering practices. Join our community to learn more.</p>
                 </div>
               </div>
             </footer>
-          </div>
-        </div>
-
-        {/* ✅ Right Sidebar: Promo */}
-        <div className="hidden xl:block shrink-0 sticky top-28 self-start">
-          <BlogPromoSidebar />
-        </div>
       </div>
 
       <div className="bg-gray-50 py-24 mt-24">

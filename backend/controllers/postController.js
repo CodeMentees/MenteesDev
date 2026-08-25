@@ -295,4 +295,13 @@ const deleteComment = asyncHandler(async (req, res) => {
   }
 });
 
-export { createPost, deletePost, getPost, getPosts, updatePost, likePost, addComment, deleteComment };
+const bulkDeletePosts = asyncHandler(async (req, res) => {
+  const { ids } = req.body;
+  if (!ids || !Array.isArray(ids)) {
+    return res.status(400).json({ message: "Invalid payload" });
+  }
+  await Post.deleteMany({ _id: { $in: ids } });
+  res.json({ message: "Posts deleted successfully" });
+});
+
+export { createPost, deletePost, getPost, getPosts, updatePost, likePost, addComment, deleteComment, bulkDeletePosts };

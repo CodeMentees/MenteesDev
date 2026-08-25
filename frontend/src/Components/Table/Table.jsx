@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { SkeletonGrid } from "../UI/LoadingSpinner";
+import { Edit, Trash2 } from "lucide-react";
+import DeleteConfirmModal from "../UI/DeleteConfirmModal";
 
-const ReusableTable = ({ headers, data, actions, isLoading, onAccessToggle, enableExport = true }) => {
+const ReusableTable = ({ headers, data, actions, isLoading, onAccessToggle, enableExport = true, enableMultiSelect = false, onBulkDelete }) => {
     const [activeDropdown, setActiveDropdown] = useState(null);
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [isBulkConfirmOpen, setIsBulkConfirmOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     useEffect(() => {
@@ -56,10 +60,35 @@ const ReusableTable = ({ headers, data, actions, isLoading, onAccessToggle, enab
         document.body.removeChild(link);
     };
 
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            setSelectedRows(data.map(item => item._id || item.id));
+        } else {
+            setSelectedRows([]);
+        }
+    };
+
+    const handleSelectRow = (id) => {
+        setSelectedRows(prev => 
+            prev.includes(id) ? prev.filter(r => r !== id) : [...prev, id]
+        );
+    };
+
     return (
         <div className="w-full flex flex-col">
-            {enableExport && (
-                <div className="flex justify-end mb-3 pr-2">
+            <div className="flex justify-between items-center mb-3 pr-2 pl-2">
+                <div>
+                    {enableMultiSelect && selectedRows.length > 0 && onBulkDelete && (
+                        <button 
+                            onClick={() => setIsBulkConfirmOpen(true)}
+                            className="text-xs font-semibold px-4 py-2 rounded-lg flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white transition-all shadow-sm"
+                        >
+                            <Trash2 size={14} />
+                            Delete Selected ({selectedRows.length})
+                        </button>
+                    )}
+                </div>
+                {enableExport && (
                     <button 
                         onClick={handleExportCSV}
                         className="text-xs font-semibold px-4 py-2 rounded-lg flex items-center gap-2 transition-all shadow-sm"
@@ -70,11 +99,23 @@ const ReusableTable = ({ headers, data, actions, isLoading, onAccessToggle, enab
                         </svg>
                         Export CSV
                     </button>
-                </div>
-            )}
+                )}
+            </div>
         <table className="w-full text-sm text-left text-gray-400">
             <thead className="text-xs uppercase" style={{ backgroundColor: "rgba(var(--dash-border))", color: "rgb(var(--text-secondary))" }}>
                 <tr>
+                    {enableMultiSelect && (
+                        <th scope="col" className="p-4 w-4">
+                            <div className="flex items-center">
+                                <input 
+                                    type="checkbox" 
+                                    className="w-4 h-4 rounded focus:ring-purple-600 ring-offset-gray-800 bg-gray-700 border-gray-600"
+                                    onChange={handleSelectAll}
+                                    checked={data.length > 0 && selectedRows.length === data.length}
+                                />
+                            </div>
+                        </th>
+                    )}
                     {headers.map((header, index) => (
                         <th key={index} scope="col" className="px-4 py-3">
                             {header}
@@ -84,8 +125,22 @@ const ReusableTable = ({ headers, data, actions, isLoading, onAccessToggle, enab
                 </tr>
             </thead>
             <tbody>
-                {data.map((item, rowIndex) => (
+                {data.map((item, rowIndex) => {
+                    const rowId = item._id || item.id;
+                    return (
                     <tr key={rowIndex} className="border-b" style={{ borderColor: "rgba(var(--dash-border))" }}>
+                        {enableMultiSelect && (
+                            <td className="p-4 w-4">
+                                <div className="flex items-center">
+                                    <input 
+                                        type="checkbox" 
+                                        className="w-4 h-4 rounded focus:ring-purple-600 ring-offset-gray-800 bg-gray-700 border-gray-600"
+                                        checked={selectedRows.includes(rowId)}
+                                        onChange={() => handleSelectRow(rowId)}
+                                    />
+                                </div>
+                            </td>
+                        )}
                         {headers.map((header, colIndex) => {
                             // Find the key in item that matches header (case-insensitive)
                             const itemKey = Object.keys(item).find(key => key.toLowerCase() === header.toLowerCase()) || header;
@@ -132,51 +187,43 @@ const ReusableTable = ({ headers, data, actions, isLoading, onAccessToggle, enab
                             );
                         })}
                         {actions && (
-                            <td className="px-4 py-3 text-right relative">
-                                <button
-                                    onClick={() => setActiveDropdown(activeDropdown === rowIndex ? null : rowIndex)}
-                                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100 transition-colors"
-                                    type="button"
-                                >
-                                    <svg
-                                        className="w-5 h-5"
-                                        aria-hidden="true"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-                                    </svg>
-                                </button>
-                                {activeDropdown === rowIndex && (
-                                    <div
-                                        ref={dropdownRef}
-                                        className="absolute right-10 top-8 z-10 w-44 rounded divide-y shadow-lg"
-                                        style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))", borderWidth: "1px" }}
-                                    >
-                                        <ul className="py-1 text-sm text-gray-300">
-                                            {actions.map((action, index) => (
-                                                <li key={index}>
-                                                    <button
-                                                        onClick={() => {
-                                                            action.handler(item._id || item.id);
-                                                            setActiveDropdown(null);
-                                                        }}
-                                                        className={`block py-2 px-4 w-full text-left hover:text-white transition-colors ${action.label.toLowerCase() === 'delete' ? 'text-red-500 hover:text-red-600' : 'text-gray-700 dark:text-gray-200'}`}
-                                                    >
-                                                        {action.label}
-                                                    </button>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                )}
+                            <td className="px-4 py-3 text-right">
+                                <div className="flex justify-end gap-3 items-center">
+                                    {actions.map((action, index) => {
+                                        const isDelete = action.label.toLowerCase() === 'delete';
+                                        return (
+                                            <button
+                                                key={index}
+                                                onClick={() => action.handler(item._id || item.id)}
+                                                className={`p-1.5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 ${
+                                                    isDelete 
+                                                    ? 'text-red-400 hover:text-white hover:bg-red-600 focus:ring-red-500' 
+                                                    : 'text-blue-400 hover:text-white hover:bg-blue-600 focus:ring-blue-500'
+                                                }`}
+                                                title={action.label}
+                                            >
+                                                {isDelete ? <Trash2 size={16} /> : (action.label.toLowerCase() === 'edit' ? <Edit size={16} /> : action.label)}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
                             </td>
                         )}
                     </tr>
-                ))}
+                    );
+                })}
             </tbody>
         </table>
+        <DeleteConfirmModal
+            isOpen={isBulkConfirmOpen}
+            onClose={() => setIsBulkConfirmOpen(false)}
+            onConfirm={() => {
+                onBulkDelete(selectedRows);
+                setIsBulkConfirmOpen(false);
+                setSelectedRows([]);
+            }}
+            itemName={`${selectedRows.length} selected items`}
+        />
         </div>
     );
 };

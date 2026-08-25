@@ -177,7 +177,10 @@ function Blog() {
                           layoutId={`blog-page-content-${post._id}`}
                           className="text-gray-500 text-sm mb-4 line-clamp-2 leading-relaxed"
                         >
-                          <div dangerouslySetInnerHTML={{ __html: post.content.substring(0, 120) + "..." }} />
+                          {(() => {
+                             const text = post.content?.replace(/<[^>]+>/g, ' ').replace(/[#_*~`>]/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/!\[([^\]]*)\]\([^)]+\)/g, '').replace(/\s+/g, ' ').trim() || "";
+                             return text.substring(0, 150) + "...";
+                          })()}
                         </motion.div>
 
                         <div>
@@ -250,8 +253,11 @@ function Blog() {
                       <motion.h3 layoutId={`blog-page-title-${post._id}`} className="text-2xl md:text-3xl font-black text-gray-900 mb-4 leading-tight">
                         {post.title}
                       </motion.h3>
-                      <motion.div layoutId={`blog-page-content-${post._id}`} className="text-sm md:text-base leading-relaxed mb-6 overflow-y-auto pr-2 text-gray-600">
-                        <div dangerouslySetInnerHTML={{ __html: post.content?.substring(0, 300) + "..." }} />
+                      <motion.div layoutId={`blog-page-content-${post._id}`} className="text-sm md:text-base leading-relaxed mb-6 overflow-y-auto pr-2 text-gray-600 line-clamp-4">
+                        {(() => {
+                           const text = post.content?.replace(/<[^>]+>/g, ' ').replace(/[#_*~`>]/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/!\[([^\]]*)\]\([^)]+\)/g, '').replace(/\s+/g, ' ').trim() || "";
+                           return text.substring(0, 300) + "...";
+                        })()}
                       </motion.div>
                       
                       <div className="mt-auto pt-4 flex gap-3 border-t border-gray-100">

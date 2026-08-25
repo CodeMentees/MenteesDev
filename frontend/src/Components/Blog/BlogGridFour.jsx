@@ -71,7 +71,7 @@ function BlogGridFour() {
           <p className="text-center" style={{ color: "rgba(255,255,255,0.35)" }}>No blogs available.</p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {latestBlogs.blogs.map((latest) => (
+            {latestBlogs.blogs.slice(0, 4).map((latest) => (
               <motion.article
                 key={latest._id}
                 layoutId={`blog-card-${latest._id}`}
@@ -113,7 +113,10 @@ function BlogGridFour() {
                     {latest.title}
                   </motion.h3>
                   <motion.p layoutId={`blog-content-${latest._id}`} className="text-xs mb-4 line-clamp-2 flex-grow leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>
-                    {latest.content?.replace(/<[^>]+>/g, "").substring(0, 100)}...
+                    {(() => {
+                       const text = latest.content?.replace(/<[^>]+>/g, ' ').replace(/[#_*~`>]/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/!\[([^\]]*)\]\([^)]+\)/g, '').replace(/\s+/g, ' ').trim() || "";
+                       return text.substring(0, 100) + "...";
+                    })()}
                   </motion.p>
                   
                   <span
@@ -144,7 +147,7 @@ function BlogGridFour() {
                 />
                 
                 <div className="relative w-full max-w-xl max-h-[85vh] flex justify-center pointer-events-none">
-                  {latestBlogs.blogs.filter(b => b._id === selectedId).map(blog => (
+                  {latestBlogs.blogs.filter(b => b._id === selectedId).slice(0, 4).map(blog => (
                     <motion.div
                       key={blog._id}
                       layoutId={`blog-card-${blog._id}`}
@@ -173,8 +176,11 @@ function BlogGridFour() {
                         <motion.h3 layoutId={`blog-title-${blog._id}`} className="text-xl md:text-2xl font-black text-white mb-3 leading-tight">
                           {blog.title}
                         </motion.h3>
-                        <motion.div layoutId={`blog-content-${blog._id}`} className="text-sm leading-relaxed mb-6 overflow-y-auto pr-2" style={{ color: "rgba(255,255,255,0.7)" }}>
-                          <div dangerouslySetInnerHTML={{ __html: blog.content?.substring(0, 300) + "..." }} />
+                        <motion.div layoutId={`blog-content-${blog._id}`} className="text-sm leading-relaxed mb-6 overflow-y-auto pr-2 line-clamp-4" style={{ color: "rgba(255,255,255,0.7)" }}>
+                          {(() => {
+                             const text = blog.content?.replace(/<[^>]+>/g, ' ').replace(/[#_*~`>]/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/!\[([^\]]*)\]\([^)]+\)/g, '').replace(/\s+/g, ' ').trim() || "";
+                             return text.substring(0, 300) + "...";
+                          })()}
                         </motion.div>
                         
                         <div className="mt-auto pt-4 flex gap-3 border-t border-white/5">

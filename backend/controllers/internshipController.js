@@ -152,3 +152,23 @@ export const deleteInternship = asyncHandler(async (req, res) => {
     res.status(500).json({ message: error.message || "Failed to delete application." });
   }
 });
+/**
+ * @swagger
+ * /api/internships/bulk:
+ *   post:
+ *     summary: Bulk delete internship applications
+ *     tags: [Internships]
+ */
+export const bulkDeleteInternships = asyncHandler(async (req, res) => {
+  const { ids } = req.body;
+  if (!ids || !Array.isArray(ids)) {
+    return res.status(400).json({ message: "No application IDs provided" });
+  }
+
+  try {
+    await InternshipApplication.deleteMany({ _id: { $in: ids } });
+    res.json({ success: true, message: "Applications deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message || "Failed to delete applications" });
+  }
+});
