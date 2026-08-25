@@ -20,7 +20,7 @@ frontend/.npm-cache/
 frontend/.npmrc
 backend/.npm-cache/
 backend/.npmrc
-
+todo.md 
 # Logs
 logs
 *.log

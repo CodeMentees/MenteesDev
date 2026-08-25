@@ -302,6 +302,53 @@ h1, h2, h3, h4, h5, h6 {
   animation: fadeInUp 0.4s ease both;
 }
 
+/* ─── Scroll-reveal (JS sets .revealed when in viewport) ──────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.revealed { opacity: 1; transform: translateY(0); }
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.reveal-scale.revealed { opacity: 1; transform: scale(1); }
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-28px);
+  transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-left.revealed { opacity: 1; transform: translateX(0); }
+.reveal-right {
+  opacity: 0;
+  transform: translateX(28px);
+  transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-right.revealed { opacity: 1; transform: translateX(0); }
+
+/* Staggered children reveal */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-stagger.revealed > * { opacity: 1; transform: translateY(0); }
+.reveal-stagger.revealed > *:nth-child(1) { transition-delay: 0ms; }
+.reveal-stagger.revealed > *:nth-child(2) { transition-delay: 80ms; }
+.reveal-stagger.revealed > *:nth-child(3) { transition-delay: 160ms; }
+.reveal-stagger.revealed > *:nth-child(4) { transition-delay: 240ms; }
+.reveal-stagger.revealed > *:nth-child(5) { transition-delay: 320ms; }
+.reveal-stagger.revealed > *:nth-child(6) { transition-delay: 400ms; }
+
+/* ─── Page-level fade-in on mount ─────────────────────────────── */
+@keyframes pageMount {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-mount { animation: pageMount 0.35s ease both; }
+
 /* ─── Scrollbar ───────────────────────────────────────────────── */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -327,13 +374,23 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ─── Blog / Article prose ────────────────────────────────────── */
 .article-content {
-  @apply prose prose-lg prose-pink max-w-none prose-headings:font-heading prose-img:rounded-xl prose-img:shadow-md prose-img:mx-auto prose-pre:bg-[#1a1b26] prose-pre:text-gray-200 prose-pre:p-6 prose-pre:rounded-xl prose-pre:border prose-pre:border-gray-800 prose-pre:shadow-lg text-gray-800 prose-p:my-3;
+  @apply prose prose-lg prose-pink prose-headings:font-heading prose-img:rounded-xl prose-img:shadow-md prose-img:mx-auto prose-pre:bg-[#1a1b26] prose-pre:text-gray-200 prose-pre:p-6 prose-pre:rounded-xl prose-pre:border prose-pre:border-gray-800 prose-pre:shadow-lg text-gray-800 prose-p:my-3;
+  max-width: none !important;
+  width: 100% !important;
+}
+.code-tab-content pre {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
 }
 .article-content a {
   @apply text-pink-600 hover:text-pink-700 underline decoration-pink-300 underline-offset-4 transition;
 }
-.article-content code:not(pre code) {
-  @apply bg-gray-100 text-pink-600 px-1.5 py-0.5 rounded font-mono text-sm dark:bg-gray-800 dark:text-pink-400;
+.article-content code::before,
+.article-content code::after {
+  content: none !important;
 }
 
 /* ─── Misc ────────────────────────────────────────────────────── */

@@ -18,7 +18,10 @@ const jobOpportunitySchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
+  expirationDate: {
+    type: Date,
+  },
+}, { timestamps: true });
 
 jobOpportunitySchema.index({ role: 1 });
 

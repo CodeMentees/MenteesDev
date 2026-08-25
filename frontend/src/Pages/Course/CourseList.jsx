@@ -39,6 +39,35 @@ function CourseList() {
         }
     };
 
+    const handleBulkDelete = async (ids) => {
+        try {
+            // we don't have axios imported directly here, so we'll use fetch
+            const authState = localStorage.getItem('persist:root');
+            let token = "";
+            if (authState) {
+                const parsed = JSON.parse(authState);
+                if (parsed.auth) {
+                    const authData = JSON.parse(parsed.auth);
+                    token = authData.user?.token || "";
+                }
+            }
+            const res = await fetch("/api/courses/bulk", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ ids })
+            });
+            if (!res.ok) throw new Error("Failed to delete");
+            setToast(true);
+            setTimeout(() => setToast(false), 3000);
+            await fetchData();
+        } catch (err) {
+            alert("Failed to bulk delete: " + err.message);
+        }
+    };
+
     const headers = ['name', 'price', 'image'];
     const actions = [
         { label: 'Manage', handler: (id) => navigate(`/admin/courses/${id}/manage`) },
@@ -94,6 +123,8 @@ function CourseList() {
                         data={Courses}
                         actions={actions}
                         isLoading={isLoading}
+                        enableMultiSelect={true}
+                        onBulkDelete={handleBulkDelete}
                     />
                 </div>
 

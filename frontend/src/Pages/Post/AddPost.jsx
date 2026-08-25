@@ -1,6 +1,7 @@
 import { initFlowbite } from "flowbite";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import RichTextEditor from "../../Components/RichTextEditor";
 import { useBlogCategory } from "../../api/blogCategoryApi";
 import { FaPlus } from "react-icons/fa";
@@ -9,6 +10,7 @@ function AddPost() {
   const { fetchBlogCategories } = useBlogCategory();
   const { id } = useParams(); // Get post ID from URL
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
 
   const [toast, setToast] = useState({
     visible: false,
@@ -89,7 +91,11 @@ function AddPost() {
     try {
       const response = await fetch(`/api/posts${isEditing ? `/${id}` : ""}`, {
         method: isEditing ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${user?.token}`
+        },
         body: JSON.stringify(postData),
       });
 
@@ -102,9 +108,10 @@ function AddPost() {
           navigate("/admin/posts");
         }, 2000);
       } else {
+        const errorData = await response.json();
         setToast({
           visible: true,
-          message: "Something went wrong!",
+          message: errorData.message || "Something went wrong!",
           type: "error",
         });
       }

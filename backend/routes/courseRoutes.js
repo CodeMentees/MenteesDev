@@ -8,7 +8,8 @@ import {
   getCourses,
   getCoursesByCategory,
   updateCourse,
-  updateCourseDetails
+  updateCourseDetails,
+  bulkDeleteCourses
 } from "../controllers/courseController.js"; // Import the correct controller
 import multer from "multer";
 import { storage } from "../config/cloudinaryConfig.js";
@@ -21,6 +22,7 @@ router.get("/:categoryId/category", getCoursesByCategory);
 router.get("/", getCourses);
 
 router.use(isAdmin)
+router.post("/bulk", bulkDeleteCourses);
 router.post("/", upload.single("image"), createCourse);
 router.put("/:id", upload.single("image"), updateCourse);
 router.put("/:id/details", updateCourseDetails);

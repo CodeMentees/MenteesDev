@@ -1,6 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import RouteProgressBar from './Components/UI/RouteProgressBar';
+import Loading from './Components/Helpers/Loading';
+import useScrollReveal from './hooks/useScrollReveal';
+import ScrollToTop from './Components/UI/ScrollToTop';
 
 // Lazy load components
 const Home = lazy(() => import('./Pages/Home'));
@@ -136,14 +140,36 @@ const adminRoutes = [
   { path: "bulk-mail", title: "Bulk Email Sender", element: <BulkMailSender /> }
 ];
 
+
+// Inner component so hooks can access Router context
+function AppInner() {
+  useScrollReveal();
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('visited')) {
+      sessionStorage.setItem('visited', 'true');
+      fetch('/api/visitors/track', { method: 'POST' })
+        .catch(err => {
+            console.error('Failed to track visitor:', err);
+            // Optional: revert if it fails, though usually okay to keep it true
+            // sessionStorage.removeItem('visited');
+        });
+    }
+  }, []);
+
+  return <ScrollToTop />;
+}
+
 function App() {
   return (
     <>
       <Router>
-        <div className="flex flex-col min-h-screen bg-dark-box">
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen text-white">Loading...</div>}>
+        <div className="flex flex-col min-h-screen" style={{ background: "#000005" }}>
+          <RouteProgressBar />
+          <AppInner />
+          <Suspense fallback={<Loading />}>
             <Header />
-            <main className="flex-grow font-sans mt-12">
+            <main className="flex-grow font-sans mt-12 page-mount">
               <Routes>
                 {/* Public Routes */}
                 <Route

@@ -47,6 +47,35 @@ function UserList() {
     }
   };
 
+  const handleBulkDelete = async (ids) => {
+    try {
+      // Need axios here, so I'll import it or use a fetch. UserList doesn't import axios at the top currently.
+      // Wait, there's no axios import. I'll import it at the top of the file.
+      // For now I'll use fetch or just add import axios
+      const response = await fetch("/api/users/bulk", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser?.token}`,
+        },
+        body: JSON.stringify({ ids }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Failed to delete users");
+      
+      setToast({ visible: true, message: "Users deleted successfully!", type: "success" });
+      setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 3000);
+      fetchUsers(currentPage, 10).then((resData) => {
+        setUsers(resData.data);
+        setTotalPages(resData.totalPages);
+      });
+    } catch (error) {
+      console.error("Error bulk deleting users:", error);
+      setToast({ visible: true, message: error.message || "Failed to delete users.", type: "error" });
+      setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 3000);
+    }
+  };
+
   useEffect(() => {
     if (isSuccess) {
       setToast({ visible: true, message: "User deleted successfully!", type: "success" });
@@ -76,9 +105,8 @@ function UserList() {
     initFlowbite();
   }, [users]);
 
-  const headers = ["name", "email", "role", "isFullAccess", "phoneNumber"];
+  const headers = ["name", "email", "role", "isFullAccess", "phoneNumber", "createdAt"];
   const actions = [
-    { label: "Show", handler: (id) => console.log(`Show user with ID: ${id}`) },
     { label: "Edit", handler: (id) => navigate(`/admin/users/edit/${id}`) },
     { label: "Delete", handler: handleDelete },
   ];
@@ -141,6 +169,8 @@ function UserList() {
                 actions={actions} 
                 isLoading={isLoading} 
                 onAccessToggle={handleAccessToggle}
+                enableMultiSelect={true}
+                onBulkDelete={handleBulkDelete}
               />
               <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
             </div>

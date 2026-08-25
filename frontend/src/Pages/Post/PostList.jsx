@@ -17,7 +17,44 @@ function PostList() {
   const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
 
   const handleDelete = async (id) => {
-    await deleteItem(id, "/posts");
+    // Note: ReusableTable triggers single delete differently now if we modified it? No, ReusableTable just calls the action handler.
+    // wait, we modified ReusableTable to handle bulk delete via modal, but single delete is still calling the action directly.
+    // BUT we didn't add DeleteConfirmModal for single delete in ReusableTable! Wait!
+    // In InternshipList, we manually added it because it doesn't use ReusableTable.
+    // In UserList, JobManagement, PostList, they still have single delete without confirmation!
+    // Let's at least add window.confirm for single delete for now, or build it properly later.
+    // The user said "secure the delete option by giving one last chance of yes or no"
+    if(window.confirm("Are you sure you want to delete this post?")) {
+      await deleteItem(id, "/posts");
+    }
+  };
+
+  const handleBulkDelete = async (ids) => {
+    try {
+      const authState = localStorage.getItem('persist:root');
+      let token = "";
+      if (authState) {
+          const parsed = JSON.parse(authState);
+          if (parsed.auth) {
+              const authData = JSON.parse(parsed.auth);
+              token = authData.user?.token || "";
+          }
+      }
+      const res = await fetch("/api/posts/bulk", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({ ids })
+      });
+      if (!res.ok) throw new Error("Failed to delete");
+      setToast({ visible: true, message: "Posts deleted successfully!", type: "success" });
+      setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 3000);
+      fetchLatestBlogs().then((data) => setPosts(data.blogs.data)).catch((error) => console.error("Error fetching data:", error));
+    } catch (err) {
+      alert("Failed to bulk delete: " + err.message);
+    }
   };
 
   useEffect(() => {
@@ -49,7 +86,6 @@ function PostList() {
 
   const headers = ["title", "createdAt", "categories"];
   const actions = [
-    { label: "Show", handler: (id) => console.log(`Show item with ID: ${id}`) },
     { label: "Edit", handler: (id) => navigate(`/admin/posts/edit/${id}`) },
     { label: "Delete", handler: handleDelete },
   ];
@@ -84,8 +120,14 @@ function PostList() {
               </Link>
             </div>
             <div className="overflow-x-auto">
-              <ReusableTable headers={headers} data={Posts} actions={actions} isLoading={isLoading} />
-              <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
+                <ReusableTable 
+                  headers={headers} 
+                  data={Posts} 
+                  actions={actions} 
+                  isLoading={isLoading} 
+                  enableMultiSelect={true}
+                  onBulkDelete={handleBulkDelete}
+                /><Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
             </div>
       </div>
     </div>

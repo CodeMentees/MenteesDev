@@ -12,6 +12,7 @@ const menuItems = [
     subItems: [
       { id: 22, title: "Blog List", link: "/admin/posts" },
       { id: 23, title: "Categories", link: "/admin/posts/categories" },
+      { id: 24, title: "Create Post", link: "/admin/posts/create" },
     ],
   },
   {

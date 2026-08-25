@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
-function CourseCard({ course }) {
+function CourseCard({ course, delay = 0 }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        el.style.opacity = "1";
+        el.style.transform = "translateY(0)";
+        observer.unobserve(el); // animate ONCE only — fixes repeat animation bug
+      }
+    }, { threshold: 0.1 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div
-      data-aos="fade-up"
+      ref={ref}
       className="flex flex-col h-full rounded-2xl p-5 group"
       style={{
         background: "rgb(var(--surface))",
         border: "1px solid rgba(var(--border))",
-        transition: "border-color 0.25s ease, transform 0.28s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease",
+        opacity: 0,
+        transform: "translateY(20px)",
+        transition: `opacity 0.5s ease ${delay}ms, transform 0.5s cubic-bezier(0.16,1,0.3,1) ${delay}ms, border-color 0.25s ease, box-shadow 0.25s ease`,
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = "rgba(249,115,22,0.3)";
