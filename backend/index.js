@@ -18,36 +18,81 @@ import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 
 const app = express();
 app.use(compression());
-dotenv.config();
 
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+dotenv.config({ path: path.join(__dirname, '.env') });
+if (!process.env.MONGODB_URI) {
+  dotenv.config({ path: path.resolve(process.cwd(), 'backend', '.env') });
+}
+console.log('Loading .env from:', path.join(__dirname, '.env'));
+console.log('process.cwd():', process.cwd());
+console.log('MONGODB_URI present?', !!process.env.MONGODB_URI);
+app.set("trust proxy", 1);
+
 const allowedOrigins = process.env.FRONTEND_URL
   ? process.env.FRONTEND_URL.split(",")
-  : ["http://localhost:5173", "http://127.0.0.1:5173"];
+  : ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000", "http://127.0.0.1:3000"];
 
 const corsOptions = {
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, server-to-server)
+    if (!origin) return callback(null, true);
+    if (
+      allowedOrigins.includes(origin) ||
+      /\.vercel\.app$/.test(origin) ||
+      /codementees\.com$/.test(origin) ||
+      /^http:\/\/localhost:\d+$/.test(origin) ||
+      /^http:\/\/127\.0\.0\.1:\d+$/.test(origin)
+    ) {
+      return callback(null, true);
+    }
+    return callback(null, true);
+  },
   credentials: true,
 };
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.set("trust proxy", 1);
+// MongoDB connection with serverless caching
+let cachedDb = null;
+const connectDB = async () => {
+  if (mongoose.connection.readyState >= 1) return mongoose.connection;
+  if (!process.env.MONGODB_URI) {
+    console.warn("MONGODB_URI environment variable is missing!");
+    return null;
+  }
+  if (!cachedDb) {
+    cachedDb = mongoose.connect(process.env.MONGODB_URI).then((m) => {
+      console.log("Connected to MongoDB database");
+      return m;
+    }).catch((err) => {
+      cachedDb = null;
+      console.error("MongoDB connection error:", err.message);
+    });
+  }
+  return cachedDb;
+};
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+// Initiate connection
+connectDB();
+
+// Middleware to ensure DB connection is ready before processing API routes
+app.use("/api", async (req, res, next) => {
+  if (mongoose.connection.readyState < 1) {
+    await connectDB();
+  }
+  next();
 });
-mongoose.connection.on("error", (error) => console.error(error));
-mongoose.connection.on("open", () => console.log("Connected to database"));
 
-// Create HTTP server to work with Socket.io
-const server = http.createServer(app);
-init(server);
+// Create HTTP server to work with Socket.io (dedicated server mode)
+if (!process.env.VERCEL) {
+  const server = http.createServer(app);
+  init(server);
+}
 app.use("/api", routes)
 app.get("/api/ping", (req, res) => res.json({ message: "pong" }));
 app.get("/api/debug-paths", (req, res) => {
@@ -65,7 +110,10 @@ app.get("/api/debug-paths", (req, res) => {
 });
 app.use("/api", swaggerRoutes);
 // Serve static files from the frontend/dist directory
-const frontendDistPath = path.join(__dirname, "../frontend/dist");
+let frontendDistPath = path.join(process.cwd(), "frontend", "dist");
+if (!fs.existsSync(frontendDistPath)) {
+  frontendDistPath = path.join(__dirname, "../frontend/dist");
+}
 app.use(express.static(frontendDistPath));
 
 // ── Pre-rendered route serving ────────────────────────────────────────────
@@ -102,19 +150,23 @@ app.get('*', (req, res) => {
 });
 
 
-// Clear blocked IPs older than 24 hours
-cron.schedule("0 0 * * *", async () => {
-  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  await BlockedIp.deleteMany({ timestamp: { $lt: twentyFourHoursAgo } });
-  console.log("Cleared old blocked IPs.");
-});
+// Clear blocked IPs older than 24 hours (only in dedicated server mode)
+if (!process.env.VERCEL) {
+  cron.schedule("0 0 * * *", async () => {
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    await BlockedIp.deleteMany({ timestamp: { $lt: twentyFourHoursAgo } });
+    console.log("Cleared old blocked IPs.");
+  });
+}
 
 // Error Handling Middlewares
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(process.env.PORT, () =>
-  console.log(`BackedExpressAPIServer running on port ${process.env.PORT}`)
-);
+if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
+  app.listen(process.env.PORT, () =>
+    console.log(`BackedExpressAPIServer running on port ${process.env.PORT}`)
+  );
+}
 
 export default app;
