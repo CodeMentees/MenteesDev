@@ -4,15 +4,15 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/backend/index.js?path=$1"
+      "destination": "/api/index.js?path=$1"
     },
     {
       "source": "/(.*)",
-      "destination": "/backend/index.js"
+      "destination": "/api/index.js"
     }
   ],
   "functions": {
-    "backend/index.js": {
+    "api/index.js": {
       "includeFiles": "frontend/dist/**"
     }
   }
