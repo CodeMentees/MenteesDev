@@ -30,6 +30,10 @@ const useCRUD = (endpoint) => {
 
       setData(response.data);
 
+      if (typeof response.data === 'string' && response.data.trim().startsWith('<')) {
+        throw new Error("Received HTML instead of JSON from API");
+      }
+
       // Handle pagination response if available
       if (response.data?.totalPages !== undefined) {
         setTotalPages(response.data.totalPages);

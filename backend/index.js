@@ -17,6 +17,18 @@ import swaggerRoutes from "./swagger.js";
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 
 const app = express();
+
+// Fix Vercel's URL rewrite behavior for single-file Express apps
+app.use((req, res, next) => {
+  // If vercel.json passed the original path via query parameter ?path=
+  if (req.query && req.query.path) {
+    req.url = req.originalUrl = `/api/${req.query.path}`;
+    // Optionally remove it from query so it doesn't pollute req.query
+    delete req.query.path;
+  }
+  next();
+});
+
 app.use(compression());
 
 import { fileURLToPath } from "url";
@@ -136,6 +148,11 @@ const PRE_RENDERED_ROUTES = [
 
 app.get('*', (req, res) => {
   const reqPath = req.path;
+
+  // Prevent serving SPA fallback (index.html) for missing assets or files with extensions
+  if (reqPath.startsWith('/api/') || reqPath.startsWith('/assets/') || reqPath.match(/\.[a-zA-Z0-9]+$/)) {
+    return res.status(404).send('Not Found');
+  }
 
   // Check if this exact path has a pre-rendered HTML file
   if (PRE_RENDERED_ROUTES.includes(reqPath)) {
