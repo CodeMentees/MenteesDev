@@ -50,6 +50,19 @@ const server = http.createServer(app);
 init(server);
 app.use("/api", routes)
 app.get("/api/ping", (req, res) => res.json({ message: "pong" }));
+app.get("/api/debug-paths", (req, res) => {
+  try {
+    res.json({
+      cwd: process.cwd(),
+      dirname: __dirname,
+      cwd_files: fs.readdirSync(process.cwd()),
+      dirname_files: fs.readdirSync(__dirname),
+      root_files: fs.readdirSync(path.join(__dirname, '..'))
+    });
+  } catch (err) {
+    res.json({ error: err.message, stack: err.stack });
+  }
+});
 app.use("/api", swaggerRoutes);
 // Serve static files from the frontend/dist directory
 const frontendDistPath = path.join(__dirname, "../frontend/dist");

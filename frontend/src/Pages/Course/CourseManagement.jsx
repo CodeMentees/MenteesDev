@@ -59,7 +59,7 @@ const SortableItem = ({ id, children, handleProps }) => {
   return (
     <div ref={setNodeRef} style={style} className="relative group">
       <div className="flex items-start gap-3 /50 border  p-4 rounded-xl mb-3 hover:border-blue-500/50 transition-all" style={{borderColor: "rgba(var(--dash-border))", backgroundColor: "rgb(var(--surface-2))"}}>
-        <div {...attributes} {...listeners} className="mt-1 cursor-grab active:cursor-grabbing  hover:" style={{color: "rgb(var(--text-secondary))", color: "rgb(var(--text-primary))"}}>
+        <div {...attributes} {...listeners} className="mt-1 cursor-grab active:cursor-grabbing  hover:" style={{color: "rgb(var(--text-primary))"}}>
           <GripVertical size={20} />
         </div>
         <div className="flex-1">
@@ -278,7 +278,7 @@ const CourseManagement = () => {
           <div className="flex items-center gap-4">
             <button 
               onClick={() => navigate("/admin/courses")}
-              className="p-2 hover: rounded-lg transition-colors  hover:" style={{color: "rgb(var(--text-secondary))", color: "rgb(var(--text-primary))", backgroundColor: "rgb(var(--surface-2))"}}>
+              className="p-2 hover: rounded-lg transition-colors hover:" style={{color: "rgb(var(--text-primary))", backgroundColor: "rgb(var(--surface-2))"}}>
               <ArrowLeft size={24} />
             </button>
             <div>
