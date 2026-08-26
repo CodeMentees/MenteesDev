@@ -1,12 +1,21 @@
 {
-  "buildCommand": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
-  "outputDirectory": "frontend/dist",
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/backend/index.js" }
-  ],
-  "functions": {
-    "backend/index.js": {
-      "includeFiles": "frontend/dist/**"
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/index.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "frontend/dist/**"
+        ]
+      }
     }
-  }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "backend/index.js"
+    }
+  ],
+  "buildCommand": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend"
 }
