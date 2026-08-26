@@ -52,8 +52,7 @@ app.use("/api", routes)
 app.get("/api/ping", (req, res) => res.json({ message: "pong" }));
 app.use("/api", swaggerRoutes);
 // Serve static files from the frontend/dist directory
-const frontendDistPath = path.join(process.cwd(), "frontend", "dist");
-
+const frontendDistPath = path.join(__dirname, "../frontend/dist");
 app.use(express.static(frontendDistPath));
 
 // ── Pre-rendered route serving ────────────────────────────────────────────
@@ -104,3 +103,5 @@ app.use(errorHandler);
 app.listen(process.env.PORT, () =>
   console.log(`BackedExpressAPIServer running on port ${process.env.PORT}`)
 );
+
+export default app;
