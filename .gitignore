@@ -45,3 +45,4 @@ yarn-debug.log*
 !frontend/vite.config.js
 !frontend/src/api/constants.js
 .vercel
+.env*
