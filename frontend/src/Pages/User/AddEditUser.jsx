@@ -195,7 +195,7 @@ function AddEditUser() {
               className="w-5 h-5 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2 cursor-pointer"
             />
             <label htmlFor="isFullAccess" className="block text-sm font-medium text-gray-300 cursor-pointer select-none">
-              Grant Full Access (Premium)
+              Grant Premium Course Access
             </label>
           </div>
 

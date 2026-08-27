@@ -123,19 +123,19 @@ const DashboardOverview = () => {
             <div className="panel">
                 <h2 className="text-xl font-bold mb-6" style={{ color: "rgb(var(--dash-ink))" }}>Quick Actions</h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {(user?.role === 'super admin' || user?.isAdmin || user?.isFullAccess) && (
+                    {(user?.role === 'super admin' || user?.isAdmin) && (
                         <Link to="/admin/posts" className="p-4 rounded-xl border hover:bg-gray-800 transition flex flex-col items-center justify-center text-center gap-3" style={{ borderColor: "rgba(var(--dash-border))", background: "rgba(255,255,255,0.02)" }}>
                             <FaEdit size={24} style={{ color: "rgb(249,115,22)" }} />
                             <span className="font-semibold text-white">Manage Blogs</span>
                         </Link>
                     )}
-                    {(user?.role === 'super admin' || user?.isAdmin || user?.isFullAccess) && (
+                    {(user?.role === 'super admin' || user?.isAdmin) && (
                         <Link to="/admin/jobs" className="p-4 rounded-xl border hover:bg-gray-800 transition flex flex-col items-center justify-center text-center gap-3" style={{ borderColor: "rgba(var(--dash-border))", background: "rgba(255,255,255,0.02)" }}>
                             <FaBriefcase size={24} style={{ color: "rgb(34,197,94)" }} />
                             <span className="font-semibold text-white">Manage Jobs</span>
                         </Link>
                     )}
-                    {(user?.role === 'super admin' || user?.isAdmin || user?.isFullAccess) && (
+                    {(user?.role === 'super admin' || user?.isAdmin) && (
                         <Link to="/admin/courses" className="p-4 rounded-xl border hover:bg-gray-800 transition flex flex-col items-center justify-center text-center gap-3" style={{ borderColor: "rgba(var(--dash-border))", background: "rgba(255,255,255,0.02)" }}>
                             <FaBook size={24} style={{ color: "rgb(99,102,241)" }} />
                             <span className="font-semibold text-white">Manage Courses</span>
