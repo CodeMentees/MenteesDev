@@ -2,12 +2,15 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-const AdminRoutes = ({ children }) => {
-  const user = useSelector((state) => state.auth.user);
-  let isAuthenticated = false;
-  if(user?.isAdmin){
-    isAuthenticated = user.isAdmin
+const AdminRoute = ({ children }) => {
+  const { user } = useSelector((state) => state.auth);
+  
+  const isAuthenticated = user && user.role !== 'student';
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
   }
-  return isAuthenticated ? children : <Navigate to="/unauth" />;
+  
+  return children;
 };
-export default AdminRoutes;
+export default AdminRoute;

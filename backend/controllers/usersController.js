@@ -43,11 +43,14 @@ const createUser = asyncHandler(async (req, res) => {
       return res.status(400).json({ message: "Email already registered" });
     }
 
-    // Hash password before saving
-    const hashedPassword = await hashPassword(password);
-
     // Create User
-    const user = new User({ name, email, password: hashedPassword });
+    const user = new User({ 
+      name, 
+      email, 
+      password, // pre-save hook will hash this
+      role: req.body.role || "student",
+      isFullAccess: req.body.isFullAccess || false,
+    });
     const createdUser = await user.save();
 
     // Return user data with token
@@ -127,10 +130,13 @@ const updateUser = asyncHandler(async (req, res) => {
     if (req.body.isFullAccess !== undefined) {
       user.isFullAccess = req.body.isFullAccess;
     }
+    if (req.body.role) {
+      user.role = req.body.role;
+    }
 
-    // Hash new password if provided
+    // Set new password if provided (pre-save hook will hash it)
     if (req.body.password) {
-      user.password = await hashPassword(req.body.password);
+      user.password = req.body.password;
     }
 
     const updatedUser = await user.save();
@@ -249,4 +255,32 @@ const getUserGrowth = asyncHandler(async (req, res) => {
   }
 });
 
-export { createUser, deleteUser, getUser, getUsers, updateUser, bulkDeleteUsers, getUserGrowth };
+/**
+ * @swagger
+ * /api/users/interns/reset-password:
+ *   post:
+ *     summary: Reset password for all interns (editors)
+ *     tags: [Users]
+ */
+const resetInternPasswords = asyncHandler(async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    if (!newPassword || newPassword.length < 6) {
+      return res.status(400).json({ message: "A valid new password (min 6 characters) is required." });
+    }
+
+    const hashedPassword = await hashPassword(newPassword);
+
+    // Update all users with role 'intern'
+    const result = await User.updateMany(
+      { role: "intern" },
+      { $set: { password: hashedPassword } }
+    );
+
+    res.json({ message: `Successfully reset password for ${result.modifiedCount} interns.` });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+export { createUser, deleteUser, getUser, getUsers, updateUser, bulkDeleteUsers, getUserGrowth, resetInternPasswords };

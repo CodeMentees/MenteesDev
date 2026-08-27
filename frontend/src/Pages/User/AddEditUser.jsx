@@ -21,6 +21,7 @@ function AddEditUser() {
     name: "",
     email: "",
     password: "",
+    role: "student",
     isFullAccess: false,
   });
   const [isEditing, setIsEditing] = useState(false);
@@ -42,6 +43,7 @@ function AddEditUser() {
         name: data.name || "",
         email: data.email || "",
         password: "", // Don't populate password
+        role: data.role || "student",
         isFullAccess: data.isFullAccess || false,
       });
     } catch (error) {
@@ -163,6 +165,24 @@ function AddEditUser() {
               className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500"
               placeholder="••••••••"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-2">
+              Role
+            </label>
+            <select
+              name="role"
+              value={userData.role}
+              onChange={handleChange}
+              className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="student">Student</option>
+              <option value="intern">Intern</option>
+              <option value="instructor">Instructor</option>
+              <option value="editor">Editor</option>
+              <option value="super admin">Super Admin</option>
+            </select>
           </div>
 
           <div className="flex items-center gap-3 mt-4">

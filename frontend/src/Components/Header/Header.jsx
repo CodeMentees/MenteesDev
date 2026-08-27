@@ -92,7 +92,7 @@ function Header() {
 
             {/* Desktop auth buttons */}
             <div className="hidden lg:flex items-center gap-3">
-              {user?.isAdmin && (
+              {user && user.role !== "student" && (
                 <Link
                   to="/admin"
                   className="px-4 py-2 rounded-full text-sm font-semibold transition text-white"
@@ -132,7 +132,7 @@ function Header() {
 
             {/* Mobile burger */}
             <div className="lg:hidden flex items-center gap-3">
-              {user?.isAdmin && (
+              {user && user.role !== "student" && (
                 <Link
                   to="/admin"
                   className="px-3 py-1.5 rounded-full text-sm font-semibold text-white"

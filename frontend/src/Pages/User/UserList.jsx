@@ -101,6 +101,36 @@ function UserList() {
     fetchData();
   }, [currentPage]);
 
+  const handleResetInternPasswords = async () => {
+    const newPassword = window.prompt("Enter the new default password for all interns (min 6 characters):");
+    if (!newPassword) return; // User cancelled or entered empty string
+    if (newPassword.length < 6) {
+      alert("Password must be at least 6 characters long.");
+      return;
+    }
+
+    if (!window.confirm("Are you sure you want to reset all interns passwords? This will invalidate their current passwords.")) return;
+    try {
+      const response = await fetch("/api/users/interns/reset-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser?.token}`,
+        },
+        body: JSON.stringify({ newPassword }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Failed to reset passwords");
+      
+      setToast({ visible: true, message: data.message, type: "success" });
+      setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 3000);
+    } catch (error) {
+      console.error("Error resetting passwords:", error);
+      setToast({ visible: true, message: error.message || "Failed to reset passwords.", type: "error" });
+      setTimeout(() => setToast({ visible: false, message: "", type: "success" }), 3000);
+    }
+  };
+
   useEffect(() => {
     initFlowbite();
   }, [users]);
@@ -142,25 +172,35 @@ function UserList() {
       )}
       <div className="relative shadow-lg sm:rounded-2xl overflow-hidden border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
             <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-              <Link
-                to={"/admin/users/create"}
-                className="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
-              >
-                <svg
-                  className="h-3.5 w-3.5 mr-2"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
+              <div className="flex gap-2">
+                {currentUser?.role === 'super admin' && (
+                  <button
+                    onClick={handleResetInternPasswords}
+                    className="flex items-center justify-center text-white bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 transition-colors"
+                  >
+                    Reset Interns Passwords
+                  </button>
+                )}
+                <Link
+                  to={"/admin/users/create"}
+                  className="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
                 >
-                  <path
-                    clipRule="evenodd"
-                    fillRule="evenodd"
-                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                  />
-                </svg>
-                Add User
-              </Link>
+                  <svg
+                    className="h-3.5 w-3.5 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path
+                      clipRule="evenodd"
+                      fillRule="evenodd"
+                      d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                    />
+                  </svg>
+                  Add User
+                </Link>
+              </div>
             </div>
             <div className="overflow-x-auto">
               <ReusableTable 
