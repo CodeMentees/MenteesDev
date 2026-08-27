@@ -35,7 +35,6 @@ router.use("/queries", queryRoutes);
 router.use("/groups", groupRoutes);
 router.use("/messages", messageRoutes);
 router.use("/events", eventRoutes);
-router.use("/events", eventRoutes);
 router.use("/test", testRoutes);
 router.use("/internships", internshipRoutes);
 router.use("/bulk-mail", bulkMailRoutes);

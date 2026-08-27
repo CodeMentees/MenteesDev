@@ -1,7 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cron from "node-cron";
@@ -59,13 +58,13 @@ const corsOptions = {
     ) {
       return callback(null, true);
     }
-    return callback(null, true);
+    return callback(new Error("Origin is not allowed by CORS"));
   },
   credentials: true,
 };
 
 app.use(cors(corsOptions));
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cookieParser());
 // MongoDB connection with serverless caching
 let cachedDb = null;
@@ -99,8 +98,9 @@ app.use("/api", async (req, res, next) => {
 });
 
 // Create HTTP server to work with Socket.io (dedicated server mode)
+let server;
 if (!process.env.VERCEL) {
-  const server = http.createServer(app);
+  server = http.createServer(app);
   init(server);
 }
 app.use("/api", routes)
@@ -167,7 +167,7 @@ app.use(notFound);
 app.use(errorHandler);
 
 if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
-  app.listen(process.env.PORT, () =>
+  server.listen(process.env.PORT, () =>
     console.log(`BackedExpressAPIServer running on port ${process.env.PORT}`)
   );
 }
