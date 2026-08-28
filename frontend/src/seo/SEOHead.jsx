@@ -58,6 +58,7 @@ export default function SEOHead({
   const keywords    = keywordsOverride ?? config.keywords    ?? '';
   const ogImage     = ogImageOverride  ?? config.ogImage     ?? DEFAULT_OG_IMAGE;
   const noindex     = noindexOverride  ?? config.noindex     ?? false;
+  const jsonLd      = jsonLdOverride   ?? config.jsonLd;
   const robots      = noindex ? 'noindex, nofollow' : 'index, follow';
 
   // Build canonical — prefer explicit override, then derive from path
@@ -100,10 +101,10 @@ export default function SEOHead({
       <meta name="twitter:image"       content={ogImageAbsolute} />
 
       {/* ── JSON-LD Structured Data ───────────────── */}
-      {jsonLdOverride && (
+      {jsonLd && (
         <script type="application/ld+json">
           {JSON.stringify(
-            Array.isArray(jsonLdOverride) ? jsonLdOverride : [jsonLdOverride],
+            Array.isArray(jsonLd) ? jsonLd : [jsonLd],
             null,
             2
           )}

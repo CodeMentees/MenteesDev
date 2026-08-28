@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "../seo/SEOHead";
 import CourseCard from "../Components/Card/CourseCard";
 import { SkeletonGrid } from "../Components/UI/LoadingSpinner";
 import { useCourse } from "../api/courseApi";
@@ -52,22 +52,21 @@ function AllCourse() {
       className="min-h-screen pt-24 pb-20"
       style={{ background: "rgb(var(--bg))" }}
     >
-      <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "ItemList",
-            "name": activeTabData?.name ? `${activeTabData.name} Courses | CodeMentees` : "All Courses | CodeMentees",
-            "description": activeTabData?.description || "Explore mentor-led courses in Web Development, DSA, and Interview Preparation at CodeMentees.",
-            "url": "https://codementees.com/courses",
-            "provider": {
-              "@type": "Organization",
-              "name": "CodeMentees",
-              "url": "https://codementees.com"
-            }
-          })}
-        </script>
-      </Helmet>
+      <SEOHead
+        path="/courses"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "name": activeTabData?.name ? `${activeTabData.name} Courses | CodeMentees` : "All Courses | CodeMentees",
+          "description": activeTabData?.description || "Explore mentor-led courses in Web Development, DSA, and Interview Preparation at CodeMentees.",
+          "url": "https://codementees.com/courses",
+          "provider": {
+            "@type": "Organization",
+            "name": "CodeMentees",
+            "url": "https://codementees.com"
+          }
+        }}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 

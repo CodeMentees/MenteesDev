@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import React, { lazy, Suspense, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
 import RouteProgressBar from './Components/UI/RouteProgressBar';
 import Loading from './Components/Helpers/Loading';
 import useScrollReveal from './hooks/useScrollReveal';
@@ -60,48 +59,14 @@ const InternshipList = lazy(() => import('./Pages/Admin/Interns/InternshipList')
 const BulkMailSender = lazy(() => import('./Pages/Admin/BulkMail/BulkMailSender'));
 
 // HelmetWrapper component to handle SEO meta tags
-const HelmetWrapper = ({
-  title,
-  description,
-  keywords,
-  canonical,
-  ogImage = "/images/home.jpg",
-  noindex = false,
-  nofollow = false,
-  children
-}) => {
-  return (
-    <>
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        {keywords && <meta name="keywords" content={keywords} />}
-        <link rel="canonical" href={`https://codementees.com${canonical}`} />
+import SEOHead from './seo/SEOHead';
 
-        {noindex || nofollow ? (
-          <meta name="robots" content={`${noindex ? 'noindex' : ''}${nofollow ? ',nofollow' : ''}`} />
-        ) : (
-          <meta name="robots" content="index, follow" />
-        )}
-
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={`https://codementees.com${canonical}`} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:image" content={`https://codementees.com${ogImage}`} />
-
-        {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={`https://codementees.com${canonical}`} />
-        <meta property="twitter:title" content={title} />
-        <meta property="twitter:description" content={description} />
-        <meta property="twitter:image" content={`https://codementees.com${ogImage}`} />
-      </Helmet>
-      {children}
-    </>
-  );
-};
+const SEOHeadWrapper = ({ path, noindex, title, children }) => (
+  <>
+    <SEOHead path={path} noindex={noindex} title={title} />
+    {children}
+  </>
+);
 
 // Admin routes configuration
 const adminRoutes = [
@@ -175,229 +140,151 @@ function App() {
                 <Route
                   path="/"
                   element={
-                    <HelmetWrapper
-                      title="Learn to Code. Get Job-Ready. Work From Anywhere. | CodeMentees"
-                      description="Live 1:1 mentorship in Web Development, DSA & Interview Prep — from engineers at JPMorgan and Freecharge. Join 500+ developers already learning."
-                      keywords="coding mentorship, 1:1 mentorship, web development, DSA, interview prep, job ready, remote coding, JavaScript, React"
-                      canonical="/"
-                    >
+                    <SEOHeadWrapper path="/" noindex={false}>
                       <Home />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path="/register"
                   element={
-                    <HelmetWrapper
-                      title="Register | Start Your Coding Journey with CodeMentees"
-                      description="Create an account at CodeMentees to access expert-led courses in AI/ML, Data Science, and DSA. Join our community of learners today."
-                      keywords="register, join codementees, learning platform, coding courses"
-                      canonical="/register"
-                    >
+                    <SEOHeadWrapper path="/register" noindex={false}>
                       <RegisterPage />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path="/summer-internships"
                   element={
-                    <HelmetWrapper
-                      title="Summer Training & Internships | CodeMentees"
-                      description="Apply for our Summer Training and Internship program. Choose from 12+ tech stacks including AI, Data Science, MERN, and more!"
-                      keywords="summer training, internship, MERN stack internship, AI internship, CodeMentees internship"
-                      canonical="/summer-internships"
-                    >
+                    <SEOHeadWrapper path="/summer-internships" noindex={false}>
                       <SummerInternship />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path="/verify-otp"
                   element={
-                    <HelmetWrapper
-                      title="Verify Account | CodeMentees"
-                      description="Enter the 6-digit code to verify your CodeMentees account"
-                      canonical="/verify-otp"
-                      noindex={true}
-                    >
+                    <SEOHeadWrapper path="/verify-otp" noindex={true}>
                       <OTPVerification />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path="/login"
                   element={
-                    <HelmetWrapper
-                      title="Login | CodeMentees"
-                      description="Login to your account to continue learning"
-                      canonical="/login"
-                    >
+                    <SEOHeadWrapper path="/login" noindex={false}>
                       <LoginPage />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />\n\n                <Route
                   path="/forgot-password"
                   element={
-                    <HelmetWrapper
-                      title="Forgot Password | CodeMentees"
-                      description="Reset your CodeMentees account password securely"
-                      canonical="/forgot-password"
-                      noindex={true}
-                    >
+                    <SEOHeadWrapper path="/forgot-password" noindex={true}>
                       <ForgotPassword />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path="/courses"
                   element={
-                    <HelmetWrapper
-                      title="All Courses | Coding, AI/ML, DSA & Tech Certification"
-                      description="Explore our wide range of technical courses including AI/ML, Data Science, DSA, and Java/Python Programming. Get certified and prepare for your dream job."
-                      keywords="AI/ML courses, Data Science classes, DSA course, Java Programming, Python Programming, Tech Certifications"
-                      canonical="/courses"
-                    >
+                    <SEOHeadWrapper path="/courses" noindex={false}>
                       <AllCourse />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path="/courses/:courseId"
                   element={
-                    <HelmetWrapper
-                      title="Course Details | Learn with Expert Mentors | CodeMentees"
-                      description="Explore this mentor-led course at CodeMentees. Build real, hireable skills with 1:1 guidance from industry engineers."
-                      canonical="/courses"
-                    >
+                    <SEOHeadWrapper path="/courses" noindex={false}>
                       <CourseDetails />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path="/live"
                   element={
-                    <HelmetWrapper
-                      title="Live Courses | Interactive Classes | CodeMentees"
-                      description="Join our live interactive coding classes. Expert-led sessions with real-time doubt clearing and certificate."
-                      keywords="live coding classes, interactive courses, live DSA, live AI/ML"
-                      canonical="/live"
-                    >
+                    <SEOHeadWrapper path="/live" noindex={false}>
                       <LivePage />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path="/live/:id"
                   element={
-                    <HelmetWrapper
-                      title="Live Course Details | CodeMentees"
-                      description="View live course content and join sessions."
-                      canonical="/live/:id"
-                    >
+                    <SEOHeadWrapper path="/live/:id" noindex={false}>
                       <LiveCourseDetails />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path='/about'
                   element={
-                    <HelmetWrapper
-                      title="About Us | CodeMentees"
-                      description="Learn about our mission, vision, and team of coding experts"
-                      canonical="/about"
-                    >
+                    <SEOHeadWrapper path="/about" noindex={false}>
                       <About />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path="/unauthorized"
                   element={
-                    <HelmetWrapper
-                      title="Unauthorized | CodeMentees"
-                      description="You don't have permission to access this page"
-                      canonical="/unauthorized"
-                      noindex={true}
-                    >
+                    <SEOHeadWrapper path="/unauthorized" noindex={true}>
                       <Unauth />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path="/contact"
                   element={
-                    <HelmetWrapper
-                      title="Contact Us | CodeMentees"
-                      description="Get in touch with our team for questions and support"
-                      canonical="/contact"
-                    >
+                    <SEOHeadWrapper path="/contact" noindex={false}>
                       <Contact />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path='/faq'
                   element={
-                    <HelmetWrapper
-                      title="FAQ | CodeMentees"
-                      description="Frequently asked questions about our platform and courses"
-                      canonical="/faq"
-                    >
+                    <SEOHeadWrapper path="/faq" noindex={false}>
                       <FAQ />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path="/school-coding"
                   element={
-                    <HelmetWrapper
-                      title="School Coding | K-12 Computer Science Curriculum"
-                      description="Complete coding curriculum for schools. Teach kids Python, Scratch, and Computer Science fundamentals with CodeMentees' global standards."
-                      keywords="School Coding, K-12 Coding, Kids Coding, Coding for Schools"
-                      canonical="/school-coding"
-                    >
+                    <SEOHeadWrapper path="/school-coding" noindex={false}>
                       <SchoolCoding />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path="/placement-support"
                   element={
-                    <HelmetWrapper
-                      title="Placement Support | Live Job Opportunities | CodeMentees"
-                      description="Access live job opportunities and placement support from CodeMentees. Hand-picked roles for our students."
-                      keywords="placement support, job opportunities, tech jobs, internships"
-                      canonical="/placement-support"
-                    >
+                    <SEOHeadWrapper path="/placement-support" noindex={false}>
                       <PlacementSupport />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path="/school-coding/catalog"
                   element={
-                    <HelmetWrapper
-                      title="Curriculum Catalog | CodeMentees"
-                      description="Explore our full school coding curriculum."
-                      canonical="/school-coding/catalog"
-                    >
+                    <SEOHeadWrapper path="/school-coding/catalog" noindex={false}>
                       <CurriculumCatalog />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
@@ -405,13 +292,9 @@ function App() {
                   path="/school-courses/edit/:id"
                   element={
                     <AdminRoutes>
-                      <HelmetWrapper
-                        title="Edit School Course | CodeMentees"
-                        description="Edit school course details"
-                        noindex={true}
-                      >
+                      <SEOHeadWrapper noindex={true} title="Edit School Course | CodeMentees">
                         <AddEditSchoolCourse />
-                      </HelmetWrapper>
+                      </SEOHeadWrapper>
                     </AdminRoutes>
                   }
                 />
@@ -419,26 +302,18 @@ function App() {
                 <Route
                   path="/blogs"
                   element={
-                    <HelmetWrapper
-                      title="Blog | CodeMentees"
-                      description="Read our latest articles and insights about coding and technology"
-                      canonical="/blogs"
-                    >
+                    <SEOHeadWrapper path="/blogs" noindex={false}>
                       <Blog />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
                 <Route
                   path="/blogs/:id"
                   element={
-                    <HelmetWrapper
-                      title="Blog Post | CodeMentees"
-                      description="Read the latest coding guides, DSA tips, and web development articles from the CodeMentees mentor community."
-                      canonical="/blogs"
-                    >
+                    <SEOHeadWrapper path="/blogs" noindex={false}>
                       <BlogPage />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
 
@@ -447,14 +322,9 @@ function App() {
                   path="/admin"
                   element={
                     <AdminRoutes>
-                      <HelmetWrapper
-                        title="Admin Dashboard | CodeMentees"
-                        description="Admin dashboard for managing content"
-                        noindex={true}
-                        nofollow={true}
-                      >
+                      <SEOHeadWrapper noindex={true} title="Admin Dashboard | CodeMentees">
                         <DashboardLayout />
-                      </HelmetWrapper>
+                      </SEOHeadWrapper>
                     </AdminRoutes>
                   }
                 >
@@ -463,13 +333,9 @@ function App() {
                       key={route.path}
                       path={route.path}
                       element={
-                        <HelmetWrapper
-                          title={`${route.title} | Admin`}
-                          noindex={true}
-                          nofollow={true}
-                        >
+                        <SEOHeadWrapper noindex={true} title={`${route.title} | CodeMentees`}>
                           {route.element}
-                        </HelmetWrapper>
+                        </SEOHeadWrapper>
                       }
                     />
                   ))}
@@ -478,13 +344,9 @@ function App() {
                 <Route
                   path="*"
                   element={
-                    <HelmetWrapper
-                      title="Page Not Found | CodeMentees"
-                      description="The page you're looking for doesn't exist"
-                      noindex={true}
-                    >
+                    <SEOHeadWrapper noindex={true} title="Page Not Found | CodeMentees">
                       <NotFound />
-                    </HelmetWrapper>
+                    </SEOHeadWrapper>
                   }
                 />
               </Routes>

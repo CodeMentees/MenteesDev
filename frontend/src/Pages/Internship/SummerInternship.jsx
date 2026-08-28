@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -182,10 +181,6 @@ function SummerInternship() {
 
   return (
     <div className="bg-[#0B0F19] min-h-screen text-gray-100 overflow-hidden relative selection:bg-purple-500/30">
-      <Helmet>
-        <title>Summer Training & Internships - CodeMentees</title>
-        <meta name="description" content="Apply for our Summer Training and Internship program. Choose from 12+ tech stacks including AI, Data Science, MERN, and more!" />
-      </Helmet>
 
       {/* Decorative background blurs */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-purple-600/20 blur-[120px] rounded-full pointer-events-none opacity-50" />

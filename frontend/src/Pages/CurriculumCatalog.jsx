@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Helmet } from 'react-helmet-async';
 import { FaFilter, FaSearch, FaArrowRight, FaClock, FaLayerGroup, FaLanguage, FaTimes, FaPlus, FaEdit, FaTrash, FaChevronDown } from 'react-icons/fa';
 import axios from 'axios';
 import { useSchoolCourseAPI } from '../api/schoolCourseApi';
@@ -93,10 +92,6 @@ const CurriculumCatalog = () => {
 
     return (
         <div className="min-h-screen bg-[#050810] text-white pt-24 pb-20">
-            <Helmet>
-                <title>Curriculum Catalog | CodeMentees</title>
-                <meta name="description" content="Explore our comprehensive school coding curriculum catalog." />
-            </Helmet>
 
             <Toast message={isToast.message} type={isToast.type} visible={isToast.visible} />
 

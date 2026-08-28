@@ -1,5 +1,4 @@
 import React from "react";
-import { Helmet } from "react-helmet-async";
 import { FaCode, FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -8,10 +7,6 @@ const SchoolCoding = () => {
 
     return (
         <div className="bg-dark-background min-h-screen text-white pt-[22px] pb-12 font-sans relative">
-            <Helmet>
-                <title>School Coding Curriculum | CodeMentees</title>
-                <meta name="description" content="Explore our comprehensive K-12 computer science curriculum designed for schools and districts." />
-            </Helmet>
 
             {/* AI Animated Banner - Cinematic Entry */}
             <style>

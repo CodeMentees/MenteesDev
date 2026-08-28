@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 import Toast from "../Components/UI/Toast";
 
 const STEPS = {
@@ -128,9 +127,6 @@ function ForgotPassword() {
 
     return (
         <div className="min-h-screen bg-[#0C172C] flex items-center justify-center py-12 px-4">
-            <Helmet>
-                <title>Forgot Password | CodeMentees</title>
-            </Helmet>
 
             <Toast visible={toast.visible} message={toast.message} type={toast.type} />
 

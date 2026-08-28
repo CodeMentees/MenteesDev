@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "../seo/SEOHead";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
@@ -74,10 +74,11 @@ function Blog() {
     <div className="bg-white min-h-screen py-16">
       <BlogAuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
       {/* Helmet for SEO logic remains same... */}
-      <Helmet>
-        <title>{category ? `${category} Blogs` : "Latest Blog Posts"} | Codementees</title>
-        <meta name="description" content="Read our latest articles and insights about coding and technology" />
-      </Helmet>
+      <SEOHead
+        path="/blogs"
+        title={`${category ? `${category} Blogs` : "Latest Blog Posts"} | Codementees`}
+        description="Read our latest articles and insights about coding and technology"
+      />
 
       <div className="w-full max-w-[1920px] mx-auto px-6 xl:px-12">
         {/* Header Section */}

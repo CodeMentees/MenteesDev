@@ -1,10 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import htmlPerRoute from './vite-plugin-html-per-route.js'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), htmlPerRoute()],
+  plugins: [react()],
   server: {
     proxy: {
       '/api': 'http://localhost:5000',

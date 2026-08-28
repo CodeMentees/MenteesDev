@@ -41,7 +41,31 @@ export const SEO_ROUTES = [
     keywords:
       'coding mentorship, 1:1 mentorship, web development, DSA, data structures algorithms, interview prep, remote coding, job ready, JavaScript, React, online coding',
     ogImage: '/images/home-og.jpg',
-    jsonLd: 'organization',
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": ["EducationalOrganization", "Organization"],
+      "name": "CodeMentees",
+      "url": "https://codementees.com/",
+      "logo": "https://codementees.com/logo.png",
+      "description": "Live 1:1 mentorship in Web Development, DSA & Interview Prep from engineers who've worked at JPMorgan and Freecharge. Build real, hireable skills — not just certificates.",
+      "foundingDate": "2023",
+      "areaServed": "Worldwide",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "IN"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "100",
+        "bestRating": "5"
+      },
+      "sameAs": [
+        "https://www.facebook.com/codementees",
+        "https://twitter.com/codementees",
+        "https://www.linkedin.com/company/codementees"
+      ]
+    },
     changefreq: 'weekly',
     priority: 1.0,
   },
@@ -52,7 +76,6 @@ export const SEO_ROUTES = [
       'Explore mentor-led courses in Web Development, Data Structures & Algorithms, and Interview Preparation. Learn from engineers with real production experience.',
     keywords:
       'coding courses, web development course, DSA course, interview prep, MERN stack, JavaScript course, React course, online mentorship, coding classes India',
-    jsonLd: 'itemlist',
     changefreq: 'weekly',
     priority: 0.9,
   },
@@ -73,7 +96,14 @@ export const SEO_ROUTES = [
       'CodeMentees connects early-career developers with mentors from JPMorgan and Freecharge. Build real, hireable skills — not just certificates.',
     keywords:
       'about codementees, coding mentors, industry mentors, JPMorgan engineers, fintech mentorship, developer mentorship, coding platform India',
-    jsonLd: 'organization',
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": ["EducationalOrganization", "Organization"],
+      "name": "CodeMentees",
+      "url": "https://codementees.com/",
+      "logo": "https://codementees.com/logo.png",
+      "description": "CodeMentees connects early-career developers with mentors from JPMorgan and Freecharge. Build real, hireable skills — not just certificates."
+    },
     changefreq: 'monthly',
     priority: 0.7,
   },
@@ -134,7 +164,6 @@ export const SEO_ROUTES = [
       'Find answers to frequently asked questions about CodeMentees courses, mentorship programs, payments, and placement support.',
     keywords:
       'CodeMentees FAQ, coding platform questions, mentorship FAQ, course questions, payment questions',
-    jsonLd: 'faq',
     changefreq: 'monthly',
     priority: 0.5,
   },
