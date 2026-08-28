@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from "react-dom";
 
 /** Inline spinner — use inside buttons or small containers */
 export default function LoadingSpinner({ size = "md", className = "" }) {
@@ -22,7 +23,7 @@ export default function LoadingSpinner({ size = "md", className = "" }) {
 
 /** Full-screen overlay with backdrop blur */
 export function LoadingOverlay({ message = "Loading..." }) {
-  return (
+  const overlayContent = (
     <div className="fixed inset-0 z-[9998] flex items-center justify-center"
       style={{ background: "rgba(0,0,0,0.65)", backdropFilter: "blur(8px)" }}>
       <div
@@ -39,6 +40,8 @@ export function LoadingOverlay({ message = "Loading..." }) {
       </div>
     </div>
   );
+  
+  return ReactDOM.createPortal(overlayContent, document.body);
 }
 
 /** Centered page-level spinner for route transitions */

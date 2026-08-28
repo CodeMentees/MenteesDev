@@ -1,9 +1,10 @@
 import React from "react";
+import ReactDOM from "react-dom";
 
 const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, itemName, isLoading }) => {
     if (!isOpen) return null;
 
-    return (
+    const modalContent = (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-2xl max-w-md w-full overflow-hidden transform transition-all scale-100">
                 <div className="p-6">
@@ -40,6 +41,8 @@ const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, itemName, isLoading })
             </div>
         </div>
     );
+
+    return ReactDOM.createPortal(modalContent, document.body);
 };
 
 export default DeleteConfirmModal;

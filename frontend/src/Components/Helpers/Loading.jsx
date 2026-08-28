@@ -1,8 +1,9 @@
 import React from "react";
+import ReactDOM from "react-dom";
 
 /** Premium full-page loader — shown while lazy chunks are downloading */
-function Loading({ message = "Loading..." }) {
-  return (
+export default function Loading({ message = "Loading..." }) {
+  const loadingContent = (
     <div
       className="fixed inset-0 z-[9990] flex flex-col items-center justify-center"
       style={{ background: "#000005" }}
@@ -78,6 +79,7 @@ function Loading({ message = "Loading..." }) {
       `}</style>
     </div>
   );
+
+  return ReactDOM.createPortal(loadingContent, document.body);
 }
 
-export default Loading;

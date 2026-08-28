@@ -5,17 +5,18 @@ import Loading from './Components/Helpers/Loading';
 import useScrollReveal from './hooks/useScrollReveal';
 import ScrollToTop from './Components/UI/ScrollToTop';
 
+import Header from './Components/Header/Header';
+import Footer from './Components/Footer/Footer';
+
 // Lazy load components
 const Home = lazy(() => import('./Pages/Home'));
 const LoginPage = lazy(() => import('./Pages/Login'));
 const RegisterPage = lazy(() => import('./Pages/Register'));
-const Header = lazy(() => import('./Components/Header/Header'));
 const ProtectedRoute = lazy(() => import('./ProtectedRoute'));
 const Blog = lazy(() => import('./Pages/Blog'));
 const DashboardLayout = lazy(() => import('./Pages/Dashboard'));
 const AddPost = lazy(() => import('./Pages/Post/AddPost'));
 const PostList = lazy(() => import('./Pages/Post/PostList'));
-const Footer = lazy(() => import('./Components/Footer/Footer'));
 const AllCourse = lazy(() => import('./Pages/AllCourse'));
 const CourseDetails = lazy(() => import('./Pages/CourseDetails'));
 const UpdateCourseDetails = lazy(() => import('./Pages/Course/UpdateCourseDetails'));
@@ -132,9 +133,9 @@ function App() {
         <div className="flex flex-col min-h-screen" style={{ background: "#000005" }}>
           <RouteProgressBar />
           <AppInner />
-          <Suspense fallback={<Loading />}>
-            <Header />
-            <main className="flex-grow font-sans mt-12 page-mount">
+          <Header />
+          <main className="flex-grow font-sans mt-12 page-mount">
+            <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Public Routes */}
                 <Route
@@ -350,9 +351,9 @@ function App() {
                   }
                 />
               </Routes>
-            </main>
-            <Footer />
-          </Suspense>
+            </Suspense>
+          </main>
+          <Footer />
         </div>
       </Router>
     </>
