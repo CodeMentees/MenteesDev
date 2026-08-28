@@ -10,7 +10,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, '../dist');
 
 // Define API URL
-const BACKEND_URL = process.env.VITE_API_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.VERCEL 
+  ? 'https://codementees.com' 
+  : (process.env.VITE_API_URL || 'http://localhost:5000');
 const BACKEND_HOST = new URL(BACKEND_URL).host;
 
 // The static SEO routes we want to pre-render
@@ -135,7 +137,7 @@ async function prerender() {
   });
 
   const page = await browser.newPage();
-  
+
   // Disable irrelevant requests to speed up rendering
   await page.setRequestInterception(true);
   page.on('request', (req) => {
@@ -150,7 +152,7 @@ async function prerender() {
   page.on('pageerror', err => {
     console.error('PAGE ERROR:', err.message);
   });
-  
+
   page.on('console', msg => {
     if (msg.type() === 'error') {
       console.error('PAGE CONSOLE ERROR:', msg.text());
@@ -166,20 +168,20 @@ async function prerender() {
 
     try {
       await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
-      
+
       // Give React an extra second to ensure async data (like Redux/Helmet) is fully populated
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const html = await page.content();
-      
+
       const routeDir = path.join(distDir, route);
       if (route !== '/') {
         fs.mkdirSync(routeDir, { recursive: true });
       }
-      
+
       const filePath = route === '/' ? path.join(distDir, 'index.html') : path.join(routeDir, 'index.html');
       fs.writeFileSync(filePath, html);
-      
+
       sitemapUrls.push(`
   <url>
     <loc>https://codementees.com${route === '/' ? '' : route}</loc>
@@ -187,7 +189,7 @@ async function prerender() {
     <changefreq>weekly</changefreq>
     <priority>${route === '/' ? '1.0' : '0.8'}</priority>
   </url>`);
-      
+
       console.log(`✅ Successfully pre-rendered ${route}`);
     } catch (error) {
       console.error(`❌ Failed to pre-render ${route}:`, error);
