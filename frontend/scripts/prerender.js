@@ -113,10 +113,25 @@ async function prerender() {
   await new Promise((resolve) => server.listen(3000, resolve));
   console.log('🌍 Local static server started on port 3000');
 
-  // Launch Puppeteer
+  // Launch Puppeteer (Conditional for Vercel)
+  let executablePath = undefined;
+  let args = ['--no-sandbox', '--disable-setuid-sandbox'];
+  let headless = 'new';
+
+  if (process.env.VERCEL) {
+    console.log('☁️ Vercel Environment Detected: Using @sparticuz/chromium');
+    const chromium = (await import('@sparticuz/chromium')).default;
+    executablePath = await chromium.executablePath();
+    args = chromium.args;
+    headless = chromium.headless;
+  } else {
+    console.log('💻 Local Environment Detected: Using bundled Chromium');
+  }
+
   const browser = await puppeteer.launch({
-    headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless,
+    args,
+    executablePath
   });
 
   const page = await browser.newPage();

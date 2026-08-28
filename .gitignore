@@ -16,11 +16,25 @@ dist/
 .DS_Store
 .npm-cache/
 .npmrc
+frontend/dist
 frontend/.npm-cache/
 frontend/.npmrc
 backend/.npm-cache/
 backend/.npmrc
 todo.md 
+
+# -------------------------------------------------------------------
+# Graphify & Antigravity IDE Configuration
+# -------------------------------------------------------------------
+# Hide local run states, heavy indexing caches, and token cost metrics
+
+graphify-out/cache/
+graphify-out/cost.json
+graphify-out/manifest.json
+
+# Hide local agent execution history and temporary workflow runs
+.agents/workflows/
+
 # Logs
 logs
 *.log
