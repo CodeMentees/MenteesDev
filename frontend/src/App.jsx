@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import React, { lazy, Suspense, useEffect } from 'react';
 import RouteProgressBar from './Components/UI/RouteProgressBar';
 import Loading from './Components/Helpers/Loading';
