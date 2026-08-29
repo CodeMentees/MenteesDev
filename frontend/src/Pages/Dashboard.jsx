@@ -117,7 +117,7 @@ function DashboardLayout() {
       // Overview is available to all admin users
       if (!item.permission) return true;
       // Super admins see everything
-      if (user?.role === "super admin") return true;
+      if (user?.role === "super admin" || user?.isAdmin) return true;
       // Others must have the specific permission
       return user?.permissions?.includes(item.permission);
     });

@@ -226,6 +226,33 @@ export const authUser = asyncHandler(async (req, res) => {
     return;
   }
 
+  // --- Auto-Migrate Legacy Users ---
+  let needsSave = false;
+  if (user.isAdmin && (!user.role || user.role === 'student')) {
+    // If they were a legacy admin, default them to 'editor' (highest generic admin)
+    // The super admin should manually adjust them if they need less access.
+    if (user.email === process.env.ADMIN_EMAIL) {
+      user.role = 'super admin';
+      user.permissions = [];
+    } else {
+      user.role = 'editor';
+      user.permissions = getDefaultPermissions('editor');
+    }
+    needsSave = true;
+  }
+  
+  if (!user.permissions || user.permissions.length === 0) {
+    if (user.role !== 'super admin') {
+      user.permissions = getDefaultPermissions(user.role || 'student');
+      needsSave = true;
+    }
+  }
+
+  if (needsSave) {
+    await user.save();
+  }
+  // ---------------------------------
+
   const expiresInDays = remember_me ? 30 : 1;
   const cookieMaxAge = expiresInDays * 24 * 60 * 60 * 1000;
   const tokenExpiresIn = `${expiresInDays}d`;
