@@ -1,0 +1,34 @@
+[
+    {
+        "id": "1",
+        "label": "Data Structures & Algorithms",
+        "content": {
+            "icon": "/images/c-sharp.png",
+            "title": "Data Structures & Algorithms",
+            "description": "Data Structures and Algorithms are the building blocks of programming & required to write optimised code...",
+            "modules": [
+                {
+                    "icon": "/images/c-sharp.png",
+                    "title": "Master Data structures and Algorithms using C++",
+                    "tags": ["Online", "Live", "Classroom"]
+                }
+            ]
+        }
+    },
+    {
+        "id": "2",
+        "label": "Python",
+        "content": {
+            "icon": "/images/c-sharp.png",
+            "title": "Dashboard Course",
+            "description": "This is a course about dashboards...",
+            "modules": [
+                {
+                    "icon": "/images/c-sharp.png",
+                    "title": "Master Dashboard Design",
+                    "tags": ["Online", "Live"]
+                }
+            ]
+        }
+    }
+]

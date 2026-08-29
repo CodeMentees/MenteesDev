@@ -1,0 +1,123 @@
+[
+  
+    {
+      "id": 1,
+      "label": "Introduction to Programming",
+      "content": [
+        {
+          "title": "Welcome aboard",
+          "description": "Welcome to the course! This section will introduce you to the basics of programming and set the foundation for your learning journey."
+        },
+        {
+          "title": "What is Programming?",
+          "description": "Programming is the process of writing instructions for computers to perform specific tasks. It involves problem-solving, logic, and creativity."
+        },
+        {
+          "title": "Flowcharts and Pseudocode",
+          "description": "Flowcharts and pseudocode are tools to help you plan and visualize your programs before writing actual code. They make it easier to understand and debug your logic."
+        },
+        {
+          "title": "Programming Languages",
+          "description": "There are many programming languages, such as Python, Java, C++, and JavaScript. Each language has its strengths and is suited for different types of projects."
+        },
+        {
+          "title": "Setting Up Your Environment",
+          "description": "Learn how to install and set up a code editor, compiler, and other tools required for programming."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "Data Structures and Algorithms",
+      "content": [
+        {
+          "title": "Basics of Data Structures",
+          "description": "Data structures are ways to organize and store data efficiently. Common data structures include arrays, linked lists, stacks, and queues."
+        },
+        {
+          "title": "Arrays",
+          "description": "Arrays are collections of elements stored in contiguous memory locations. They are useful for storing and accessing data in a structured way."
+        },
+        {
+          "title": "Linked Lists",
+          "description": "Linked lists are dynamic data structures where each element (node) points to the next. They are useful for insertions and deletions."
+        },
+        {
+          "title": "Stacks and Queues",
+          "description": "Stacks follow the Last-In-First-Out (LIFO) principle, while queues follow the First-In-First-Out (FIFO) principle. Both are used in various algorithms and applications."
+        },
+        {
+          "title": "Introduction to Algorithms",
+          "description": "Algorithms are step-by-step procedures for solving problems. Examples include sorting, searching, and graph traversal algorithms."
+        },
+        {
+          "title": "Sorting Algorithms",
+          "description": "Learn about popular sorting algorithms like Bubble Sort, Quick Sort, and Merge Sort, and understand their time and space complexities."
+        },
+        {
+          "title": "Searching Algorithms",
+          "description": "Explore algorithms like Linear Search and Binary Search, and learn how to efficiently find elements in a dataset."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "Object-Oriented Programming (OOP)",
+      "content": [
+        {
+          "title": "What is OOP?",
+          "description": "Object-Oriented Programming is a programming paradigm that uses objects and classes to structure code. It emphasizes reusability, modularity, and scalability."
+        },
+        {
+          "title": "Classes and Objects",
+          "description": "A class is a blueprint for creating objects, while an object is an instance of a class. Learn how to define classes and create objects in your code."
+        },
+        {
+          "title": "Inheritance",
+          "description": "Inheritance allows a class to inherit properties and methods from another class. It promotes code reuse and hierarchical classification."
+        },
+        {
+          "title": "Polymorphism",
+          "description": "Polymorphism allows objects to take on multiple forms. It enables methods to behave differently based on the object that invokes them."
+        },
+        {
+          "title": "Encapsulation",
+          "description": "Encapsulation is the concept of bundling data and methods that operate on that data within a single unit (class). It ensures data security and integrity."
+        },
+        {
+          "title": "Abstraction",
+          "description": "Abstraction involves hiding complex implementation details and exposing only the necessary features of an object. It simplifies code and reduces complexity."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "label": "Advanced Topics",
+      "content": [
+        {
+          "title": "Recursion",
+          "description": "Recursion is a technique where a function calls itself to solve a problem. It is commonly used in algorithms like tree traversal and divide-and-conquer."
+        },
+        {
+          "title": "Dynamic Programming",
+          "description": "Dynamic Programming is a method for solving complex problems by breaking them down into simpler subproblems. It is used in optimization problems."
+        },
+        {
+          "title": "Graph Algorithms",
+          "description": "Graphs are data structures that represent relationships between objects. Learn about algorithms like Depth-First Search (DFS) and Breadth-First Search (BFS)."
+        },
+        {
+          "title": "Big O Notation",
+          "description": "Big O Notation is used to describe the performance or complexity of an algorithm. It helps you analyze the efficiency of your code."
+        },
+        {
+          "title": "Design Patterns",
+          "description": "Design patterns are reusable solutions to common software design problems. Examples include Singleton, Factory, and Observer patterns."
+        },
+        {
+          "title": "Concurrency and Multithreading",
+          "description": "Concurrency involves executing multiple tasks simultaneously. Learn how to write multithreaded programs to improve performance."
+        }
+      ]
+    }
+  ]
