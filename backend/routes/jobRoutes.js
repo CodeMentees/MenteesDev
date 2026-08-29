@@ -1,5 +1,5 @@
 import { Router } from "express";
-import isAdmin from "../middlewares/isAdmin.js";
+import { requirePermission } from "../middlewares/rbacMiddleware.js";
 import {
   createJob,
   deleteJob,
@@ -14,7 +14,7 @@ const router = Router();
 router.get("/", getJobs);
 
 // Protected admin routes
-router.use(isAdmin);
+router.use(requirePermission("manage_careers"));
 router.post("/bulk", bulkDeleteJobs);
 router.post("/", createJob);
 router.put("/:id", updateJob);

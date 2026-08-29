@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { FaHome, FaFileAlt, FaBook, FaQuestionCircle, FaGlobe, FaComments, FaCalendarAlt, FaUsers, FaEnvelope } from "react-icons/fa";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
-const menuItems = [
+const ALL_MENU_ITEMS = [
   { id: 1, title: "Overview", icon: <FaHome />, link: "/admin" },
   {
     id: 2,
     title: "Posts",
     icon: <FaFileAlt />,
+    permission: "manage_content",
     subItems: [
       { id: 22, title: "Blog List", link: "/admin/posts" },
       { id: 23, title: "Categories", link: "/admin/posts/categories" },
@@ -19,6 +21,7 @@ const menuItems = [
     id: 3,
     title: "Courses",
     icon: <FaBook />,
+    permission: "manage_courses",
     subItems: [
       { id: 32, title: "Course List", link: "/admin/courses" },
       { id: 33, title: "Create Course", link: "/admin/courses/create" },
@@ -30,6 +33,7 @@ const menuItems = [
     id: 4,
     title: "Queries",
     icon: <FaQuestionCircle />,
+    permission: "manage_queries",
     subItems: [
       { id: 41, title: "Query List", link: "/admin/queries" },
       { id: 42, title: "School Coding Leads", link: "/admin/school-coding-leads" },
@@ -39,18 +43,21 @@ const menuItems = [
     id: 5,
     title: "Site",
     icon: <FaGlobe />,
+    permission: "manage_site",
     subItems: [{ id: 51, title: "Update Site", link: "/admin/site-settings" }],
   },
   {
     id: 6,
     title: "Chat",
     icon: <FaComments />,
+    permission: "manage_chat",
     subItems: [{ id: 61, title: "Create Group", link: "/admin/groups/create" }],
   },
   {
     id: 7,
     title: "Events",
     icon: <FaCalendarAlt />,
+    permission: "manage_content",
     subItems: [
       { id: 71, title: "Create Event", link: "/admin/events/create" },
       { id: 72, title: "Events", link: "/admin/events" },
@@ -60,6 +67,7 @@ const menuItems = [
     id: 9,
     title: "Live Courses",
     icon: <FaBook />,
+    permission: "manage_live",
     subItems: [
       { id: 91, title: "Live Course List", link: "/admin/live-courses" },
       { id: 92, title: "Create Live Course", link: "/admin/live-courses/create" },
@@ -69,12 +77,14 @@ const menuItems = [
     id: 8,
     title: "Users",
     icon: <FaUsers />,
+    permission: "manage_users",
     subItems: [{ id: 81, title: "Users", link: "/admin/users" }],
   },
   {
     id: 10,
     title: "Jobs",
     icon: <FaFileAlt />,
+    permission: "manage_careers",
     subItems: [
       { id: 101, title: "Job List", link: "/admin/jobs" },
       { id: 102, title: "Post Job", link: "/admin/jobs/create" },
@@ -84,12 +94,14 @@ const menuItems = [
     id: 11,
     title: "Interns",
     icon: <FaUsers />,
+    permission: "manage_careers",
     subItems: [{ id: 111, title: "Applicants", link: "/admin/interns" }],
   },
   {
     id: 12,
     title: "Bulk Mail",
     icon: <FaEnvelope />,
+    permission: "manage_mail",
     link: "/admin/bulk-mail",
   },
 ];
@@ -97,6 +109,19 @@ const menuItems = [
 function DashboardLayout() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const location = useLocation();
+  const { user } = useSelector((state) => state.auth);
+
+  // Filter menu items based on user permissions
+  const menuItems = useMemo(() => {
+    return ALL_MENU_ITEMS.filter((item) => {
+      // Overview is available to all admin users
+      if (!item.permission) return true;
+      // Super admins see everything
+      if (user?.role === "super admin") return true;
+      // Others must have the specific permission
+      return user?.permissions?.includes(item.permission);
+    });
+  }, [user]);
 
   const toggleDropdown = (id) => {
     setOpenDropdowns((prev) => ({ ...prev, [id]: !prev[id] }));

@@ -9,25 +9,25 @@ import {
   updateLiveCourseContent,
   deleteLiveCourseContent,
 } from "../controllers/liveCourseController.js";
-import isAdmin from "../middlewares/isAdmin.js";
+import { requirePermission } from "../middlewares/rbacMiddleware.js";
 import isAuthenticated from "../middlewares/IsAuthenticate.js";
 
 const router = express.Router();
 
 router.route("/")
   .get(getLiveCourses)
-  .post(isAdmin, createLiveCourse);
+  .post(requirePermission("manage_live"), createLiveCourse);
 
 router.route("/:id")
   .get(getLiveCourseById)
-  .put(isAdmin, updateLiveCourse)
-  .delete(isAdmin, deleteLiveCourse);
+  .put(requirePermission("manage_live"), updateLiveCourse)
+  .delete(requirePermission("manage_live"), deleteLiveCourse);
 
 router.route("/:id/content")
-  .post(isAdmin, addLiveCourseContent);
+  .post(requirePermission("manage_live"), addLiveCourseContent);
 
 router.route("/:id/content/:contentId")
-  .put(isAdmin, updateLiveCourseContent)
-  .delete(isAdmin, deleteLiveCourseContent);
+  .put(requirePermission("manage_live"), updateLiveCourseContent)
+  .delete(requirePermission("manage_live"), deleteLiveCourseContent);
 
 export default router;

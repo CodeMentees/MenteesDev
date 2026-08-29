@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createCategory, deleteCategory, getCategories, getCategory, updateCategory } from "../controllers/blogCategoryController.js";
-import isAdmin from "../middlewares/isAdmin.js";
+import { requirePermission } from "../middlewares/rbacMiddleware.js";
 
 const router = Router();
 
@@ -9,7 +9,7 @@ router.get("/", getCategories);
 router.get("/:id", getCategory);
 
 // Protected Routes (Only Admin)
-router.use(isAdmin);
+router.use(requirePermission("manage_content"));
 router.post("/", createCategory);
 router.put("/:id", updateCategory);
 router.delete("/:id", deleteCategory);

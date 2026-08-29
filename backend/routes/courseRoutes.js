@@ -1,5 +1,5 @@
 import { Router } from "express";
-import isAdmin from "../middlewares/isAdmin.js";
+import { requirePermission } from "../middlewares/rbacMiddleware.js";
 import protect from "../middlewares/IsAuthenticate.js";
 import {
   createCourse,
@@ -21,7 +21,7 @@ router.get("/:id", getCourse);
 router.get("/:categoryId/category", getCoursesByCategory);
 router.get("/", getCourses);
 
-router.use(isAdmin)
+router.use(requirePermission("manage_courses"))
 router.post("/bulk", bulkDeleteCourses);
 router.post("/", upload.single("image"), createCourse);
 router.put("/:id", upload.single("image"), updateCourse);

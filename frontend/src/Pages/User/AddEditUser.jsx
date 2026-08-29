@@ -23,6 +23,7 @@ function AddEditUser() {
     password: "",
     role: "student",
     isFullAccess: false,
+    permissions: [],
   });
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,6 +46,7 @@ function AddEditUser() {
         password: "", // Don't populate password
         role: data.role || "student",
         isFullAccess: data.isFullAccess || false,
+        permissions: data.permissions || [],
       });
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -61,6 +63,29 @@ function AddEditUser() {
       [name]: type === "checkbox" ? checked : value 
     }));
   };
+
+  const handlePermissionToggle = (permission) => {
+    setUserData((prev) => {
+      const perms = prev.permissions || [];
+      if (perms.includes(permission)) {
+        return { ...prev, permissions: perms.filter(p => p !== permission) };
+      } else {
+        return { ...prev, permissions: [...perms, permission] };
+      }
+    });
+  };
+
+  const AVAILABLE_PERMISSIONS = [
+    { id: "manage_site", label: "Site Settings" },
+    { id: "manage_users", label: "User Management" },
+    { id: "manage_careers", label: "Jobs / Interns" },
+    { id: "manage_mail", label: "Bulk Mail" },
+    { id: "manage_courses", label: "Courses" },
+    { id: "manage_live", label: "Live Courses" },
+    { id: "manage_chat", label: "Chat / Groups" },
+    { id: "manage_content", label: "Posts / Events" },
+    { id: "manage_queries", label: "Queries / Leads" },
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -197,6 +222,28 @@ function AddEditUser() {
             <label htmlFor="isFullAccess" className="block text-sm font-medium text-gray-300 cursor-pointer select-none">
               Grant Premium Course Access
             </label>
+          </div>
+
+          <div className="pt-4 border-t border-gray-700">
+            <label className="block text-sm font-medium text-gray-400 mb-3">
+              Specific Permissions (Overrides Default Role Permissions)
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {AVAILABLE_PERMISSIONS.map((perm) => (
+                <div key={perm.id} className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    id={`perm-${perm.id}`}
+                    checked={(userData.permissions || []).includes(perm.id)}
+                    onChange={() => handlePermissionToggle(perm.id)}
+                    className="w-5 h-5 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 cursor-pointer"
+                  />
+                  <label htmlFor={`perm-${perm.id}`} className="block text-sm font-medium text-gray-300 cursor-pointer select-none">
+                    {perm.label}
+                  </label>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="flex gap-4 pt-4">

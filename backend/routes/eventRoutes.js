@@ -1,5 +1,5 @@
 import express from "express";
-import isAdmin from '../middlewares/isAdmin.js';
+import { requirePermission } from '../middlewares/rbacMiddleware.js';
 import {
   addEvent,
   getEvent,
@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 router.get("/:id", getEvent);
 router.get("/", getAllEvents);
-router.use(isAdmin)
+router.use(requirePermission("manage_content"))
 router.post("/", addEvent);
 router.put("/:id", updateEvent);
 router.delete("/:id", deleteEvent);

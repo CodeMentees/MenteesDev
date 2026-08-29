@@ -4,6 +4,7 @@ import { OAuth2Client } from "google-auth-library";
 import asyncHandler from "express-async-handler";
 import crypto from "crypto";
 import { sendVerificationOTP } from "../utils/emailService.js";
+import { getDefaultPermissions } from "../utils/defaultPermissions.js";
 
 const client = new OAuth2Client();
 
@@ -58,7 +59,8 @@ export const registerUser = asyncHandler(async (req, res) => {
     user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
 
-    user = await User.create({ email, name: `${given_name} ${family_name}`, phoneNumber });
+    const permissions = getDefaultPermissions("student");
+    user = await User.create({ email, name: `${given_name} ${family_name}`, phoneNumber, permissions });
   } else {
     user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
@@ -66,7 +68,8 @@ export const registerUser = asyncHandler(async (req, res) => {
     const otp = crypto.randomInt(100000, 999999).toString();
     const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-    user = await User.create({ name, email, password, phoneNumber, verificationOTP: otp, otpExpiresAt, isVerified: false });
+    const permissions = getDefaultPermissions("student");
+    user = await User.create({ name, email, password, phoneNumber, verificationOTP: otp, otpExpiresAt, isVerified: false, permissions });
 
     // Send verification OTP
     try {
@@ -204,7 +207,8 @@ export const authUser = asyncHandler(async (req, res) => {
     // Auto-register via Google if user does not exist
     if (!user) {
       const { email, given_name, family_name } = payload;
-      user = await User.create({ email, name: `${given_name || ''} ${family_name || ''}`.trim() || 'Google User' });
+      const permissions = getDefaultPermissions("student");
+      user = await User.create({ email, name: `${given_name || ''} ${family_name || ''}`.trim() || 'Google User', permissions });
     }
   } else {
     user = await User.findOne({ email });
@@ -234,6 +238,8 @@ export const authUser = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       isFullAccess: user.isFullAccess,
+      role: user.role,
+      permissions: user.permissions,
       token: token,
       message: "User signed in successfully",
     });

@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { createUser, deleteUser, getUser, getUsers, updateUser, bulkDeleteUsers, getUserGrowth, resetInternPasswords } from "../controllers/usersController.js";
-import isAdmin from "../middlewares/isAdmin.js";
+import { requirePermission } from "../middlewares/rbacMiddleware.js";
 
 const router = Router(); 
 
-router.use(isAdmin)
+router.use(requirePermission("manage_users"))
 
 // Define routes
 router.post("/interns/reset-password", resetInternPasswords);

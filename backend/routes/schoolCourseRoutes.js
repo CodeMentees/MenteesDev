@@ -7,7 +7,7 @@ import {
     deleteSchoolCourse,
 } from "../controllers/schoolCourseController.js";
 import protect from "../middlewares/IsAuthenticate.js";
-import isAdmin from "../middlewares/isAdmin.js";
+import { requirePermission } from "../middlewares/rbacMiddleware.js";
 
 import multer from "multer";
 import { storage } from "../config/cloudinaryConfig.js";
@@ -17,11 +17,11 @@ const router = express.Router();
 
 router.route("/")
     .get(getSchoolCourses)
-    .post(protect, isAdmin, upload.single("image"), createSchoolCourse);
+    .post(protect, requirePermission("manage_courses"), upload.single("image"), createSchoolCourse);
 
 router.route("/:id")
     .get(getSchoolCourseById)
-    .put(protect, isAdmin, upload.single("image"), updateSchoolCourse)
-    .delete(protect, isAdmin, deleteSchoolCourse);
+    .put(protect, requirePermission("manage_courses"), upload.single("image"), updateSchoolCourse)
+    .delete(protect, requirePermission("manage_courses"), deleteSchoolCourse);
 
 export default router;

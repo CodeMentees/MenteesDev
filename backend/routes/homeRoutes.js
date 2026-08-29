@@ -1,6 +1,6 @@
 import { Router } from "express";
 import Home from "../models/home.js"
-import isAdmin from "../middlewares/isAdmin.js";
+import { requirePermission } from "../middlewares/rbacMiddleware.js";
 const router = Router();
 
 // Define routes
@@ -13,7 +13,7 @@ router.get("/", async(req,res)=>{
     }
 });
 
-router.use(isAdmin)
+router.use(requirePermission("manage_site"))
 
 router.post("/", async (req, res) => {
     try {

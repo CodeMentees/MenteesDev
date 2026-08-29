@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import isAdmin from "../middlewares/isAdmin.js";
+import { requirePermission } from "../middlewares/rbacMiddleware.js";
 import { sendBulkMail } from "../controllers/bulkMailController.js";
 
 const router = express.Router();
@@ -39,6 +39,6 @@ const uploadMiddleware = (req, res, next) => {
   });
 };
 
-router.post("/send", isAdmin, uploadMiddleware, sendBulkMail);
+router.post("/send", requirePermission("manage_mail"), uploadMiddleware, sendBulkMail);
 
 export default router;

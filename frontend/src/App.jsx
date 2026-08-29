@@ -27,6 +27,9 @@ const SchoolCodingLeadList = lazy(() => import('./Pages/Query/SchoolCodingLeadLi
 const CourseList = lazy(() => import('./Pages/Course/CourseList'));
 const Unauth = lazy(() => import('./Pages/Error/Unauth'));
 const AdminRoutes = lazy(() => import("./AdminRoute"));
+const StudentRoute = lazy(() => import("./StudentRoute"));
+const StudentDashboard = lazy(() => import("./Pages/Student/StudentDashboard"));
+const MyCourses = lazy(() => import("./Pages/Student/MyCourses"));
 const BlogPage = lazy(() => import('./Pages/BlogPage'));
 const HomeSite = lazy(() => import('./Pages/Home/HomeSite'));
 const CategoryList = lazy(() => import('./Pages/Course/CategoryList'));
@@ -350,6 +353,23 @@ function App() {
                     </SEOHeadWrapper>
                   }
                 />
+                {/* ─── Student Routes ─── */}
+                <Route
+                  path="/student"
+                  element={
+                    <StudentRoute>
+                      <StudentDashboard />
+                    </StudentRoute>
+                  }
+                >
+                  {/* Default redirect or dashboard home */}
+                  <Route index element={<MyCourses />} />
+                  <Route path="courses" element={<MyCourses />} />
+                  <Route path="live-classes" element={<div className="p-10 text-white">Live Classes feature coming soon.</div>} />
+                  <Route path="certificates" element={<div className="p-10 text-white">Certificates feature coming soon.</div>} />
+                  <Route path="profile" element={<div className="p-10 text-white">Student Profile feature coming soon.</div>} />
+                </Route>
+
               </Routes>
             </Suspense>
           </main>

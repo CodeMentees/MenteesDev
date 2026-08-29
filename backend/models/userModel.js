@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
     default: "student" 
   },
   isFullAccess: { type: Boolean, default: false },
+  permissions: [{ type: String }],
   phoneNumber: String,
   verificationOTP: String,
   otpExpiresAt: Date,

@@ -2,6 +2,7 @@ import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { getDefaultPermissions } from "../utils/defaultPermissions.js";
 
 // 🔐 Generate JWT Token
 const generateToken = (id) => {
@@ -43,12 +44,16 @@ const createUser = asyncHandler(async (req, res) => {
       return res.status(400).json({ message: "Email already registered" });
     }
 
+    const role = req.body.role || "student";
+    const permissions = req.body.permissions || getDefaultPermissions(role);
+
     // Create User
     const user = new User({ 
       name, 
       email, 
       password, // pre-save hook will hash this
-      role: req.body.role || "student",
+      role,
+      permissions,
       isFullAccess: req.body.isFullAccess || false,
     });
     const createdUser = await user.save();
@@ -132,6 +137,14 @@ const updateUser = asyncHandler(async (req, res) => {
     }
     if (req.body.role) {
       user.role = req.body.role;
+      // Optionally reset permissions if role changes, but let's allow explicit permissions override
+      if (!req.body.permissions) {
+         user.permissions = getDefaultPermissions(user.role);
+      }
+    }
+    
+    if (req.body.permissions) {
+      user.permissions = req.body.permissions;
     }
 
     // Set new password if provided (pre-save hook will hash it)

@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import isAdmin from "../middlewares/isAdmin.js";
+import { requirePermission } from "../middlewares/rbacMiddleware.js";
 import { 
   applyForInternship, 
   getInternships, 
@@ -22,7 +22,7 @@ const upload = multer({
 router.post("/apply", upload.single("resume"), applyForInternship);
 
 // Admin protected routes
-router.use(isAdmin);
+router.use(requirePermission("manage_careers"));
 router.post("/bulk", bulkDeleteInternships);
 router.get("/", getInternships);
 router.put("/:id", updateInternship);
