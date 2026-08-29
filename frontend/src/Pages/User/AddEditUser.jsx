@@ -27,6 +27,7 @@ function AddEditUser() {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOverrideOpen, setIsOverrideOpen] = useState(false);
 
   useEffect(() => {
     initFlowbite();
@@ -48,6 +49,9 @@ function AddEditUser() {
         isFullAccess: data.isFullAccess || false,
         permissions: data.permissions || [],
       });
+      if (data.permissions && data.permissions.length > 0) {
+        setIsOverrideOpen(true);
+      }
     } catch (error) {
       console.error("Error fetching user:", error);
       setToast({ visible: true, message: "Error fetching user details", type: "error" });
@@ -225,25 +229,40 @@ function AddEditUser() {
           </div>
 
           <div className="pt-4 border-t border-gray-700">
-            <label className="block text-sm font-medium text-gray-400 mb-3">
-              Specific Permissions (Overrides Default Role Permissions)
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {AVAILABLE_PERMISSIONS.map((perm) => (
-                <div key={perm.id} className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    id={`perm-${perm.id}`}
-                    checked={(userData.permissions || []).includes(perm.id)}
-                    onChange={() => handlePermissionToggle(perm.id)}
-                    className="w-5 h-5 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 cursor-pointer"
-                  />
-                  <label htmlFor={`perm-${perm.id}`} className="block text-sm font-medium text-gray-300 cursor-pointer select-none">
-                    {perm.label}
-                  </label>
-                </div>
-              ))}
+            <div className="flex items-center justify-between mb-2">
+              <div>
+                <h3 className="text-sm font-medium text-white">Override Default Permissions</h3>
+                <p className="text-xs text-gray-400 mt-1">Manually grant or revoke specific access tags for this user.</p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  className="sr-only peer" 
+                  checked={isOverrideOpen}
+                  onChange={() => setIsOverrideOpen(!isOverrideOpen)} 
+                />
+                <div className="w-11 h-6 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
             </div>
+
+            {isOverrideOpen && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6 animate-fade-in-down transition-all duration-300 ease-in-out">
+                {AVAILABLE_PERMISSIONS.map((perm) => (
+                  <div key={perm.id} className="flex items-center justify-between p-3 bg-gray-800 rounded-xl border border-gray-700 hover:border-blue-500/50 transition-colors shadow-sm">
+                    <span className="text-sm font-medium text-gray-300 select-none">{perm.label}</span>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={(userData.permissions || []).includes(perm.id)}
+                        onChange={() => handlePermissionToggle(perm.id)}
+                      />
+                      <div className="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div>
+                    </label>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex gap-4 pt-4">

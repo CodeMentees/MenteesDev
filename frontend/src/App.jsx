@@ -129,6 +129,23 @@ function AppInner() {
   return <ScrollToTop />;
 }
 
+function MainLayout({ children }) {
+  const location = useLocation();
+  
+  // Do not show public header/footer on admin and student dashboards
+  const isDashboardRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/student');
+
+  return (
+    <>
+      {!isDashboardRoute && <Header />}
+      <main className={`flex-grow font-sans ${!isDashboardRoute ? 'mt-12' : ''} page-mount`}>
+        {children}
+      </main>
+      {!isDashboardRoute && <Footer />}
+    </>
+  );
+}
+
 function App() {
   return (
     <>
@@ -136,8 +153,7 @@ function App() {
         <div className="flex flex-col min-h-screen" style={{ background: "#000005" }}>
           <RouteProgressBar />
           <AppInner />
-          <Header />
-          <main className="flex-grow font-sans mt-12 page-mount">
+          <MainLayout>
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Public Routes */}
@@ -372,8 +388,7 @@ function App() {
 
               </Routes>
             </Suspense>
-          </main>
-          <Footer />
+          </MainLayout>
         </div>
       </Router>
     </>
