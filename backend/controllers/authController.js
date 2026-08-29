@@ -228,9 +228,10 @@ export const authUser = asyncHandler(async (req, res) => {
 
   // --- Auto-Migrate Legacy Users ---
   let needsSave = false;
-  if (user.isAdmin && (!user.role || user.role === 'student')) {
-    // If they were a legacy admin, default them to 'editor' (highest generic admin)
-    // The super admin should manually adjust them if they need less access.
+  const validRoles = ["super admin", "editor", "instructor", "intern", "student"];
+  
+  if (user.isAdmin && (!user.role || !validRoles.includes(user.role) || user.role === 'student')) {
+    // If they were a legacy admin (or had an invalid role like 'admin'), default them to 'editor'
     if (user.email === process.env.ADMIN_EMAIL) {
       user.role = 'super admin';
       user.permissions = [];
@@ -243,7 +244,15 @@ export const authUser = asyncHandler(async (req, res) => {
   
   if (!user.permissions || user.permissions.length === 0) {
     if (user.role !== 'super admin') {
-      user.permissions = getDefaultPermissions(user.role || 'student');
+      // Ensure the role we pass to getDefaultPermissions is valid
+      const fallbackRole = validRoles.includes(user.role) ? user.role : 'student';
+      user.permissions = getDefaultPermissions(fallbackRole);
+      
+      // If the role was invalid and they weren't an admin, fix their role to student
+      if (!validRoles.includes(user.role)) {
+        user.role = 'student';
+      }
+      
       needsSave = true;
     }
   }
