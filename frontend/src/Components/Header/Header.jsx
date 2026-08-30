@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../Slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { FaUserCircle } from "react-icons/fa";
+import { FaChevronDown, FaSignOutAlt, FaTachometerAlt, FaBookOpen } from "react-icons/fa";
 
 /** Animated hamburger icon */
 const MenuIcon = ({ open }) => (
@@ -18,8 +18,11 @@ const menuItems = [
   { label: "Blogs", link: "/blogs" },
   { label: "Live Courses", link: "/live" },
   { label: "School Coding", link: "/school-coding" },
+  { label: "Internships", link: "/internships" },
   { label: "Placement Support", link: "/placement-support" },
 ];
+
+const ADMIN_ROLES = ["super admin", "editor", "instructor", "intern"];
 
 function Header() {
   const dispatch = useDispatch();
@@ -27,12 +30,27 @@ function Header() {
   const location = useLocation();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef(null);
 
   const isActive = (path) => location.pathname === path;
+  const isStudent = user?.role === "student";
+  const isAdmin = user && ADMIN_ROLES.includes(user.role);
+
+  // Close profile dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("/api/auth/logout", { method: "POST" });
+      const response = await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
       if (response.ok) {
         dispatch(logout());
         navigate("/login");
@@ -42,6 +60,7 @@ function Header() {
       dispatch(logout());
     }
     setMenuOpen(false);
+    setProfileOpen(false);
   };
 
   return (
@@ -92,28 +111,81 @@ function Header() {
 
             {/* Desktop auth buttons */}
             <div className="hidden lg:flex items-center gap-3">
-              {user && user.role !== "student" && (
-                <Link
-                  to="/admin"
-                  className="px-4 py-2 rounded-full text-sm font-semibold transition text-white"
-                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}
-                >
-                  Dashboard
-                </Link>
-              )}
-
               {isAuthenticated ? (
-                <>
-                  <div className="relative">
-                    <FaUserCircle className="text-2xl cursor-pointer" style={{ color: "rgb(160,160,160)" }} />
-                  </div>
+                /* ── Profile Dropdown ── */
+                <div className="relative" ref={profileRef}>
                   <button
-                    onClick={handleLogout}
-                    className="btn btn-secondary text-sm py-2 px-5"
+                    onClick={() => setProfileOpen((p) => !p)}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-full transition-all"
+                    style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
+                    aria-label="Profile menu"
                   >
-                    Logout
+                    <div
+                      className="w-7 h-7 rounded-full flex items-center justify-center font-black text-white text-xs"
+                      style={{ background: "rgb(var(--accent))" }}
+                    >
+                      {user?.name?.charAt(0)?.toUpperCase() || "U"}
+                    </div>
+                    <span className="text-sm font-medium text-white max-w-[80px] truncate">
+                      {user?.name?.split(" ")[0]}
+                    </span>
+                    <FaChevronDown
+                      className="text-gray-400 text-xs transition-transform duration-200"
+                      style={{ transform: profileOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                    />
                   </button>
-                </>
+
+                  {/* Dropdown panel */}
+                  {profileOpen && (
+                    <div
+                      className="absolute right-0 mt-2 w-52 rounded-2xl shadow-2xl overflow-hidden z-[100]"
+                      style={{ background: "rgb(6,22,42)", border: "1px solid rgba(255,255,255,0.1)" }}
+                    >
+                      {/* User info header */}
+                      <div className="px-4 py-3 border-b" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
+                        <p className="text-white font-semibold text-sm truncate">{user?.name}</p>
+                        <p className="text-gray-400 text-xs truncate">{user?.email}</p>
+                        <span
+                          className="inline-block mt-1 text-xs px-2 py-0.5 rounded-full font-medium capitalize"
+                          style={{ background: "rgba(205,0,148,0.15)", color: "#CD0094" }}
+                        >
+                          {user?.role}
+                        </span>
+                      </div>
+
+                      {/* Role-based links */}
+                      <div className="py-1">
+                        {isStudent ? (
+                          <Link
+                            to="/student/my-courses"
+                            onClick={() => setProfileOpen(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
+                          >
+                            <FaBookOpen className="text-purple-400 text-base" />
+                            My Learning
+                          </Link>
+                        ) : isAdmin ? (
+                          <Link
+                            to="/admin"
+                            onClick={() => setProfileOpen(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
+                          >
+                            <FaTachometerAlt className="text-blue-400 text-base" />
+                            Dashboard
+                          </Link>
+                        ) : null}
+
+                        <button
+                          onClick={handleLogout}
+                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors"
+                        >
+                          <FaSignOutAlt className="text-base" />
+                          Logout
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <>
                   <Link
@@ -132,15 +204,6 @@ function Header() {
 
             {/* Mobile burger */}
             <div className="lg:hidden flex items-center gap-3">
-              {user && user.role !== "student" && (
-                <Link
-                  to="/admin"
-                  className="px-3 py-1.5 rounded-full text-sm font-semibold text-white"
-                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}
-                >
-                  Dashboard
-                </Link>
-              )}
               <button
                 type="button"
                 onClick={() => setMenuOpen((p) => !p)}
@@ -186,6 +249,7 @@ function Header() {
                   <div>
                     <p className="font-semibold text-white">{user.name}</p>
                     <p className="text-xs opacity-50">{user.email}</p>
+                    <span className="text-xs opacity-60 capitalize">{user.role}</span>
                   </div>
                 </div>
               )}
@@ -209,12 +273,32 @@ function Header() {
                 style={{ borderColor: "rgba(255,255,255,0.07)" }}
               >
                 {isAuthenticated ? (
-                  <button
-                    onClick={handleLogout}
-                    className="btn btn-secondary w-full justify-center text-sm"
-                  >
-                    Logout
-                  </button>
+                  <>
+                    {isStudent && (
+                      <Link
+                        to="/student/my-courses"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors"
+                      >
+                        <FaBookOpen /> My Learning
+                      </Link>
+                    )}
+                    {isAdmin && (
+                      <Link
+                        to="/admin"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
+                      >
+                        <FaTachometerAlt /> Dashboard
+                      </Link>
+                    )}
+                    <button
+                      onClick={handleLogout}
+                      className="btn btn-secondary w-full justify-center text-sm"
+                    >
+                      Logout
+                    </button>
+                  </>
                 ) : (
                   <>
                     <Link

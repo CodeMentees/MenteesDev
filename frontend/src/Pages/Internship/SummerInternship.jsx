@@ -145,6 +145,13 @@ function SummerInternship() {
     setStatus("loading");
     setErrorMessage("");
 
+    // Resume is mandatory
+    if (!formData.resume) {
+      setStatus("error");
+      setErrorMessage("Resume is required. Please upload your resume (PDF, DOC, or DOCX).");
+      return;
+    }
+
     try {
       const submitData = new FormData();
       const finalName = referralCode ? `${formData.name}-${referralCode}` : formData.name;
@@ -194,7 +201,7 @@ function SummerInternship() {
             APPLICATIONS NOW OPEN FOR 2026
           </div>
           <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight text-white">
-            Summer <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">Internships</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">Internships</span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-400 mb-10 font-light leading-relaxed">
             Kickstart your career with our immersive industrial training programs. Build real-world projects, master in-demand technologies, and get industry-ready.
@@ -409,7 +416,7 @@ function SummerInternship() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-300">Upload Resume (Optional)</label>
+                  <label className="block text-sm font-medium text-gray-300">Upload Resume <span className="text-red-400">*</span></label>
                   <label htmlFor="resume" className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-700 border-dashed rounded-xl cursor-pointer bg-[#131825]/50 hover:bg-[#131825] hover:border-purple-500/50 transition-all group">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <svg className="w-8 h-8 mb-4 text-gray-500 group-hover:text-purple-400 transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">

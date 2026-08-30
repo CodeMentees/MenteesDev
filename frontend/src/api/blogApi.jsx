@@ -11,6 +11,7 @@ export const useBlog = () => {
       return customRequest("GET", url);
     },
     fetchBlog: (id) => getItemById(id),
+    fetchBlogBySlug: (slug) => customRequest("GET", `/slug/${slug}`),
     createBlog: (blogData) => createItem(blogData),
     updateBlog: (id, blogData) => updateItem(id, blogData),
     deleteBlog: (id) => deleteItem(id),

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import React, { lazy, Suspense, useEffect } from 'react';
 import RouteProgressBar from './Components/UI/RouteProgressBar';
 import Loading from './Components/Helpers/Loading';
@@ -176,13 +176,15 @@ function App() {
                 />
 
                 <Route
-                  path="/summer-internships"
+                  path="/internships"
                   element={
-                    <SEOHeadWrapper path="/summer-internships" noindex={false}>
+                    <SEOHeadWrapper path="/internships" noindex={false}>
                       <SummerInternship />
                     </SEOHeadWrapper>
                   }
                 />
+                {/* Legacy redirect: keep /summer-internships working */}
+                <Route path="/summer-internships" element={<Navigate to="/internships" replace />} />
 
                 <Route
                   path="/verify-otp"
@@ -329,7 +331,7 @@ function App() {
                 />
 
                 <Route
-                  path="/blogs/:id"
+                  path="/blogs/:slug"
                   element={
                     <SEOHeadWrapper path="/blogs" noindex={false}>
                       <BlogPage />

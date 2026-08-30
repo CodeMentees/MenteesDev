@@ -118,12 +118,12 @@ export const SEO_ROUTES = [
     priority: 0.8,
   },
   {
-    path: '/summer-internships',
-    title: 'Summer Training & Internship Programs | CodeMentees',
+    path: '/internships',
+    title: 'Training & Internship Programs | CodeMentees',
     description:
-      'Apply for 30-60 day summer internship and training programs. Choose from Web Dev, AI, MERN, and 12+ tech stacks. Certificate included.',
+      'Apply for 30-60 day internship and training programs. Choose from Web Dev, AI, MERN, and 12+ tech stacks. Certificate included.',
     keywords:
-      'summer internship, summer training, MERN internship, coding internship, tech internship India, AI internship, web dev internship',
+      'internship, training program, MERN internship, coding internship, tech internship India, AI internship, web dev internship',
     changefreq: 'monthly',
     priority: 0.8,
   },

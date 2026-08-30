@@ -1,6 +1,18 @@
 import Post from "../models/postModel.js";
 import asyncHandler from "express-async-handler";
 
+/** Generate a URL-friendly slug from a title string */
+const generateSlug = (title) => {
+  const base = title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+  return `${base}-${Date.now().toString(36)}`; // append short timestamp for uniqueness
+};
+
 /**
  * @swagger
  * tags:
@@ -45,7 +57,8 @@ const createPost = asyncHandler(async (req, res) => {
       return res.status(400).json({ message: "Title and content are required" });
     }
 
-    const post = new Post({ title, content, image, categories, seo });
+    const slug = generateSlug(title);
+    const post = new Post({ title, slug, content, image, categories, seo });
     const createdPost = await post.save();
 
     res.status(201).json({ data: createdPost, message: "Post created successfully" });
@@ -159,6 +172,14 @@ const updatePost = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
+    // Regenerate slug if title changed
+    if (req.body.title && req.body.title !== post.title) {
+      post.slug = generateSlug(req.body.title);
+    } else if (!post.slug) {
+      // Backfill slug for old posts that had none
+      post.slug = generateSlug(post.title);
+    }
+
     post.title = req.body.title || post.title;
     post.content = req.body.content || post.content;
     post.image = req.body.image || post.image;
@@ -167,6 +188,19 @@ const updatePost = asyncHandler(async (req, res) => {
 
     const updatedPost = await post.save();
     res.json({ data: updatedPost, message: "Post updated successfully" });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+/** @desc Get a single post by its URL slug @route GET /api/posts/slug/:slug @access Public */
+const getPostBySlug = asyncHandler(async (req, res) => {
+  try {
+    const post = await Post.findOne({ slug: req.params.slug }).populate("comments.user", "name email");
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    res.json({ data: post, message: "Post fetched successfully" });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -304,4 +338,4 @@ const bulkDeletePosts = asyncHandler(async (req, res) => {
   res.json({ message: "Posts deleted successfully" });
 });
 
-export { createPost, deletePost, getPost, getPosts, updatePost, likePost, addComment, deleteComment, bulkDeletePosts };
+export { createPost, deletePost, getPost, getPosts, updatePost, likePost, addComment, deleteComment, bulkDeletePosts, getPostBySlug };

@@ -70,8 +70,8 @@ const rehypeCodeTabs = () => {
 };
 
 function BlogPage() {
-  const { fetchBlog, likeBlog, addComment, deleteComment } = useBlog();
-  const { id } = useParams();
+  const { fetchBlog, fetchBlogBySlug, likeBlog, addComment, deleteComment } = useBlog();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const [blog, setBlog] = useState(null);
 
@@ -87,7 +87,7 @@ function BlogPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const blogData = await fetchBlog(id);
+        const blogData = await fetchBlogBySlug(slug);
         setBlog(blogData.data);
       } catch (error) {
         console.error("Error fetching blog:", error);
@@ -95,7 +95,7 @@ function BlogPage() {
     };
 
     fetchData();
-  }, [id]);
+  }, [slug]);
 
   const showToast = (message, type = "success") => {
     setToast({ visible: true, message, type });
@@ -116,7 +116,7 @@ function BlogPage() {
       return;
     }
     try {
-      const response = await likeBlog(id);
+      const response = await likeBlog(blog._id);
       setBlog({ ...blog, likes: response.data });
     } catch (error) {
       showToast("Failed to like post", "error");
@@ -133,7 +133,7 @@ function BlogPage() {
 
     setIsSubmitting(true);
     try {
-      const response = await addComment(id, commentText);
+      const response = await addComment(blog._id, commentText);
       setBlog({ ...blog, comments: response.data });
       setCommentText("");
       showToast("Comment added", "success");
@@ -147,7 +147,7 @@ function BlogPage() {
   const handleDeleteComment = async (commentId) => {
     if (!window.confirm("Are you sure you want to delete this comment?")) return;
     try {
-      const response = await deleteComment(id, commentId);
+      const response = await deleteComment(blog._id, commentId);
       setBlog({ ...blog, comments: response.data });
       showToast("Comment deleted", "success");
     } catch (error) {
@@ -168,7 +168,7 @@ function BlogPage() {
     <main className="min-h-screen bg-white antialiased w-full">
       <Toast visible={toast.visible} message={toast.message} type={toast.type} />
 
-      <SEOHead path="/blogs/:id" {...seoProps} />
+      <SEOHead path="/blogs/:slug" {...seoProps} />
 
       <div className="w-full max-w-[1600px] mx-auto px-4 lg:px-6 xl:px-12 py-12 flex flex-col lg:flex-row gap-6 lg:gap-10 xl:gap-16 items-start justify-between">
         {/* Left Sidebar */}

@@ -11,6 +11,7 @@ const commentSchema = new mongoose.Schema(
 const postSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
+    slug: { type: String, unique: true, index: true },
     content: { type: String, required: true },
     image: String,
     categories: [String],

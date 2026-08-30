@@ -30,7 +30,7 @@ function Footer() {
                                 </Link>
                             </li>
                             <li className="mb-4">
-                                <Link to="/summer-internships" className="hover:underline">
+                                <Link to="/internships" className="hover:underline">
                                     Careers
                                 </Link>
                             </li>

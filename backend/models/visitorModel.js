@@ -11,6 +11,11 @@ const visitorSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    // Array of unique visitor IDs (session cookie _vid or IP) seen today
+    visitors: {
+      type: [String],
+      default: [],
+    },
   },
   { timestamps: true }
 );

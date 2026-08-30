@@ -1,18 +1,39 @@
 import asyncHandler from "express-async-handler";
 import Visitor from "../models/visitorModel.js";
+import { randomUUID } from "crypto";
 
-// @desc    Track a new visitor for today
+// @desc    Track a new visitor for today (session/IP-based deduplication)
 // @route   POST /api/visitors/track
 // @access  Public
 const trackVisitor = asyncHandler(async (req, res) => {
   const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
-  // Increment today's count, create if it doesn't exist
-  await Visitor.findOneAndUpdate(
-    { date: today },
-    { $inc: { count: 1 } },
+  // 1. Resolve visitor identity: prefer our session cookie, fallback to IP
+  let visitorId = req.cookies?._vid;
+  const isNewSession = !visitorId;
+
+  if (isNewSession) {
+    // Generate a new unique visitor ID
+    visitorId = randomUUID();
+  }
+
+  // 2. Atomically add this visitorId to today's set if not already present
+  const result = await Visitor.findOneAndUpdate(
+    { date: today, visitors: { $ne: visitorId } }, // only match if not already tracked
+    {
+      $addToSet: { visitors: visitorId },
+      $inc: { count: 1 },
+    },
     { upsert: true, new: true }
   );
+
+  // 3. Set / refresh the session cookie (httpOnly, 24h, SameSite=Lax)
+  res.cookie("_vid", visitorId, {
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
 
   res.status(200).json({ success: true, message: "Visitor tracked" });
 });

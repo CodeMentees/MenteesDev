@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { fetchSiteData } from "../../api/siteDataApi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { motion, useMotionValue, useSpring, animate } from "framer-motion";
 
 // Each word has its own gradient that transitions as text is typed
 const TYPEWRITER_WORDS = [
@@ -51,44 +52,66 @@ function useTypewriter(words, typingSpeed = 85, deletingSpeed = 50, pauseAfter =
   return { displayed, wordIndex, isDeleting: phase === "deleting" };
 }
 
+/** Framer-motion spring count-up counter — animates on scroll into view */
 function StatCounter({ target, label }) {
-  const [count, setCount] = useState(0);
   const ref = useRef(null);
+  const motionVal = useMotionValue(0);
+  const springVal = useSpring(motionVal, { damping: 60, stiffness: 300, mass: 1 });
+  const [display, setDisplay] = useState(0);
   const observed = useRef(false);
 
   useEffect(() => {
+    const unsubscribe = springVal.on("change", (v) => setDisplay(Math.round(v)));
+    return unsubscribe;
+  }, [springVal]);
+
+  useEffect(() => {
+    const num = parseInt(target.replace(/\D/g, ""));
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting && !observed.current) {
         observed.current = true;
-        const num = parseInt(target.replace(/\D/g, ""));
-        const steps = 55;
-        const increment = num / steps;
-        let current = 0;
-        const timer = setInterval(() => {
-          current += increment;
-          if (current >= num) { setCount(num); clearInterval(timer); }
-          else setCount(Math.floor(current));
-        }, 1800 / steps);
+        // Animate from 0 to num using framer-motion
+        animate(motionVal, num, { duration: 2, ease: [0.16, 1, 0.3, 1] });
       }
-    }, { threshold: 0.3 });
+    }, { threshold: 0.4 });
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
-  }, [target]);
+  }, [target, motionVal]);
 
   const suffix = target.replace(/[\d,]/g, "");
   return (
     <div ref={ref} className="px-4 text-center">
-      <p className="text-3xl md:text-4xl font-black text-white mb-1">{count}{suffix}</p>
+      <p className="text-3xl md:text-4xl font-black text-white mb-1">
+        {display}{suffix}
+      </p>
       <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.4)" }}>{label}</p>
     </div>
   );
 }
 
 function Carousel() {
+  const navigate = useNavigate();
   const [siteLoaded, setSiteLoaded] = useState(false);
   const { displayed, wordIndex, isDeleting } = useTypewriter(TYPEWRITER_WORDS);
   const currentGradient = TYPEWRITER_WORDS[wordIndex].gradient;
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+
+  const ADMIN_ROLES = ["super admin", "editor", "instructor", "intern"];
+  const isStudent = user?.role === "student";
+  const isAdmin = user && ADMIN_ROLES.includes(user.role);
+
+  const getDashboardPath = () => {
+    if (!isAuthenticated) return "/register";
+    if (isStudent) return "/student/my-courses";
+    if (isAdmin) return "/admin";
+    return "/register";
+  };
+
+  const getDashboardLabel = () => {
+    if (!isAuthenticated) return "Start Your Journey";
+    if (isStudent) return "My Learning";
+    return "Go to Dashboard";
+  };
 
   useEffect(() => {
     fetchSiteData().catch(() => {}).finally(() => setSiteLoaded(true));
@@ -226,12 +249,12 @@ function Carousel() {
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center gap-4 mb-24 fade-in stagger">
           <Link
-            to={isAuthenticated ? "/dashboard" : "/register"}
+            to={getDashboardPath()}
             className="group relative inline-flex items-center justify-center px-9 py-4 font-bold text-black rounded-full overflow-hidden transition-all duration-300 hover:scale-105 active:scale-100"
             style={{ background: "white", boxShadow: "0 0 50px rgba(255,255,255,0.2), 0 4px 20px rgba(0,0,0,0.5)" }}
           >
             <span className="relative z-10 flex items-center gap-2">
-            {isAuthenticated ? "Go to Dashboard" : "Start Your Journey"}
+            {getDashboardLabel()}
               <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>

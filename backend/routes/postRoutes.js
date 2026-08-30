@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createPost, deletePost, getPost, getPosts, updatePost, likePost, addComment, deleteComment, bulkDeletePosts } from "../controllers/postController.js";
+import { createPost, deletePost, getPost, getPosts, updatePost, likePost, addComment, deleteComment, bulkDeletePosts, getPostBySlug } from "../controllers/postController.js";
 import { requirePermission } from "../middlewares/rbacMiddleware.js";
 import isAuthenticated from "../middlewares/IsAuthenticate.js";
 
@@ -7,6 +7,7 @@ const router = Router();
 
 // Public routes
 router.get("/", getPosts);
+router.get("/slug/:slug", getPostBySlug); // ⚠️ Must be BEFORE /:id to avoid shadowing
 router.get("/:id", getPost);
 
 // Authenticated user routes (likes & comments)

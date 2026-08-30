@@ -66,7 +66,7 @@ function SummerInternshipModal() {
             </div>
 
             <Link
-              to="/summer-internships"
+              to="/internships"
               onClick={() => setIsOpen(false)}
               className="inline-block w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl shadow-lg shadow-purple-900/50 transform hover:-translate-y-1 transition-all text-lg"
             >
