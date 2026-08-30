@@ -63,45 +63,60 @@ export function PageLoader({ message = "Loading..." }) {
 export function SkeletonCard() {
   return (
     <div
-      className="rounded-2xl p-5 animate-pulse"
+      className="relative overflow-hidden rounded-2xl p-5"
       style={{
         background: "rgb(var(--surface))",
         border: "1px solid rgba(var(--border))",
       }}
     >
+      {/* Shimmer Effect */}
+      <div 
+        className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite]"
+        style={{
+          background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)",
+          zIndex: 10
+        }}
+      />
+      
       {/* Image placeholder */}
       <div className="h-36 rounded-xl mb-4"
-        style={{ background: "rgba(255,255,255,0.06)" }} />
+        style={{ background: "rgba(255,255,255,0.04)" }} />
       {/* Badge row */}
       <div className="flex gap-2 mb-3">
         <div className="h-5 w-16 rounded-full"
-          style={{ background: "rgba(255,255,255,0.07)" }} />
+          style={{ background: "rgba(255,255,255,0.05)" }} />
       </div>
       {/* Title */}
       <div className="h-5 rounded mb-2"
-        style={{ background: "rgba(255,255,255,0.07)", width: "75%" }} />
+        style={{ background: "rgba(255,255,255,0.06)", width: "75%" }} />
       <div className="h-4 rounded mb-4"
-        style={{ background: "rgba(255,255,255,0.05)", width: "55%" }} />
+        style={{ background: "rgba(255,255,255,0.04)", width: "55%" }} />
       {/* Description lines */}
       <div className="space-y-2 mb-4">
-        <div className="h-3 rounded" style={{ background: "rgba(255,255,255,0.05)" }} />
-        <div className="h-3 rounded" style={{ background: "rgba(255,255,255,0.05)", width: "85%" }} />
-        <div className="h-3 rounded" style={{ background: "rgba(255,255,255,0.05)", width: "70%" }} />
+        <div className="h-3 rounded" style={{ background: "rgba(255,255,255,0.03)" }} />
+        <div className="h-3 rounded" style={{ background: "rgba(255,255,255,0.03)", width: "85%" }} />
+        <div className="h-3 rounded" style={{ background: "rgba(255,255,255,0.03)", width: "70%" }} />
       </div>
       {/* Tags */}
       <div className="flex gap-2 mb-4">
         {[1, 2, 3].map((i) => (
           <div key={i} className="h-5 w-12 rounded"
-            style={{ background: "rgba(255,255,255,0.06)" }} />
+            style={{ background: "rgba(255,255,255,0.04)" }} />
         ))}
       </div>
       {/* Divider */}
-      <div className="h-px mb-4" style={{ background: "rgba(255,255,255,0.05)" }} />
+      <div className="h-px mb-4" style={{ background: "rgba(255,255,255,0.03)" }} />
       {/* CTA row */}
-      <div className="flex justify-between">
-        <div className="h-5 w-24 rounded" style={{ background: "rgba(249,115,22,0.15)" }} />
-        <div className="h-7 w-20 rounded-full" style={{ background: "rgba(255,255,255,0.06)" }} />
+      <div className="flex justify-between items-center">
+        <div className="h-5 w-24 rounded" style={{ background: "rgba(249,115,22,0.1)" }} />
+        <div className="h-7 w-20 rounded-full" style={{ background: "rgba(255,255,255,0.05)" }} />
       </div>
+
+      <style>{`
+        @keyframes shimmer {
+          100% { transform: translateX(100%); }
+        }
+      `}</style>
     </div>
   );
 }
