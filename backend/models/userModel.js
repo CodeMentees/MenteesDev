@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   isVerified: { type: Boolean, default: false },
   role: { 
     type: String, 
-    enum: ["super admin", "editor", "instructor", "intern", "student"], 
+    enum: ["super admin", "editor", "instructor", "intern", "viewer", "student"], 
     default: "student" 
   },
   isFullAccess: { type: Boolean, default: false },

@@ -228,7 +228,7 @@ export const authUser = asyncHandler(async (req, res) => {
 
   // --- Auto-Migrate Legacy Users ---
   let needsSave = false;
-  const validRoles = ["super admin", "editor", "instructor", "intern", "student"];
+  const validRoles = ["super admin", "editor", "instructor", "intern", "viewer", "student"];
   
   if (user.isAdmin && (!user.role || !validRoles.includes(user.role) || user.role === 'student')) {
     // If they were a legacy admin (or had an invalid role like 'admin'), default them to 'editor'

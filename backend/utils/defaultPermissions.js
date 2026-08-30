@@ -35,6 +35,7 @@ export const getDefaultPermissions = (role) => {
         "manage_content",
         "manage_queries",
       ];
+    case "viewer":
     case "student":
     default:
       return [];

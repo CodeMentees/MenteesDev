@@ -207,6 +207,7 @@ function AddEditUser() {
               className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="student">Student</option>
+              <option value="viewer">Viewer</option>
               <option value="intern">Intern</option>
               <option value="instructor">Instructor</option>
               <option value="editor">Editor</option>

@@ -8,14 +8,17 @@ const AdminRoute = ({ children, allowedPermissions = [] }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Force legacy users with stale sessions to re-authenticate
-    if (user && user.isAdmin && (!user.role || !user.permissions)) {
+    // Force ANY legacy user with a stale session to re-authenticate
+    if (user && (!user.role || !user.permissions)) {
       dispatch(logout());
       window.location.href = "/login";
     }
   }, [user, dispatch]);
   
-  const isAuthenticated = user && (user.role !== 'student' || user.isAdmin);
+  // If the user's role is undefined (stale session before they get logged out),
+  // we must strictly fallback. If they had isAdmin, they were an admin, otherwise they are a student.
+  const effectiveRole = user?.role || (user?.isAdmin ? 'editor' : 'student');
+  const isAuthenticated = user && (effectiveRole !== 'student' || user.isAdmin);
   
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
@@ -23,7 +26,7 @@ const AdminRoute = ({ children, allowedPermissions = [] }) => {
 
   // If a specific permission is required, check it
   if (allowedPermissions.length > 0) {
-    const hasPermission = allowedPermissions.some(p => user?.permissions?.includes(p)) || user?.role === 'super admin' || user?.isAdmin;
+    const hasPermission = allowedPermissions.some(p => user?.permissions?.includes(p)) || effectiveRole === 'super admin' || user?.isAdmin;
     if (!hasPermission) {
       return <Navigate to="/admin" replace />;
     }
