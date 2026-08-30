@@ -61,7 +61,7 @@ function LoginPage() {
     try {
       const userData = await loginUser(updatedFormData);
       if (userData) {
-        localStorage.setItem("token", userData.token);
+        // CRIT-4: Do NOT store the token in localStorage — auth uses the httpOnly cookie set by the server
         dispatch(login(userData));
         showToast(userData.message || "Logged in successfully!", "success");
         setTimeout(() => {

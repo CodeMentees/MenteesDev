@@ -30,7 +30,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     try {
       const userData = await loginUser(formData);
       if (userData) {
-        localStorage.setItem("token", userData.token);
+        // CRIT-4: Do NOT store the token in localStorage — auth uses the httpOnly cookie set by the server
         dispatch(login(userData));
         showToast("Logged in successfully!", "success");
         setTimeout(() => {

@@ -49,12 +49,20 @@ const corsOptions = {
   origin: (origin, callback) => {
     // Allow requests with no origin (like mobile apps, curl, server-to-server)
     if (!origin) return callback(null, true);
+
+    // Build the explicit allowed set
+    const vercelProjectDomain = process.env.VERCEL_PROJECT_DOMAIN; // e.g. "mentees-dev.vercel.app"
+    const explicitAllowed = new Set([
+      ...allowedOrigins,
+      // LOW-3 Fix: Only allow the specific Vercel deploy URL, not all *.vercel.app
+      ...(vercelProjectDomain ? [`https://${vercelProjectDomain}`] : []),
+    ]);
+
     if (
-      allowedOrigins.includes(origin) ||
-      /\.vercel\.app$/.test(origin) ||
-      /codementees\.com$/.test(origin) ||
-      /^http:\/\/localhost:\d+$/.test(origin) ||
-      /^http:\/\/127\.0\.0\.1:\d+$/.test(origin)
+      explicitAllowed.has(origin) ||
+      /codementees\.com$/.test(origin) ||        // production domain and subdomains
+      /^http:\/\/localhost:\d+$/.test(origin) ||  // dev: any localhost port
+      /^http:\/\/127\.0\.0\.1:\d+$/.test(origin)  // dev: any 127.0.0.1 port
     ) {
       return callback(null, true);
     }

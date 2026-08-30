@@ -91,10 +91,9 @@ function AddPost() {
     try {
       const response = await fetch(`/api/posts${isEditing ? `/${id}` : ""}`, {
         method: isEditing ? "PUT" : "POST",
-        credentials: "include",
+        credentials: "include",  // CRIT-4: use the httpOnly cookie for auth
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${user?.token}`
         },
         body: JSON.stringify(postData),
       });

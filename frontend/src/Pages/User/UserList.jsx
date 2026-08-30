@@ -54,9 +54,9 @@ function UserList() {
       // For now I'll use fetch or just add import axios
       const response = await fetch("/api/users/bulk", {
         method: "POST",
+        credentials: "include",  // CRIT-4: use the httpOnly cookie for auth
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${currentUser?.token}`,
         },
         body: JSON.stringify({ ids }),
       });
@@ -113,9 +113,9 @@ function UserList() {
     try {
       const response = await fetch("/api/users/interns/reset-password", {
         method: "POST",
+        credentials: "include",  // CRIT-4: use the httpOnly cookie for auth
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${currentUser?.token}`,
         },
         body: JSON.stringify({ newPassword }),
       });

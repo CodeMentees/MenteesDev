@@ -17,9 +17,8 @@ export const authSlice = createSlice({
     logout: (state) => {
       state.isAuthenticated = false;
       state.user = null;
-      // Remove user from localStorage
+      // Remove user metadata from localStorage (token is NOT stored here — it's in the httpOnly cookie)
       localStorage.removeItem('user');
-      localStorage.removeItem('token');
     },
     updateUserSession: (state, action) => {
       if (state.user) {

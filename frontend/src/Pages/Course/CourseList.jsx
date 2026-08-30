@@ -41,21 +41,11 @@ function CourseList() {
 
     const handleBulkDelete = async (ids) => {
         try {
-            // we don't have axios imported directly here, so we'll use fetch
-            const authState = localStorage.getItem('persist:root');
-            let token = "";
-            if (authState) {
-                const parsed = JSON.parse(authState);
-                if (parsed.auth) {
-                    const authData = JSON.parse(parsed.auth);
-                    token = authData.user?.token || "";
-                }
-            }
             const res = await fetch("/api/courses/bulk", {
                 method: "POST",
+                credentials: "include",  // CRIT-4: use the httpOnly cookie — no localStorage token needed
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({ ids })
             });

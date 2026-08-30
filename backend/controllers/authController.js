@@ -281,7 +281,7 @@ export const authUser = asyncHandler(async (req, res) => {
       isFullAccess: user.isFullAccess,
       role: user.role,
       permissions: user.permissions,
-      token: token,
+      // LOW-4: token intentionally NOT returned in body — auth is via httpOnly cookie only
       message: "User signed in successfully",
     });
 });
