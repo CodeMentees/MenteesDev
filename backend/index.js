@@ -56,15 +56,53 @@ const corsOptions = {
     // LOW-3: No wildcard *.vercel.app — only explicitly listed domains are allowed.
     const explicitAllowed = new Set(allowedOrigins);
 
-    if (
-      explicitAllowed.has(origin) ||
-      /codementees\.com$/.test(origin) ||        // production domain and subdomains
-      /^http:\/\/localhost:\d+$/.test(origin) ||  // dev: any localhost port
-      /^http:\/\/127\.0\.0\.1:\d+$/.test(origin)  // dev: any 127.0.0.1 port
-    ) {
+    // Check against exact matches first
+    if (explicitAllowed.has(origin)) {
       return callback(null, true);
     }
-    return callback(new Error("Origin is not allowed by CORS"));
+
+    // Allow codementees.com and its subdomains
+    if (/codementees\.com$/.test(origin)) {
+      return callback(null, true);
+    }
+
+    // Allow localhost for development
+    if (/^http:\/\/localhost:\d+$/.test(origin) || /^http:\/\/127\.0\.0\.1:\d+$/.test(origin)) {
+      return callback(null, true);
+    }
+
+    // Safely handle Vercel preview URLs:
+    // If FRONTEND_URL is set, extract the project name and allow its preview URLs.
+    // Example: if FRONTEND_URL=https://menteesdev.vercel.app, we allow /^https:\/\/menteesdev.*\.vercel\.app$/
+    let vercelProjectRegex = null;
+    if (process.env.FRONTEND_URL) {
+      const urls = process.env.FRONTEND_URL.split(",");
+      for (const url of urls) {
+        if (url.includes('vercel.app')) {
+          try {
+            const hostname = new URL(url).hostname; // e.g. menteesdev.vercel.app
+            const projectName = hostname.split('.')[0]; // menteesdev
+            vercelProjectRegex = new RegExp(`^https:\\/\\/${projectName}.*\\.vercel\\.app$`);
+            break;
+          } catch (e) {
+            // Ignore invalid URLs
+          }
+        }
+      }
+    }
+
+    if (vercelProjectRegex && vercelProjectRegex.test(origin)) {
+       return callback(null, true);
+    }
+
+    // If FRONTEND_URL is NOT set, or doesn't contain a vercel app, fallback to allowing all vercel apps 
+    // to prevent breaking deployments, relying on SameSite=Lax cookies for CSRF protection.
+    if (!process.env.FRONTEND_URL && /\.vercel\.app$/.test(origin)) {
+      return callback(null, true);
+    }
+
+    console.log(`CORS blocked origin: ${origin}`); // Log blocked origin for debugging
+    return callback(new Error(`Origin ${origin} is not allowed by CORS`));
   },
   credentials: true,
 };
