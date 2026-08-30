@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import SEOHead from "../seo/SEOHead";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { createPortal } from "react-dom";
 import Loading from "../Components/Helpers/Loading";
 import { useBlog } from "../api/blogApi";
 import BlogSidebar from "../Components/Blog/BlogSidebar";
@@ -14,6 +15,16 @@ function Blog() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const category = searchParams.get("category");
+  const [selectedId, setSelectedId] = useState(null);
+
+  // Close overlay on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") setSelectedId(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
 
   const fetchData = async () => {
@@ -96,8 +107,8 @@ function Blog() {
                       layoutId={`blog-page-card-${post._id}`}
                       className="group flex flex-col items-center gap-6"
                     >
-                      <Link
-                        to={`/blogs/${post.slug || post._id}`}
+                      <div
+                        onClick={() => setSelectedId(post._id)}
                         className="shrink-0 relative block h-64 w-full overflow-hidden rounded-3xl bg-gray-100 shadow-xl cursor-pointer"
                       >
                         <motion.img
@@ -116,7 +127,7 @@ function Blog() {
                             Read Article
                           </span>
                         </div>
-                      </Link>
+                      </div>
 
                       <div className="flex flex-col w-full">
                         <div className="flex items-center space-x-3 text-xs font-bold text-pink-500 uppercase tracking-widest mb-3">
@@ -170,6 +181,75 @@ function Blog() {
           </div>
         </div>
       </div>
+
+      {createPortal(
+        <AnimatePresence>
+          {selectedId && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setSelectedId(null)}
+                className="absolute inset-0 bg-black/60 backdrop-blur-md"
+              />
+              
+              <div className="relative w-full max-w-xl max-h-[85vh] flex justify-center pointer-events-none">
+                {posts.filter(p => p._id === selectedId).map(post => (
+                  <motion.div
+                    key={post._id}
+                    layoutId={`blog-page-card-${post._id}`}
+                    className="flex flex-col rounded-3xl overflow-hidden shadow-2xl relative w-full bg-white pointer-events-auto border border-gray-100"
+                  >
+                    <button
+                      onClick={() => setSelectedId(null)}
+                      className="absolute top-4 right-4 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-black/60 hover:bg-black/90 text-white transition-colors"
+                      title="Close"
+                    >
+                      ✕
+                    </button>
+                    
+                    {/* Image */}
+                    <motion.div className="w-full h-56 md:h-64 relative shrink-0">
+                      <motion.img
+                        layoutId={`blog-page-image-${post._id}`}
+                        src={post.image || "/images/default-blog.png"}
+                        className="w-full h-full object-cover"
+                        alt={post.title}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent" />
+                    </motion.div>
+                    
+                    {/* Content */}
+                    <div className="p-6 md:p-8 flex flex-col flex-grow relative z-10 -mt-8">
+                      <p className="text-xs font-bold tracking-widest uppercase mb-3 text-pink-500 bg-white/80 w-max px-3 py-1 rounded-full backdrop-blur-md">Preview</p>
+                      <motion.h3 layoutId={`blog-page-title-${post._id}`} className="text-2xl md:text-3xl font-black text-gray-900 mb-4 leading-tight">
+                        {post.title}
+                      </motion.h3>
+                      <motion.div layoutId={`blog-page-content-${post._id}`} className="text-sm md:text-base leading-relaxed mb-6 overflow-y-auto pr-2 text-gray-600 line-clamp-4">
+                        {(() => {
+                           const text = post.content?.replace(/<[^>]+>/g, ' ').replace(/[#_*~`>]/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/!\[([^\]]*)\]\([^)]+\)/g, '').replace(/\s+/g, ' ').trim() || "";
+                           return text.substring(0, 300) + "...";
+                        })()}
+                      </motion.div>
+                      
+                      <div className="mt-auto pt-4 flex gap-3 border-t border-gray-100">
+                        <button
+                          onClick={() => navigate(`/blogs/${post.slug || post._id}`)}
+                          className="px-6 py-2.5 rounded-xl text-sm font-bold transition hover:opacity-90 flex-1 text-center bg-pink-600 text-white shadow-lg shadow-pink-200"
+                        >
+                          Read Full Article
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }
