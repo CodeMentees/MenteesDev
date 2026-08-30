@@ -215,32 +215,38 @@ function DashboardLayout() {
           </ul>
         </nav>
         
-        {/* Bottom Nav */}
-        <div className="absolute bottom-0 w-full p-4 border-t" style={{ borderColor: "rgba(var(--dash-border))", background: "rgba(var(--dash-bg), 0.9)" }}>
-          <Link to="/" className="dashboard-link w-full justify-start mb-2 hover:text-pink-500">
-            <span className="text-base opacity-80"><FaGlobe /></span>
-            <span>Back to Website</span>
-          </Link>
-          <button 
-            onClick={() => {
-              // Same logic as Header logout
-              fetch("/api/auth/logout", { method: "POST", credentials: "include" })
-                .finally(() => window.location.href = "/login");
-            }}
-            className="dashboard-link w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-500/10"
-          >
-            <span className="text-base opacity-80">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd" /></svg>
-            </span>
-            <span>Logout</span>
-          </button>
-        </div>
+
       </aside>
 
-      {/* ── Main Content ── */}
-      <main className="ml-64 flex-1 min-h-screen p-6 page-enter"
-        style={{ background: "rgb(var(--dash-bg))" }}>
-        <Outlet />
+      {/* ── Main Content Wrapper ── */}
+      <main className="ml-64 flex-1 flex flex-col min-h-screen" style={{ background: "rgb(var(--dash-bg))" }}>
+        {/* Header */}
+        <header className="flex items-center justify-between p-4 bg-gray-900/50 backdrop-blur-md text-white border-b border-gray-800 sticky top-0 z-20">
+          <div className="flex items-center gap-4">
+            <span className="font-bold">Admin Panel</span>
+          </div>
+          
+          <div className="flex items-center gap-4 ml-auto">
+            <Link to="/" className="text-sm text-gray-300 hover:text-pink-500 flex items-center gap-2 transition-colors">
+              <FaGlobe />
+              <span>Back to Website</span>
+            </Link>
+            <button 
+              onClick={() => {
+                fetch("/api/auth/logout", { method: "POST", credentials: "include" })
+                  .finally(() => window.location.href = "/login");
+              }}
+              className="text-sm text-red-400 hover:text-red-300 flex items-center gap-2 transition-colors bg-red-500/10 px-3 py-1.5 rounded-lg"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd" /></svg>
+              <span>Logout</span>
+            </button>
+          </div>
+        </header>
+
+        <div className="p-6 flex-1 page-enter">
+          <Outlet />
+        </div>
       </main>
     </div>
   );
