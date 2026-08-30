@@ -50,7 +50,8 @@ export const sendResetCode = asyncHandler(async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-        return res.status(404).json({ message: "No account found with this email" });
+        // MED-2: Return generic message to prevent email enumeration
+        return res.json({ message: "If that email is registered, a code has been sent." });
     }
 
     // Remove any existing reset requests for this email
@@ -116,8 +117,15 @@ export const verifyResetCode = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: "Verification code has expired. Please request a new one." });
     }
 
+    // MED-1: Brute-force protection — track wrong attempts
     if (resetEntry.code !== code) {
-        return res.status(400).json({ message: "Invalid verification code" });
+        resetEntry.attempts = (resetEntry.attempts || 0) + 1;
+        if (resetEntry.attempts >= 5) {
+            await PasswordReset.deleteMany({ email });
+            return res.status(429).json({ message: "Too many incorrect attempts. Please request a new code." });
+        }
+        await resetEntry.save();
+        return res.status(400).json({ message: `Invalid verification code. ${5 - resetEntry.attempts} attempts remaining.` });
     }
 
     // Mark as verified

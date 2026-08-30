@@ -18,7 +18,9 @@ const AdminRoute = ({ children, allowedPermissions = [] }) => {
   // If the user's role is undefined (stale session before they get logged out),
   // we must strictly fallback. If they had isAdmin, they were an admin, otherwise they are a student.
   const effectiveRole = user?.role || (user?.isAdmin ? 'editor' : 'student');
-  const isAuthenticated = user && (effectiveRole !== 'student' || user.isAdmin);
+  // Roles that should NEVER access the admin dashboard
+  const NON_ADMIN_ROLES = ['student', 'viewer'];
+  const isAuthenticated = user && (!NON_ADMIN_ROLES.includes(effectiveRole) || user.isAdmin);
   
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;

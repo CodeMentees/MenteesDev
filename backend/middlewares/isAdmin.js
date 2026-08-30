@@ -1,5 +1,8 @@
 import jwt from "jsonwebtoken"
 
+// Admin roles that are allowed access through this middleware
+const ADMIN_ROLES = ["super admin", "editor", "instructor", "intern"];
+
 const isAdmin = async (req, res, next) => {
   try {
     const token = req.cookies.token;
@@ -17,8 +20,9 @@ const isAdmin = async (req, res, next) => {
       });
     }
 
-    if (!decode.isAdmin && decode.role !== "super admin") {
-      return res.status(401).json({
+    // HIGH-2 Fix: check role explicitly — do NOT rely on the legacy isAdmin flag alone
+    if (!ADMIN_ROLES.includes(decode.role)) {
+      return res.status(403).json({
         message: "User is not authorized as an admin",
         success: false,
       });
@@ -26,7 +30,7 @@ const isAdmin = async (req, res, next) => {
     req.userId = decode._id;
     next();
   } catch (error) {
-    console.log(error);
+    console.error("isAdmin middleware error:", error.message);
     next(error);
   }
 };

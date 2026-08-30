@@ -129,6 +129,28 @@ const updateUser = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // --- HIGH-5: Role Escalation Protection ---
+    // Fetch the caller's role from DB (req.userId is set by requirePermission middleware)
+    if (req.body.role || req.body.permissions) {
+      const caller = await User.findById(req.userId).select("role");
+      if (!caller) {
+        return res.status(403).json({ message: "Caller not found" });
+      }
+      // Only a super admin can assign the super admin role
+      if (req.body.role === 'super admin' && caller.role !== 'super admin') {
+        return res.status(403).json({ message: "Only super admins can assign the super admin role." });
+      }
+      // Only super admin can assign manage_site or manage_users permissions
+      const sensitivePerms = ['manage_site', 'manage_users'];
+      if (req.body.permissions && caller.role !== 'super admin') {
+        const hasSensitive = sensitivePerms.some(p => req.body.permissions.includes(p));
+        if (hasSensitive) {
+          return res.status(403).json({ message: "Only super admins can grant site or user management permissions." });
+        }
+      }
+    }
+    // -----------------------------------------
+
     // Update fields if provided
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
@@ -158,6 +180,7 @@ const updateUser = asyncHandler(async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
 
 /**
  * @swagger
