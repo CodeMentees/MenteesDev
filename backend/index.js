@@ -50,13 +50,11 @@ const corsOptions = {
     // Allow requests with no origin (like mobile apps, curl, server-to-server)
     if (!origin) return callback(null, true);
 
-    // Build the explicit allowed set
-    const vercelProjectDomain = process.env.VERCEL_PROJECT_DOMAIN; // e.g. "mentees-dev.vercel.app"
-    const explicitAllowed = new Set([
-      ...allowedOrigins,
-      // LOW-3 Fix: Only allow the specific Vercel deploy URL, not all *.vercel.app
-      ...(vercelProjectDomain ? [`https://${vercelProjectDomain}`] : []),
-    ]);
+    // allowedOrigins comes from FRONTEND_URL env var (comma-separated list).
+    // In production, set FRONTEND_URL to include ALL allowed origins, e.g.:
+    //   FRONTEND_URL=https://codementees.com,https://your-project.vercel.app
+    // LOW-3: No wildcard *.vercel.app — only explicitly listed domains are allowed.
+    const explicitAllowed = new Set(allowedOrigins);
 
     if (
       explicitAllowed.has(origin) ||
