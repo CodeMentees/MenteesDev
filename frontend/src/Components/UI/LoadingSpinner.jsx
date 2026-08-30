@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { motion } from "framer-motion";
 
 /** Inline spinner — use inside buttons or small containers */
 export default function LoadingSpinner({ size = "md", className = "" }) {
@@ -46,20 +47,60 @@ export function LoadingOverlay({ message = "Loading..." }) {
 
 /** Centered page-level spinner for route transitions */
 export function PageLoader({ message = "Loading..." }) {
+  const dotVariants = {
+    jump: {
+      y: "-30px",
+      transition: {
+        duration: 0.8,
+        repeat: Infinity,
+        repeatType: "mirror",
+        ease: "easeInOut",
+      },
+    },
+  };
+  
+  const containerVariants = {
+    jump: {
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center"
+    <div className="min-h-screen flex flex-col items-center justify-center gap-10"
       style={{ background: "rgb(var(--bg))" }}>
-      <div className="text-center flex flex-col items-center gap-4">
-        <LoadingSpinner size="xl" />
-        <p className="text-sm" style={{ color: "rgb(var(--text-secondary))" }}>
-          {message}
-        </p>
-      </div>
+      
+      <motion.div
+        className="flex justify-center items-center gap-[10px]"
+        variants={containerVariants}
+        initial="initial"
+        animate="jump"
+      >
+        <motion.div 
+          className="w-5 h-5 rounded-full" 
+          style={{ backgroundColor: "#ff0088", willChange: "transform" }}
+          variants={dotVariants} 
+        />
+        <motion.div 
+          className="w-5 h-5 rounded-full" 
+          style={{ backgroundColor: "#ff0088", willChange: "transform" }}
+          variants={dotVariants} 
+        />
+        <motion.div 
+          className="w-5 h-5 rounded-full" 
+          style={{ backgroundColor: "#ff0088", willChange: "transform" }}
+          variants={dotVariants} 
+        />
+      </motion.div>
+
+      <p className="text-sm font-medium uppercase tracking-widest" style={{ color: "rgb(var(--text-secondary))" }}>
+        {message}
+      </p>
     </div>
   );
 }
 
-import { motion } from "framer-motion";
 
 /** Animated pulse skeleton — drop in while fetching course/blog cards */
 export function SkeletonCard() {
