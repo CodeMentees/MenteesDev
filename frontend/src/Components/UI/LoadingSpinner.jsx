@@ -59,6 +59,8 @@ export function PageLoader({ message = "Loading..." }) {
   );
 }
 
+import { motion } from "framer-motion";
+
 /** Animated pulse skeleton — drop in while fetching course/blog cards */
 export function SkeletonCard() {
   return (
@@ -69,11 +71,19 @@ export function SkeletonCard() {
         border: "1px solid rgba(var(--border))",
       }}
     >
-      {/* Shimmer Effect */}
-      <div 
-        className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite]"
+      {/* Shimmer Effect using framer-motion */}
+      <motion.div 
+        className="absolute inset-0"
+        initial={{ x: "-100%" }}
+        animate={{ x: "100%" }}
+        transition={{ 
+          repeat: Infinity, 
+          duration: 1.5, 
+          ease: "linear",
+          repeatDelay: 0.2
+        }}
         style={{
-          background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)",
+          background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%)",
           zIndex: 10
         }}
       />
@@ -111,12 +121,6 @@ export function SkeletonCard() {
         <div className="h-5 w-24 rounded" style={{ background: "rgba(249,115,22,0.1)" }} />
         <div className="h-7 w-20 rounded-full" style={{ background: "rgba(255,255,255,0.05)" }} />
       </div>
-
-      <style>{`
-        @keyframes shimmer {
-          100% { transform: translateX(100%); }
-        }
-      `}</style>
     </div>
   );
 }
