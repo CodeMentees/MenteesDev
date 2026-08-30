@@ -51,9 +51,6 @@ const corsOptions = {
     if (!origin) return callback(null, true);
 
     // allowedOrigins comes from FRONTEND_URL env var (comma-separated list).
-    // In production, set FRONTEND_URL to include ALL allowed origins, e.g.:
-    //   FRONTEND_URL=https://codementees.com,https://your-project.vercel.app
-    // LOW-3: No wildcard *.vercel.app — only explicitly listed domains are allowed.
     const explicitAllowed = new Set(allowedOrigins);
 
     // Check against exact matches first
@@ -71,32 +68,13 @@ const corsOptions = {
       return callback(null, true);
     }
 
-    // Safely handle Vercel preview URLs:
-    // If FRONTEND_URL is set, extract the project name and allow its preview URLs.
-    // Example: if FRONTEND_URL=https://menteesdev.vercel.app, we allow /^https:\/\/menteesdev.*\.vercel\.app$/
-    let vercelProjectRegex = null;
-    if (process.env.FRONTEND_URL) {
-      const urls = process.env.FRONTEND_URL.split(",");
-      for (const url of urls) {
-        if (url.includes('vercel.app')) {
-          try {
-            const hostname = new URL(url).hostname; // e.g. menteesdev.vercel.app
-            const projectName = hostname.split('.')[0]; // menteesdev
-            vercelProjectRegex = new RegExp(`^https:\\/\\/${projectName}.*\\.vercel\\.app$`);
-            break;
-          } catch (e) {
-            // Ignore invalid URLs
-          }
-        }
-      }
-    }
-
-    if (vercelProjectRegex && vercelProjectRegex.test(origin)) {
+    // Allow the main Vercel project and its preview URLs dynamically
+    if (/^https:\/\/mentees-?dev.*\.vercel\.app$/.test(origin)) {
        return callback(null, true);
     }
 
-    // If FRONTEND_URL is NOT set, or doesn't contain a vercel app, fallback to allowing all vercel apps 
-    // to prevent breaking deployments, relying on SameSite=Lax cookies for CSRF protection.
+    // If FRONTEND_URL is NOT set, fallback to allowing all vercel apps 
+    // to prevent breaking deployments.
     if (!process.env.FRONTEND_URL && /\.vercel\.app$/.test(origin)) {
       return callback(null, true);
     }
