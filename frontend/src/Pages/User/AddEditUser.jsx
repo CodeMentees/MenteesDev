@@ -213,6 +213,16 @@ function AddEditUser() {
               <option value="editor">Editor</option>
               <option value="super admin">Super Admin</option>
             </select>
+            <p className="mt-2 text-xs text-blue-400">
+              {{
+                "super admin": "Full access to all dashboard features, including site settings and user management.",
+                "editor": "Access to manage posts, blogs, categories, and events.",
+                "instructor": "Access to manage courses, categories, and live classes.",
+                "intern": "Limited access to manage applications like jobs and interns.",
+                "viewer": "Read-only access to dashboard data.",
+                "student": "Access to student portal, learning dashboard, and enrolled courses."
+              }[userData.role] || "Standard access."}
+            </p>
           </div>
 
           <div className="flex items-center gap-3 mt-4">
