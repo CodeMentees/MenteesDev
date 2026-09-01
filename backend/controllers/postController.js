@@ -229,7 +229,7 @@ const getPostBySlug = asyncHandler(async (req, res) => {
  */
 const getPosts = asyncHandler(async (req, res) => {
   try {
-    let { page = 1, limit = 10, category } = req.query;
+    let { page = 1, limit = 10, category, search } = req.query;
     page = parseInt(page);
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
@@ -237,6 +237,9 @@ const getPosts = asyncHandler(async (req, res) => {
     const query = {};
     if (category) {
       query.categories = category;
+    }
+    if (search) {
+      query.title = { $regex: search, $options: "i" };
     }
 
     const posts = await Post.find(query)

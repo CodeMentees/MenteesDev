@@ -4,10 +4,10 @@ const blogAPI = "/posts";
 export const useBlog = () => {
   const { getItems, getItemById, createItem, updateItem, deleteItem, customRequest } = useCRUD(blogAPI);
   return {
-    fetchLatestBlogs: (page = 1, limit = 10, category = "") => {
-      const url = category
-        ? `?page=${page}&limit=${limit}&category=${encodeURIComponent(category)}`
-        : `?page=${page}&limit=${limit}`;
+    fetchLatestBlogs: (page = 1, limit = 10, category = "", search = "") => {
+      let url = `?page=${page}&limit=${limit}`;
+      if (category) url += `&category=${encodeURIComponent(category)}`;
+      if (search) url += `&search=${encodeURIComponent(search)}`;
       return customRequest("GET", url);
     },
     fetchBlog: (id) => getItemById(id),

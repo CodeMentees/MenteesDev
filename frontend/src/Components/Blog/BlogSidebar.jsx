@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useBlogCategory } from "../../api/blogCategoryApi";
+import { FiSearch } from "react-icons/fi";
 
-const BlogSidebar = ({ selectedCategory, onCategoryClick }) => {
+const BlogSidebar = ({ selectedCategory, onCategoryClick, searchQuery, onSearch }) => {
     const { fetchBlogCategories } = useBlogCategory();
     const [categories, setCategories] = useState([]);
+    const [localSearch, setLocalSearch] = useState(searchQuery || "");
+
+    useEffect(() => {
+        setLocalSearch(searchQuery || "");
+    }, [searchQuery]);
 
     useEffect(() => {
         const loadCategories = async () => {
@@ -18,9 +24,27 @@ const BlogSidebar = ({ selectedCategory, onCategoryClick }) => {
         loadCategories();
     }, []);
 
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        onSearch(localSearch);
+    };
+
     return (
         <aside className="w-full lg:w-64 shrink-0">
             <div className="sticky top-24">
+                <form onSubmit={handleSearchSubmit} className="mb-8 relative">
+                    <input
+                        type="text"
+                        placeholder="Search blogs..."
+                        value={localSearch}
+                        onChange={(e) => setLocalSearch(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-500/20 focus:border-pink-500 transition-all"
+                    />
+                    <button type="submit" className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-pink-500">
+                        <FiSearch size={16} />
+                    </button>
+                </form>
+
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 pl-9">
                     Browse Categories
                 </h3>

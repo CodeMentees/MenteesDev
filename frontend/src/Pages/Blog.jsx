@@ -15,6 +15,7 @@ function Blog() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const category = searchParams.get("category");
+  const searchQuery = searchParams.get("search");
   const [selectedId, setSelectedId] = useState(null);
 
   // Close overlay on Escape key
@@ -30,7 +31,7 @@ function Blog() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const postsData = await fetchLatestBlogs(1, 10, category || "");
+      const postsData = await fetchLatestBlogs(1, 10, category || "", searchQuery || "");
       if (postsData) {
         setPosts(postsData.data || []);
       }
@@ -43,14 +44,20 @@ function Blog() {
 
   useEffect(() => {
     fetchData();
-  }, [category]);
+  }, [category, searchQuery]);
 
   const handleCategoryClick = (catName) => {
-    if (catName) {
-      setSearchParams({ category: catName });
-    } else {
-      setSearchParams({});
-    }
+    const newParams = {};
+    if (catName) newParams.category = catName;
+    if (searchQuery) newParams.search = searchQuery;
+    setSearchParams(newParams);
+  };
+
+  const handleSearch = (searchTerm) => {
+    const newParams = {};
+    if (category) newParams.category = category;
+    if (searchTerm) newParams.search = searchTerm;
+    setSearchParams(newParams);
   };
 
   if (isLoading) {
@@ -83,7 +90,12 @@ function Blog() {
         <div className="flex flex-col lg:flex-row gap-8 xl:gap-24">
           {/* Sidebar */}
           <div className="w-full lg:w-64 shrink-0">
-            <BlogSidebar selectedCategory={category} onCategoryClick={handleCategoryClick} />
+            <BlogSidebar 
+              selectedCategory={category} 
+              onCategoryClick={handleCategoryClick} 
+              searchQuery={searchQuery}
+              onSearch={handleSearch}
+            />
           </div>
 
           {/* Blog Posts Grid */}
@@ -91,12 +103,12 @@ function Blog() {
             <div className="w-full max-w-3xl">
               {posts.length === 0 ? (
                 <div className="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
-                  <p className="text-gray-400 text-lg">No blogs found in this category.</p>
+                  <p className="text-gray-400 text-lg">No blogs found.</p>
                   <button
-                    onClick={() => handleCategoryClick(null)}
+                    onClick={() => { handleCategoryClick(null); handleSearch(""); }}
                     className="mt-4 text-pink-600 font-bold hover:underline"
                   >
-                    View all posts
+                    Clear filters
                   </button>
                 </div>
               ) : (
