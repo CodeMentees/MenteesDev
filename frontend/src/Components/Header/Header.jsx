@@ -16,6 +16,7 @@ const MenuIcon = ({ open }) => (
 const menuItems = [
   { label: "All Courses", link: "/courses" },
   { label: "Blogs", link: "/blogs" },
+  { label: "Events", link: "/events" },
   { label: "Live Courses", link: "/live" },
   { label: "School Coding", link: "/school-coding" },
   { label: "Internships", link: "/internships" },

@@ -61,6 +61,7 @@ const AddEditJob = lazy(() => import('./Pages/Admin/Job/AddEditJob'));
 const SummerInternship = lazy(() => import('./Pages/Internship/SummerInternship'));
 const InternshipList = lazy(() => import('./Pages/Admin/Interns/InternshipList'));
 const BulkMailSender = lazy(() => import('./Pages/Admin/BulkMail/BulkMailSender'));
+const EventsPage = lazy(() => import('./Pages/Events'));
 
 // HelmetWrapper component to handle SEO meta tags
 import SEOHead from './seo/SEOHead';
@@ -318,6 +319,15 @@ function App() {
                         <AddEditSchoolCourse />
                       </SEOHeadWrapper>
                     </AdminRoutes>
+                  }
+                />
+
+                <Route
+                  path="/events"
+                  element={
+                    <SEOHeadWrapper path="/events" noindex={false}>
+                      <EventsPage />
+                    </SEOHeadWrapper>
                   }
                 />
 
