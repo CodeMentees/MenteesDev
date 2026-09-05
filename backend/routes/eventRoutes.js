@@ -1,5 +1,6 @@
 import express from "express";
 import { requirePermission } from '../middlewares/rbacMiddleware.js';
+import { cachePublic } from '../middlewares/cacheMiddleware.js';
 import {
   addEvent,
   getEvent,
@@ -9,8 +10,8 @@ import {
 } from "../controllers/eventController.js";
 
 const router = express.Router();
-router.get("/:id", getEvent);
-router.get("/", getAllEvents);
+router.get("/:id", cachePublic(120, 600), getEvent);
+router.get("/", cachePublic(60, 300), getAllEvents);
 router.use(requirePermission("manage_content"))
 router.post("/", addEvent);
 router.put("/:id", updateEvent);

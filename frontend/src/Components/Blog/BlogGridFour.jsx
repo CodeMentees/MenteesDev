@@ -45,7 +45,24 @@ function BlogGridFour() {
   }, []);
 
   if (loading) {
-    return <Loading />;
+    // Inline skeleton instead of full-page spinner so home page doesn't block
+    return (
+      <section className="py-24 px-6" style={{ background: "rgb(4,4,8)" }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="rounded-2xl overflow-hidden" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                <div className="h-44 bg-white/5 animate-pulse" />
+                <div className="p-5 space-y-2">
+                  <div className="h-3 bg-white/5 rounded animate-pulse w-3/4" />
+                  <div className="h-3 bg-white/5 rounded animate-pulse w-1/2" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (
@@ -93,6 +110,8 @@ function BlogGridFour() {
                     src={latest.image || "https://placehold.co/300x200?text=No+Image"}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     alt={latest.title || "Blog Image"}
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <span className="text-white text-sm font-bold bg-pink-600/90 px-4 py-2 rounded-full backdrop-blur-sm shadow-lg flex items-center gap-2">

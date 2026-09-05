@@ -44,6 +44,8 @@ const EventCard = ({ event, index }) => {
         <img
           src={event.image}
           alt={event.title}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
         {/* Gradient overlay */}

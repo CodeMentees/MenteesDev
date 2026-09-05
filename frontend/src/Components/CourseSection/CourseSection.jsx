@@ -25,7 +25,10 @@ function CourseSection() {
     };
     
     useEffect(() => {
-        AOS.init({ once: false, mirror: true });
+        AOS.init({ once: true });
+    }, []);
+
+    useEffect(() => {
         if (categoryData?.length > 0) {
             fetchCourseData(categoryData[0]._id);
         }
