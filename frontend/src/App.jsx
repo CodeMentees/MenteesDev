@@ -4,6 +4,7 @@ import RouteProgressBar from './Components/UI/RouteProgressBar';
 import Loading from './Components/Helpers/Loading';
 import useScrollReveal from './hooks/useScrollReveal';
 import ScrollToTop from './Components/UI/ScrollToTop';
+import api from './api/api';
 
 import Header from './Components/Header/Header';
 import Footer from './Components/Footer/Footer';
@@ -118,7 +119,7 @@ function AppInner() {
   useEffect(() => {
     if (!sessionStorage.getItem('visited')) {
       sessionStorage.setItem('visited', 'true');
-      fetch('/api/visitors/track', { method: 'POST' })
+      api.post('/visitors/track')
         .catch(err => {
             console.error('Failed to track visitor:', err);
             // Optional: revert if it fails, though usually okay to keep it true

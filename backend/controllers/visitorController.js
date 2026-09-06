@@ -17,14 +17,21 @@ const trackVisitor = asyncHandler(async (req, res) => {
     visitorId = randomUUID();
   }
 
-  // 2. Atomically add this visitorId to today's set if not already present
-  const result = await Visitor.findOneAndUpdate(
-    { date: today, visitors: { $ne: visitorId } }, // only match if not already tracked
+  // 2. Safely add this visitorId and increment count
+  // First, ensure the document exists for today to avoid upsert conflicts with $ne
+  await Visitor.updateOne(
+    { date: today },
+    { $setOnInsert: { count: 0, visitors: [] } },
+    { upsert: true }
+  );
+
+  // Then, only add the visitor and increment if they aren't already in the array
+  await Visitor.updateOne(
+    { date: today, visitors: { $ne: visitorId } },
     {
       $addToSet: { visitors: visitorId },
       $inc: { count: 1 },
-    },
-    { upsert: true, new: true }
+    }
   );
 
   // 3. Set / refresh the session cookie (httpOnly, 24h, SameSite=Lax)

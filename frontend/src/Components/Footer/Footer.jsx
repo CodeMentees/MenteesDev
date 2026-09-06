@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import api from "../../api/api";
 
 function Footer() {
     const [stats, setStats] = useState({ todayVisitors: 0, totalVisitors: 0 });
 
     useEffect(() => {
-        fetch("/api/visitors/stats")
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    setStats(data.data);
+        api.get("/visitors/stats")
+            .then(res => {
+                if (res.data && res.data.success) {
+                    setStats(res.data.data);
                 }
             })
             .catch(err => console.error("Failed to fetch visitor stats:", err));

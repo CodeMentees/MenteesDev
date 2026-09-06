@@ -5,6 +5,7 @@ import { useUserAPI } from "../api/userApi";
 import { FaUsers, FaUserPlus, FaUserSlash, FaArrowRight, FaEdit, FaChartLine, FaBriefcase, FaBook, FaGlobe } from "react-icons/fa";
 import DeleteConfirmModal from "../Components/UI/DeleteConfirmModal";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import api from "../api/api";
 
 const DashboardOverview = () => {
     const { fetchUsers, deleteUser, fetchGrowth } = useUserAPI();
@@ -35,10 +36,9 @@ const DashboardOverview = () => {
             setGrowthData(growth || []);
 
             // Fetch visitor stats
-            const visitorRes = await fetch("/api/visitors/stats");
-            const visitorData = await visitorRes.json();
-            if (visitorData.success) {
-                setVisitorStats(visitorData.data);
+            const visitorRes = await api.get("/visitors/stats");
+            if (visitorRes.data && visitorRes.data.success) {
+                setVisitorStats(visitorRes.data.data);
             }
         } catch (error) {
             console.error("Error loading dashboard data:", error);
