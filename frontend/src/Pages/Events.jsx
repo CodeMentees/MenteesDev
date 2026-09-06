@@ -203,7 +203,7 @@ const EventGallery = () => {
                   >
                     <img
                       src={src}
-                      className="w-full h-full object-contain backdrop-blur-3xl"
+                      className="w-full h-full object-cover object-top"
                       alt={`Event highlight ${i + 1}`}
                       loading="lazy"
                       decoding="async"
