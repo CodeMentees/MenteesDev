@@ -201,9 +201,17 @@ const EventGallery = () => {
                     }}
                     onClick={() => handleDotClick(i)}
                   >
+                    {/* Blurred background to fill space without cropping */}
                     <img
                       src={src}
-                      className="w-full h-full object-cover object-top"
+                      className="absolute inset-0 w-full h-full object-cover opacity-50 blur-xl scale-110"
+                      alt=""
+                      aria-hidden="true"
+                    />
+                    {/* Actual image, fully visible without cropping */}
+                    <img
+                      src={src}
+                      className="relative w-full h-full object-contain"
                       alt={`Event highlight ${i + 1}`}
                       loading="lazy"
                       decoding="async"
