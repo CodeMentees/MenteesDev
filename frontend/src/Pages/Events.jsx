@@ -10,6 +10,7 @@ const EventGallery = () => {
   const [images, setImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [autoPlayKey, setAutoPlayKey] = useState(0);
 
   useEffect(() => {
     const loadGallery = async () => {
@@ -34,14 +35,21 @@ const EventGallery = () => {
       setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     }, 4000);
     return () => clearInterval(timer);
-  }, [images]);
+  }, [images, autoPlayKey]);
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setAutoPlayKey((prev) => prev + 1);
   };
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    setAutoPlayKey((prev) => prev + 1);
+  };
+
+  const handleDotClick = (idx) => {
+    setCurrentIndex(idx);
+    setAutoPlayKey((prev) => prev + 1);
   };
 
   // Helper to calculate variants for the 3D Carousel
@@ -185,17 +193,17 @@ const EventGallery = () => {
                     key={src}
                     animate={variants}
                     transition={{ type: "spring", stiffness: 200, damping: 25, mass: 1 }}
-                    className="absolute w-full h-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl cursor-pointer"
+                    className="absolute w-full h-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl cursor-pointer bg-black/60"
                     style={{
                       transformStyle: "preserve-3d",
                       boxShadow: variants.scale === 1 ? "0 25px 50px -12px rgba(236, 72, 153, 0.25)" : "0 10px 30px -10px rgba(0,0,0,0.5)",
                       border: variants.scale === 1 ? "1px solid rgba(255,255,255,0.2)" : "1px solid rgba(255,255,255,0.05)"
                     }}
-                    onClick={() => setCurrentIndex(i)}
+                    onClick={() => handleDotClick(i)}
                   >
                     <img
                       src={src}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain backdrop-blur-3xl"
                       alt={`Event highlight ${i + 1}`}
                       loading="lazy"
                       decoding="async"
@@ -230,7 +238,7 @@ const EventGallery = () => {
               {images.map((_, idx) => (
                 <button
                   key={idx}
-                  onClick={() => setCurrentIndex(idx)}
+                  onClick={() => handleDotClick(idx)}
                   className={`h-2 rounded-full transition-all duration-500 ${
                     idx === currentIndex 
                       ? "bg-gradient-to-r from-pink-500 to-purple-500 w-10 shadow-[0_0_10px_rgba(236,72,153,0.5)]" 
