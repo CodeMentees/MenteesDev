@@ -6,7 +6,7 @@ const router = Router();
 
 // Tracking is public (called on every page load)
 router.post("/track", trackVisitor);
-// Stats are internal admin data — require manage_site permission
-router.get("/stats", requirePermission("manage_site"), getVisitorStats);
+// Stats are displayed in the public Footer, so it must be public
+router.get("/stats", getVisitorStats);
 
 export default router;
