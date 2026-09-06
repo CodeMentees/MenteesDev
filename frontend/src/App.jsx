@@ -120,6 +120,10 @@ function AppInner() {
     if (!sessionStorage.getItem('visited')) {
       sessionStorage.setItem('visited', 'true');
       api.post('/visitors/track')
+        .then(() => {
+          // Notify other components (like Footer) that a new visitor was tracked so they can refetch stats
+          window.dispatchEvent(new Event('visitorTracked'));
+        })
         .catch(err => {
             console.error('Failed to track visitor:', err);
             // Optional: revert if it fails, though usually okay to keep it true

@@ -6,13 +6,22 @@ function Footer() {
     const [stats, setStats] = useState({ todayVisitors: 0, totalVisitors: 0 });
 
     useEffect(() => {
-        api.get("/visitors/stats")
-            .then(res => {
-                if (res.data && res.data.success) {
-                    setStats(res.data.data);
-                }
-            })
-            .catch(err => console.error("Failed to fetch visitor stats:", err));
+        const fetchStats = () => {
+            api.get("/visitors/stats")
+                .then(res => {
+                    if (res.data && res.data.success) {
+                        setStats(res.data.data);
+                    }
+                })
+                .catch(err => console.error("Failed to fetch visitor stats:", err));
+        };
+
+        // Fetch on mount
+        fetchStats();
+
+        // Listen for the global track event so it updates instantly when a new session is tracked
+        window.addEventListener('visitorTracked', fetchStats);
+        return () => window.removeEventListener('visitorTracked', fetchStats);
     }, []);
 
     return (
