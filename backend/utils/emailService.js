@@ -16,7 +16,11 @@ async function createTransporter() {
     });
   }
 
-  // Fallback: Ethereal test account
+  if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+    throw new Error("EMAIL_USER and EMAIL_PASS environment variables are not configured in your production environment.");
+  }
+
+  // Fallback: Ethereal test account (Development Only)
   const testAccount = await nodemailer.createTestAccount();
   return nodemailer.createTransport({
     host: "smtp.ethereal.email",

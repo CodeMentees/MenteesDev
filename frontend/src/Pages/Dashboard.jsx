@@ -44,7 +44,10 @@ const ALL_MENU_ITEMS = [
     title: "Site",
     icon: <FaGlobe />,
     permission: "manage_site",
-    subItems: [{ id: 51, title: "Update Site", link: "/admin/site-settings" }],
+    subItems: [
+      { id: 51, title: "Update Site", link: "/admin/site-settings" },
+      { id: 52, title: "Social Links", link: "/admin/social-links" },
+    ],
   },
   {
     id: 6,

@@ -63,6 +63,9 @@ const SummerInternship = lazy(() => import('./Pages/Internship/SummerInternship'
 const InternshipList = lazy(() => import('./Pages/Admin/Interns/InternshipList'));
 const BulkMailSender = lazy(() => import('./Pages/Admin/BulkMail/BulkMailSender'));
 const EventsPage = lazy(() => import('./Pages/Events'));
+const PrivacyPolicy = lazy(() => import('./Pages/Legal/PrivacyPolicy'));
+const TermsConditions = lazy(() => import('./Pages/Legal/TermsConditions'));
+const SocialLinksSettings = lazy(() => import('./Pages/Admin/SocialLinksSettings'));
 
 // HelmetWrapper component to handle SEO meta tags
 import SEOHead from './seo/SEOHead';
@@ -108,7 +111,8 @@ const adminRoutes = [
   { path: "jobs/create", title: "Add Job Opportunity", element: <AddEditJob /> },
   { path: "jobs/edit/:id", title: "Edit Job Opportunity", element: <AddEditJob /> },
   { path: "interns", title: "Internship Applications", element: <InternshipList /> },
-  { path: "bulk-mail", title: "Bulk Email Sender", element: <BulkMailSender /> }
+  { path: "bulk-mail", title: "Bulk Email Sender", element: <BulkMailSender /> },
+  { path: "social-links", title: "Social Links", element: <SocialLinksSettings /> }
 ];
 
 
@@ -332,6 +336,24 @@ function App() {
                   element={
                     <SEOHeadWrapper path="/events" noindex={false}>
                       <EventsPage />
+                    </SEOHeadWrapper>
+                  }
+                />
+
+                <Route
+                  path="/privacy-policy"
+                  element={
+                    <SEOHeadWrapper path="/privacy-policy" noindex={false}>
+                      <PrivacyPolicy />
+                    </SEOHeadWrapper>
+                  }
+                />
+
+                <Route
+                  path="/terms"
+                  element={
+                    <SEOHeadWrapper path="/terms" noindex={false}>
+                      <TermsConditions />
                     </SEOHeadWrapper>
                   }
                 />

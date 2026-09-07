@@ -18,6 +18,7 @@ import testRoutes from "./test.js";
 import internshipRoutes from "./internshipRoutes.js";
 import bulkMailRoutes from "./bulkMailRoutes.js";
 import visitorRoutes from "./visitorRoutes.js";
+import siteSettingsRoutes from "./siteSettingsRoutes.js";
 
 const router = express.Router();
 router.use("/home", homeRoutes);
@@ -39,5 +40,6 @@ router.use("/test", testRoutes);
 router.use("/internships", internshipRoutes);
 router.use("/bulk-mail", bulkMailRoutes);
 router.use("/visitors", visitorRoutes);
+router.use("/site-settings", siteSettingsRoutes);
 
 export default router;

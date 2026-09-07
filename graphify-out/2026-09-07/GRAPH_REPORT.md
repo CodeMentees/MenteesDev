@@ -1,24 +1,24 @@
 # Graph Report - MenteesDev  (2026-09-07)
 
 ## Corpus Check
-- 239 files · ~286,137 words
+- 233 files · ~282,154 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 930 nodes · 1614 edges · 126 communities (61 shown, 65 thin omitted)
+- 904 nodes · 1572 edges · 113 communities (50 shown, 63 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 20 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `99fe38dd`
+- Built from commit: `bec33c7a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- Home.jsx
+- AllCourse.jsx
 - Toast.jsx
 - authController.js
-- messageController.js
+- liveCourseRoutes.js
 - devDependencies
 - useCRUD
 - backend/index.js
@@ -27,16 +27,16 @@
 - courseRoutes.js
 - postRoutes.js
 - Table.jsx
-- siteSettingsRoutes.js
+- useLiveCourseAPI
 - eventRoutes.js
 - dependencies
 - useBlogCategory
-- internshipRoutes.js
+- routes/index.js
 - backend/package.json
 - dependencies
 - CourseDetails.jsx
 - BlogPage.jsx
-- SEOHead
+- FAQ.jsx
 - queryRoutes.js
 - BulkMailSender.jsx
 - dependencies
@@ -65,8 +65,6 @@
 - mongoose
 - multer
 - multer-storage-cloudinary
-- useEvent
-- UserList.jsx
 - path
 - pdf-lib
 - swagger-ui-express
@@ -99,7 +97,6 @@
 - socket.io-client
 - enrollmentModel.js
 - rules/graphify.md
-- rbacMiddleware.js
 - googleapis
 - node-cron
 - nodemailer
@@ -108,60 +105,51 @@
 - frontend/README.md
 - README.md
 - isAdmin.js
-- blogCategoryRoutes.js
-- categoryRoutes.js
-- jobRoutes.js
-- schoolCodingLeadRoutes.js
-- routes/index.js
-- useQueryAPI
-- Header.jsx
-- StudentDashboard.jsx
-- AdminRoute.jsx
 
 ## God Nodes (most connected - your core abstractions)
-1. `Toast()` - 20 edges
-2. `useCRUD()` - 20 edges
-3. `requirePermission()` - 16 edges
-4. `useCourse()` - 16 edges
-5. `SEOHead()` - 15 edges
-6. `useDelete()` - 13 edges
-7. `api` - 13 edges
-8. `User` - 12 edges
+1. `useCRUD()` - 20 edges
+2. `Toast()` - 19 edges
+3. `useCourse()` - 16 edges
+4. `requirePermission()` - 15 edges
+5. `useDelete()` - 13 edges
+6. `SEOHead()` - 13 edges
+7. `User` - 12 edges
+8. `api` - 12 edges
 9. `useCategoryAPI()` - 12 edges
 10. `useLiveCourseAPI()` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Home()` --calls--> `useCategoryAPI()`  [EXTRACTED]
-  frontend/src/Pages/Home.jsx → frontend/src/api/categoryApi.jsx
 - `JobManagement()` --calls--> `useDelete()`  [EXTRACTED]
   frontend/src/Pages/Admin/Job/JobManagement.jsx → frontend/src/Components/API/useDelete.js
-- `UserList()` --calls--> `useDelete()`  [EXTRACTED]
-  frontend/src/Pages/User/UserList.jsx → frontend/src/Components/API/useDelete.js
 - `BlogCategoryManager()` --calls--> `useBlogCategory()`  [EXTRACTED]
   frontend/src/Components/Blog/BlogCategoryManger.jsx → frontend/src/api/blogCategoryApi.jsx
 - `AuthModal()` --calls--> `useAuth()`  [EXTRACTED]
   frontend/src/Components/UI/AuthModal.jsx → frontend/src/api/authApi.jsx
+- `WorkshopSection()` --calls--> `useEvent()`  [EXTRACTED]
+  frontend/src/Components/WorkshopSection/WorkshopSection.jsx → frontend/src/api/eventApi.jsx
+- `AddEditLiveCourse()` --calls--> `useLiveCourseAPI()`  [EXTRACTED]
+  frontend/src/Pages/Admin/LiveCourse/AddEditLiveCourse.jsx → frontend/src/api/liveCourseApi.jsx
 
 ## Import Cycles
 - None detected.
 
-## Communities (126 total, 65 thin omitted)
+## Communities (113 total, 63 thin omitted)
 
-### Community 0 - "Home.jsx"
-Cohesion: 0.09
-Nodes (17): fetchSiteData(), postSiteData(), Home, HomeSite, Carousel(), TYPEWRITER_WORDS, useTypewriter(), featuresData (+9 more)
+### Community 0 - "AllCourse.jsx"
+Cohesion: 0.15
+Nodes (7): AllCourse, MyCourses, PlacementSupport, CourseCard(), levelColors, LoadingSpinner(), SkeletonGrid()
 
 ### Community 1 - "Toast.jsx"
-Cohesion: 0.08
-Nodes (27): useAuth(), useSchoolCodingLeadAPI(), useSchoolCourseAPI(), AddEditSchoolCourse, CurriculumCatalog, ForgotPassword, LoginPage, OTPVerification (+19 more)
+Cohesion: 0.06
+Nodes (31): useAuth(), useQueryAPI(), useSchoolCourseAPI(), AddEditSchoolCourse, Contact, CurriculumCatalog, ForgotPassword, LoginPage (+23 more)
 
 ### Community 2 - "authController.js"
-Cohesion: 0.06
-Nodes (40): authUser, client, googleCallback, logoutUser(), registerUser, resendOTP, verifyOTP, compressPDF() (+32 more)
+Cohesion: 0.07
+Nodes (39): authUser, client, googleCallback, logoutUser(), registerUser, resendOTP, verifyOTP, compressPDF() (+31 more)
 
-### Community 3 - "messageController.js"
-Cohesion: 0.15
-Nodes (12): createGroup(), handleJoinRequest(), getList(), getMessages(), sendMessage(), Group, groupSchema, Message (+4 more)
+### Community 3 - "liveCourseRoutes.js"
+Cohesion: 0.10
+Nodes (23): createGroup(), handleJoinRequest(), addLiveCourseContent, createLiveCourse, deleteLiveCourse, deleteLiveCourseContent, getLiveCourseById, getLiveCourses (+15 more)
 
 ### Community 4 - "devDependencies"
 Cohesion: 0.04
@@ -169,39 +157,39 @@ Nodes (46): autoprefixer, @eslint/js, eslint-plugin-react, eslint-plugin-react-h
 
 ### Community 5 - "useCRUD"
 Cohesion: 0.06
-Nodes (36): api, useCategoryAPI(), fetchCourseByCategory(), updateDetails(), useCourse(), useLiveCourseAPI(), useCRUD(), AddCourse (+28 more)
+Nodes (40): api, useCategoryAPI(), fetchCourseByCategory(), updateDetails(), useCourse(), fetchSiteData(), postSiteData(), useCRUD() (+32 more)
 
 ### Community 6 - "backend/index.js"
 Cohesion: 0.07
 Nodes (30): createtest, deletetest, gettestById, gettests, updatetest, app, corsOptions, __dirname (+22 more)
 
 ### Community 7 - "SEOHead.jsx"
-Cohesion: 0.18
-Nodes (11): About, fadeUp, organizationJsonLd, VALUES, WHAT_WE_DO, DEFAULT_OG_IMAGE, getSEOForPath(), SEO_ROUTES (+3 more)
+Cohesion: 0.24
+Nodes (9): About, organizationJsonLd, DEFAULT_OG_IMAGE, getSEOForPath(), SEO_ROUTES, SITE_NAME, SITE_URL, TWITTER_HANDLE (+1 more)
 
 ### Community 8 - "App.jsx"
-Cohesion: 0.08
-Nodes (16): AddEditJob, App(), AppInner(), CourseList, CreateEvent, EventManager, LiveCourseList, NotFound (+8 more)
+Cohesion: 0.07
+Nodes (16): AddEditJob, AdminRoutes, App(), AppInner(), CategoryList, NotFound, ProtectedRoute, QueryList (+8 more)
 
 ### Community 9 - "courseRoutes.js"
-Cohesion: 0.08
-Nodes (34): storage, bulkDeleteCourses, createCourse, deleteCourse, getCourse, getCourses, getCoursesByCategory, updateCourse (+26 more)
+Cohesion: 0.11
+Nodes (23): storage, bulkDeleteCourses, createCourse, deleteCourse, getCourse, getCourses, getCoursesByCategory, updateCourse (+15 more)
 
 ### Community 10 - "postRoutes.js"
 Cohesion: 0.12
 Nodes (21): addComment, bulkDeletePosts, createPost, deleteComment, deletePost, generateSlug(), getPost, getPostBySlug (+13 more)
 
 ### Community 12 - "Table.jsx"
-Cohesion: 0.21
-Nodes (13): CategoryList, InternshipList, JobManagement, QueryList, useDelete(), ReusableTable(), DeleteConfirmModal(), Pagination() (+5 more)
+Cohesion: 0.13
+Nodes (22): useSchoolCodingLeadAPI(), CourseList, CreateEvent, EventManager, InternshipList, JobManagement, LiveCourseList, PostList (+14 more)
 
-### Community 13 - "siteSettingsRoutes.js"
-Cohesion: 0.17
-Nodes (10): getVisitorStats, trackVisitor, cachePublic(), noCache(), SiteSettings, siteSettingsSchema, Visitor, visitorSchema (+2 more)
+### Community 13 - "useLiveCourseAPI"
+Cohesion: 0.24
+Nodes (7): useLiveCourseAPI(), AddEditLiveCourse, LiveCourseContent, LivePage, AddEditLiveCourse(), LiveCourseContent(), LiveCourse()
 
 ### Community 14 - "eventRoutes.js"
-Cohesion: 0.29
-Nodes (8): addEvent, deleteEvent, getAllEvents, getEvent, updateEvent, getEventGallery, Event, eventSchema
+Cohesion: 0.09
+Nodes (24): createCategory, deleteCategory, getCategories, getCategoryById, updateCategory, addEvent, deleteEvent, getAllEvents (+16 more)
 
 ### Community 15 - "dependencies"
 Cohesion: 0.15
@@ -211,9 +199,9 @@ Nodes (13): autonodeapi, dependencies, autonodeapi, cloudinary, express, nodemon
 Cohesion: 0.27
 Nodes (7): useBlogCategory(), AddPost, BlogCategoryManager, BlogCategoryManager(), BlogSidebar(), RichTextEditor(), AddPost()
 
-### Community 17 - "internshipRoutes.js"
-Cohesion: 0.29
-Nodes (9): applyForInternship, bulkDeleteInternships, deleteInternship, getInternships, updateInternship, uploadToCloudinary(), InternshipApplication, internshipApplicationSchema (+1 more)
+### Community 17 - "routes/index.js"
+Cohesion: 0.06
+Nodes (43): createCategory, deleteCategory, getCategories, getCategory, updateCategory, applyForInternship, bulkDeleteInternships, deleteInternship (+35 more)
 
 ### Community 18 - "backend/package.json"
 Cohesion: 0.18
@@ -228,12 +216,12 @@ Cohesion: 0.31
 Nodes (7): CourseDetails, LiveCourseDetails, CourseDetails(), LiveCourseDetails(), stripHtml(), useDynamicSEO(), generatePdf()
 
 ### Community 21 - "BlogPage.jsx"
-Cohesion: 0.24
-Nodes (11): useBlog(), Blog, BlogPage, BlogGridFour(), BlogPromoSidebar(), containerVariants, dotVariants, Loading() (+3 more)
+Cohesion: 0.13
+Nodes (18): useBlog(), useEvent(), Blog, BlogPage, EventsPage, BlogGridFour(), BlogPromoSidebar(), UpcomingEvents() (+10 more)
 
-### Community 22 - "SEOHead"
-Cohesion: 0.14
-Nodes (8): FAQ, PrivacyPolicy, TermsConditions, faqData, faqJsonLd, SECTIONS, SECTIONS, SEOHead()
+### Community 22 - "FAQ.jsx"
+Cohesion: 0.40
+Nodes (3): FAQ, faqData, faqJsonLd
 
 ### Community 23 - "queryRoutes.js"
 Cohesion: 0.18
@@ -255,65 +243,25 @@ Nodes (6): __dirname, distDir, fetchDynamicRoutes(), prerender(), proxyRequest()
 Cohesion: 0.18
 Nodes (10): Adding a Custom OG Image, Adding SEO to a New Page (2 Steps), Admin / Utility Pages (noindex), All `SEOHead` Props Reference, CodeMentees SEO System — Developer Guide, Dynamic Pages (Content from API), How the Pre-Rendering Works, SEO Checklist for Every New Page (+2 more)
 
-### Community 54 - "useEvent"
-Cohesion: 0.24
-Nodes (7): useEvent(), EventsPage, UpcomingEvents(), WorkshopCard(), WorkshopSection(), CreateEvent(), EventGallery()
-
-### Community 55 - "UserList.jsx"
-Cohesion: 0.24
-Nodes (8): useUserAPI(), AddEditUser, DashboardOverview, UserList, DashboardOverview(), AddEditUser(), UserList(), authSlice
-
-### Community 107 - "rbacMiddleware.js"
-Cohesion: 0.24
-Nodes (6): requirePermission(), Home, homeSchema, router, upload, router
-
-### Community 116 - "blogCategoryRoutes.js"
-Cohesion: 0.36
-Nodes (7): createCategory, deleteCategory, getCategories, getCategory, updateCategory, BlogCategory, blogCategorySchema
-
-### Community 117 - "categoryRoutes.js"
-Cohesion: 0.36
-Nodes (7): createCategory, deleteCategory, getCategories, getCategoryById, updateCategory, CourseCategory, courseCategorySchema
-
-### Community 118 - "jobRoutes.js"
-Cohesion: 0.36
-Nodes (7): bulkDeleteJobs, createJob, deleteJob, getJobs, updateJob, JobOpportunity, jobOpportunitySchema
-
-### Community 119 - "schoolCodingLeadRoutes.js"
-Cohesion: 0.31
-Nodes (7): createLead, deleteLead, getLeads, updateLeadStatus, SchoolCodingLead, schoolCodingLeadSchema, router
-
-### Community 120 - "routes/index.js"
-Cohesion: 0.22
-Nodes (8): router, router, router, router, router, router, router, router
-
-### Community 121 - "useQueryAPI"
-Cohesion: 0.39
-Nodes (5): useQueryAPI(), Contact, QueryForm(), Contact(), QueryList()
-
-### Community 122 - "Header.jsx"
-Cohesion: 0.40
-Nodes (3): ADMIN_ROLES, Header(), menuItems
-
 ## Knowledge Gaps
-- **211 isolated node(s):** `client`, `deflate`, `__filename`, `__dirname`, `__filename` (+206 more)
+- **201 isolated node(s):** `client`, `deflate`, `__filename`, `__dirname`, `__filename` (+196 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **65 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **63 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `dependencies` connect `dependencies` to `devDependencies`, `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities`, `easymde`, `flowbite`, `framer-motion`, `axios`, `highlight.js`, `jspdf`, `jspdf-autotable`, `lucide-react`, `react`, `react-dom`, `react-helmet`, `react-helmet-async`, `react-icons`, `react-markdown`, `@react-oauth/google`, `react-quill`, `react-redux`, `react-router-dom`, `react-simplemde-editor`, `react-syntax-highlighter`, `@reduxjs/toolkit`, `socket.io-client`?**
-  _High betweenness centrality (0.010) - this node is a cross-community bridge._
-- **Why does `requirePermission()` connect `rbacMiddleware.js` to `authController.js`, `courseRoutes.js`, `postRoutes.js`, `siteSettingsRoutes.js`, `eventRoutes.js`, `internshipRoutes.js`, `blogCategoryRoutes.js`, `categoryRoutes.js`, `jobRoutes.js`, `queryRoutes.js`, `schoolCodingLeadRoutes.js`?**
+  _High betweenness centrality (0.011) - this node is a cross-community bridge._
+- **Why does `requirePermission()` connect `routes/index.js` to `authController.js`, `liveCourseRoutes.js`, `courseRoutes.js`, `postRoutes.js`, `eventRoutes.js`, `queryRoutes.js`?**
   _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **What connects `client`, `deflate`, `__filename` to the rest of the system?**
-  _211 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Home.jsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.08735632183908046 - nodes in this community are weakly interconnected._
+  _201 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `AllCourse.jsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.14705882352941177 - nodes in this community are weakly interconnected._
 - **Should `Toast.jsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.07993197278911565 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05989110707803993 - nodes in this community are weakly interconnected._
 - **Should `authController.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.06428988895382817 - nodes in this community are weakly interconnected._
-- **Should `devDependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.0425531914893617 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06594071385359952 - nodes in this community are weakly interconnected._
+- **Should `liveCourseRoutes.js` be split into smaller, more focused modules?**
+  _Cohesion score 0.0960960960960961 - nodes in this community are weakly interconnected._
