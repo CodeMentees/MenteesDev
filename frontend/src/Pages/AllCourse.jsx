@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import SEOHead from "../seo/SEOHead";
 import CourseCard from "../Components/Card/CourseCard";
 import { SkeletonGrid } from "../Components/UI/LoadingSpinner";
@@ -15,6 +17,28 @@ function AllCourse() {
   const [courses, setCourses] = useState([]);
   const [initialLoading, setInitialLoading] = useState(true);
   const [tabLoading, setTabLoading] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
+
+  useEffect(() => {
+    let timer;
+    if (initialLoading || tabLoading) {
+      // Delay showing the loader by 300ms to prevent flickering on fast networks
+      timer = setTimeout(() => setShowLoader(true), 300);
+    } else {
+      setShowLoader(false);
+    }
+    return () => clearTimeout(timer);
+  }, [initialLoading, tabLoading]);
+
+  useEffect(() => {
+    AOS.init({ duration: 800, once: true });
+  }, []);
+
+  useEffect(() => {
+    if (courses.length > 0) {
+      setTimeout(() => AOS.refresh(), 100);
+    }
+  }, [courses]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -129,8 +153,8 @@ function AllCourse() {
 
           {/* ── Course content area ── */}
           <section className="flex-1 min-w-0">
-            {initialLoading || tabLoading ? (
-              <SkeletonGrid count={6} />
+            {(initialLoading || tabLoading) ? (
+              showLoader ? <SkeletonGrid count={6} /> : <div className="min-h-[400px]" />
             ) : activeTabData ? (
               <div className="fade-in">
                 <CourseCard category={activeTabData} courses={courses} />
