@@ -10,9 +10,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, '../dist');
 
 // Define API URL
-const BACKEND_URL = process.env.VERCEL 
-  ? 'https://codementees.com' 
-  : (process.env.VITE_API_URL || 'http://localhost:5000');
+const BACKEND_URL =
+  process.env.VITE_API_URL ||
+  (process.env.VERCEL ? 'https://codementees.com' : 'http://localhost:5000');
 const BACKEND_HOST = new URL(BACKEND_URL).host;
 
 // The static SEO routes we want to pre-render
