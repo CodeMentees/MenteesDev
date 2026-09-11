@@ -63,11 +63,7 @@ passport.use(
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
       callbackURL: process.env.GITHUB_CALLBACK_URL,
-
-      // Needed for private email access
-      scope: ["user:email"],
     },
-
     async (accessToken, refreshToken, profile, done) => {
       try {
         const email = profile.emails?.[0]?.value?.toLowerCase();
@@ -75,7 +71,7 @@ passport.use(
         if (!email) {
           return done(
             new Error(
-              "GitHub did not return an email address. Please make sure the user:email scope is enabled."
+              "GitHub did not return an email address. Make sure user:email scope is enabled."
             ),
             false
           );
@@ -118,7 +114,6 @@ passport.use(
     }
   )
 );
-
 /*
 |--------------------------------------------------------------------------
 | PASSPORT SESSION SUPPORT

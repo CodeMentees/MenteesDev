@@ -1,10 +1,15 @@
+import "dotenv/config";
+
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import cron from "node-cron";
 import compression from "compression";
+import passport from "passport";
+
+import "./config/passport.js";
+
 import BlockedIp from "./middlewares/ipBlockMiddleware.js";
 import path from "path";
 import fs from "fs";
@@ -34,10 +39,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config({ path: path.join(__dirname, '.env') });
-if (!process.env.MONGODB_URI) {
-  dotenv.config({ path: path.resolve(process.cwd(), 'backend', '.env') });
-}
+
 console.log('MONGODB_URI present?', !!process.env.MONGODB_URI);
 app.set("trust proxy", 1);
 
