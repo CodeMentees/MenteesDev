@@ -145,7 +145,7 @@ const PRE_RENDERED_ROUTES = [
   '/live',
   '/about',
   '/placement-support',
-  '/summer-internships',
+  '/careers',
   '/school-coding',
   '/school-coding/catalog',
   '/blogs',

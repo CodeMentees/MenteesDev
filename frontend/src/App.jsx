@@ -59,8 +59,9 @@ const LiveCourseContent = lazy(() => import('./Pages/Admin/LiveCourse/LiveCourse
 const PlacementSupport = lazy(() => import('./Pages/PlacementSupport'));
 const JobManagement = lazy(() => import('./Pages/Admin/Job/JobManagement'));
 const AddEditJob = lazy(() => import('./Pages/Admin/Job/AddEditJob'));
-const SummerInternship = lazy(() => import('./Pages/Internship/SummerInternship'));
-const InternshipList = lazy(() => import('./Pages/Admin/Interns/InternshipList'));
+const Careers = lazy(() => import('./Pages/Careers/Careers'));
+const CareerApplicationsList = lazy(() => import('./Pages/Admin/Careers/CareerApplicationsList'));
+const ManageCareers = lazy(() => import('./Pages/Admin/Careers/ManageCareers'));
 const BulkMailSender = lazy(() => import('./Pages/Admin/BulkMail/BulkMailSender'));
 const EventsPage = lazy(() => import('./Pages/Events'));
 const PrivacyPolicy = lazy(() => import('./Pages/Legal/PrivacyPolicy'));
@@ -110,7 +111,8 @@ const adminRoutes = [
   { path: "jobs", title: "Job Opportunities", element: <JobManagement /> },
   { path: "jobs/create", title: "Add Job Opportunity", element: <AddEditJob /> },
   { path: "jobs/edit/:id", title: "Edit Job Opportunity", element: <AddEditJob /> },
-  { path: "interns", title: "Internship Applications", element: <InternshipList /> },
+  { path: "career-applications", title: "Career Applications", element: <CareerApplicationsList /> },
+  { path: "careers", title: "Manage Careers", element: <ManageCareers /> },
   { path: "bulk-mail", title: "Bulk Email Sender", element: <BulkMailSender /> },
   { path: "social-links", title: "Social Links", element: <SocialLinksSettings /> }
 ];
@@ -186,15 +188,15 @@ function App() {
                 />
 
                 <Route
-                  path="/internships"
+                  path="/careers"
                   element={
-                    <SEOHeadWrapper path="/internships" noindex={false}>
-                      <SummerInternship />
+                    <SEOHeadWrapper path="/careers" noindex={false}>
+                      <Careers />
                     </SEOHeadWrapper>
                   }
                 />
-                {/* Legacy redirect: keep /summer-internships working */}
-                <Route path="/summer-internships" element={<Navigate to="/internships" replace />} />
+                <Route path="/summer-internships" element={<Navigate to="/careers" replace />} />
+                <Route path="/internships" element={<Navigate to="/careers" replace />} />
 
                 <Route
                   path="/verify-otp"

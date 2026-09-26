@@ -144,7 +144,7 @@ function Footer() {
             <h3 className="mb-5 text-xs font-bold tracking-widest uppercase text-white">Company</h3>
             <ul className="space-y-3 text-sm" style={{ color: "rgba(156,163,175,0.8)" }}>
               <li><FooterLink to="/about">About Us</FooterLink></li>
-              <li><FooterLink to="/internships">Careers</FooterLink></li>
+              <li><FooterLink to="/careers">Careers</FooterLink></li>
               <li><FooterLink to="/events">Events</FooterLink></li>
               <li><FooterLink to="/blogs">Blog</FooterLink></li>
             </ul>

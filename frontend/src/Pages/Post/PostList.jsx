@@ -20,7 +20,7 @@ function PostList() {
     // Note: ReusableTable triggers single delete differently now if we modified it? No, ReusableTable just calls the action handler.
     // wait, we modified ReusableTable to handle bulk delete via modal, but single delete is still calling the action directly.
     // BUT we didn't add DeleteConfirmModal for single delete in ReusableTable! Wait!
-    // In InternshipList, we manually added it because it doesn't use ReusableTable.
+    // In CareerApplicationsList, we manually added it because it doesn't use ReusableTable.
     // In UserList, JobManagement, PostList, they still have single delete without confirmation!
     // Let's at least add window.confirm for single delete for now, or build it properly later.
     // The user said "secure the delete option by giving one last chance of yes or no"

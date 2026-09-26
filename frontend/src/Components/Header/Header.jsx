@@ -19,7 +19,7 @@ const menuItems = [
   { label: "Events", link: "/events" },
   { label: "Live Courses", link: "/live" },
   { label: "School Coding", link: "/school-coding" },
-  { label: "Internships", link: "/internships" },
+  { label: "Careers", link: "/careers" },
   { label: "Placement Support", link: "/placement-support" },
 ];
 

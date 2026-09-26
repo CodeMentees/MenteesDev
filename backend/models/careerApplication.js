@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const internshipApplicationSchema = new mongoose.Schema(
+const careerApplicationSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -35,6 +35,6 @@ const internshipApplicationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const InternshipApplication = mongoose.model("InternshipApplication", internshipApplicationSchema);
+const CareerApplication = mongoose.model("CareerApplication", careerApplicationSchema);
 
-export default InternshipApplication;
+export default CareerApplication;

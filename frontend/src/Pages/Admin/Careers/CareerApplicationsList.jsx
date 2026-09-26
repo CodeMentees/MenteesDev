@@ -2,33 +2,33 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DeleteConfirmModal from "../../../Components/UI/DeleteConfirmModal";
 
-function InternshipList() {
-  const [interns, setInterns] = useState([]);
+function CareerApplicationsList() {
+  const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   
   // Edit Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editingIntern, setEditingIntern] = useState(null);
+  const [editingApplication, setEditingApplication] = useState(null);
 
   // Multi-select and Export
   const [selectedIds, setSelectedIds] = useState([]);
   
   // Delete Modal States
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState(null); // null means no single item, maybe bulk?
+  const [deleteTarget, setDeleteTarget] = useState(null); 
   const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false);
 
   useEffect(() => {
-    fetchInternships();
+    fetchApplications();
   }, []);
 
-  const fetchInternships = async () => {
+  const fetchApplications = async () => {
     try {
-      const response = await axios.get("/api/internships");
-      setInterns(response.data.data);
+      const response = await axios.get("/api/careers/applications");
+      setApplications(response.data.data);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching internships:", error);
+      console.error("Error fetching applications:", error);
       setLoading(false);
     }
   };
@@ -41,8 +41,8 @@ function InternshipList() {
   const confirmDelete = async () => {
     if (!deleteTarget) return;
     try {
-      await axios.delete(`/api/internships/${deleteTarget}`);
-      setInterns(interns.filter((intern) => intern._id !== deleteTarget));
+      await axios.delete(`/api/careers/applications/${deleteTarget}`);
+      setApplications(applications.filter((app) => app._id !== deleteTarget));
       setSelectedIds(prev => prev.filter(i => i !== deleteTarget));
       setIsDeleteModalOpen(false);
       setDeleteTarget(null);
@@ -59,8 +59,8 @@ function InternshipList() {
 
   const confirmBulkDelete = async () => {
     try {
-      await axios.post("/api/internships/bulk", { ids: selectedIds });
-      setInterns(interns.filter(intern => !selectedIds.includes(intern._id)));
+      await axios.post("/api/careers/applications/bulk", { ids: selectedIds });
+      setApplications(applications.filter(app => !selectedIds.includes(app._id)));
       setSelectedIds([]);
       setIsBulkDeleteModalOpen(false);
     } catch (error) {
@@ -71,15 +71,15 @@ function InternshipList() {
   };
 
   const handleExportCSV = () => {
-    if (interns.length === 0) return;
-    const headers = ["Applicant Name", "Email", "Phone", "College", "Tech Track", "Applied At"];
-    const rows = interns.map(intern => [
-      `"${intern.name}"`,
-      `"${intern.email}"`,
-      `"${intern.phone}"`,
-      `"${intern.college}"`,
-      `"${intern.techStack}"`,
-      `"${intern.createdAt ? new Date(intern.createdAt).toLocaleString() : ''}"`
+    if (applications.length === 0) return;
+    const headers = ["Applicant Name", "Email", "Phone", "College", "Career Profile", "Applied At"];
+    const rows = applications.map(app => [
+      `"${app.name}"`,
+      `"${app.email}"`,
+      `"${app.phone}"`,
+      `"${app.college}"`,
+      `"${app.techStack}"`,
+      `"${app.createdAt ? new Date(app.createdAt).toLocaleString() : ''}"`
     ].join(","));
     
     const csvContent = [headers.join(","), ...rows].join("\n");
@@ -87,14 +87,14 @@ function InternshipList() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", `interns_export_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute("download", `career_applications_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
   const handleSelectAll = (e) => {
-    if (e.target.checked) setSelectedIds(interns.map(i => i._id));
+    if (e.target.checked) setSelectedIds(applications.map(i => i._id));
     else setSelectedIds([]);
   };
 
@@ -102,24 +102,24 @@ function InternshipList() {
     setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };
 
-  const handleEditClick = (intern) => {
-    setEditingIntern(intern);
+  const handleEditClick = (app) => {
+    setEditingApplication(app);
     setIsEditModalOpen(true);
   };
 
   const handleEditChange = (e) => {
-    setEditingIntern({ ...editingIntern, [e.target.name]: e.target.value });
+    setEditingApplication({ ...editingApplication, [e.target.name]: e.target.value });
   };
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`/api/internships/${editingIntern._id}`, editingIntern);
-      setInterns(interns.map((intern) => 
-        intern._id === editingIntern._id ? response.data.data : intern
+      const response = await axios.put(`/api/careers/applications/${editingApplication._id}`, editingApplication);
+      setApplications(applications.map((app) => 
+        app._id === editingApplication._id ? response.data.data : app
       ));
       setIsEditModalOpen(false);
-      setEditingIntern(null);
+      setEditingApplication(null);
     } catch (error) {
       console.error("Failed to update application:", error);
       alert("Failed to update application");
@@ -129,7 +129,7 @@ function InternshipList() {
   return (
     <div className="p-6 lg:p-8 w-full max-w-[1600px] mx-auto">
       <div className="flex flex-col md:flex-row items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold" style={{ color: "rgb(var(--dash-ink))" }}>Internship Applications</h2>
+        <h2 className="text-2xl font-bold" style={{ color: "rgb(var(--dash-ink))" }}>Career Applications</h2>
         
         <div className="flex items-center gap-3">
           {selectedIds.length > 0 && (
@@ -156,7 +156,7 @@ function InternshipList() {
       <div className="relative shadow-lg sm:rounded-2xl overflow-hidden border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
       {loading ? (
         <div className="text-center py-10" style={{ color: "rgb(var(--text-secondary))" }}>Loading applications...</div>
-      ) : interns.length === 0 ? (
+      ) : applications.length === 0 ? (
         <div className="text-center py-10 rounded-lg border border-dashed" style={{ color: "rgb(var(--text-secondary))", borderColor: "rgba(var(--dash-border))" }}>
           No applications received yet.
         </div>
@@ -170,50 +170,50 @@ function InternshipList() {
                     type="checkbox" 
                     className="w-4 h-4 rounded focus:ring-purple-600 ring-offset-gray-800 bg-gray-700 border-gray-600"
                     onChange={handleSelectAll}
-                    checked={interns.length > 0 && selectedIds.length === interns.length}
+                    checked={applications.length > 0 && selectedIds.length === applications.length}
                   />
                 </th>
                 <th className="px-6 py-3">Applicant Name</th>
                 <th className="px-6 py-3">Contact Details</th>
                 <th className="px-6 py-3">College</th>
-                <th className="px-6 py-3">Tech Track</th>
+                <th className="px-6 py-3">Career Profile</th>
                 <th className="px-6 py-3 text-center">Resume</th>
                 <th className="px-6 py-3">Applied At</th>
                 <th className="px-6 py-3 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {interns.map((intern) => (
-                <tr key={intern._id} className="border-b transition-colors hover:bg-white/5" style={{ borderColor: "rgba(var(--dash-border))" }}>
+              {applications.map((app) => (
+                <tr key={app._id} className="border-b transition-colors hover:bg-white/5" style={{ borderColor: "rgba(var(--dash-border))" }}>
                   <td className="p-4 w-4">
                     <input 
                       type="checkbox" 
                       className="w-4 h-4 rounded focus:ring-purple-600 ring-offset-gray-800 bg-gray-700 border-gray-600"
-                      checked={selectedIds.includes(intern._id)}
-                      onChange={() => handleSelectOne(intern._id)}
+                      checked={selectedIds.includes(app._id)}
+                      onChange={() => handleSelectOne(app._id)}
                     />
                   </td>
                   <td className="px-6 py-4 font-medium whitespace-nowrap">
-                    {intern.name}
+                    {app.name}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex flex-col">
-                      <a href={`mailto:${intern.email}`} className="text-blue-500 hover:underline">{intern.email}</a>
-                      <a href={`tel:${intern.phone}`} className="hover:underline" style={{ color: "rgb(var(--text-secondary))" }}>{intern.phone}</a>
+                      <a href={`mailto:${app.email}`} className="text-blue-500 hover:underline">{app.email}</a>
+                      <a href={`tel:${app.phone}`} className="hover:underline" style={{ color: "rgb(var(--text-secondary))" }}>{app.phone}</a>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    {intern.college}
+                    {app.college}
                   </td>
                   <td className="px-6 py-4">
                     <span className="bg-purple-50 text-purple-700 px-2 py-1 rounded text-xs font-medium border border-purple-200">
-                      {intern.techStack}
+                      {app.techStack}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    {intern.resumeDriveLink ? (
+                    {app.resumeDriveLink ? (
                       <a 
-                        href={intern.resumeDriveLink} 
+                        href={app.resumeDriveLink} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 bg-green-100 text-green-700 hover:bg-green-200 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors"
@@ -226,18 +226,18 @@ function InternshipList() {
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {intern.createdAt ? new Date(intern.createdAt).toLocaleString("en-US", { year: "numeric", month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }) : ''}
+                    {app.createdAt ? new Date(app.createdAt).toLocaleString("en-US", { year: "numeric", month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }) : ''}
                   </td>
                   <td className="px-6 py-4 text-center">
                     <div className="flex justify-center gap-2">
                       <button 
-                        onClick={() => handleEditClick(intern)}
+                        onClick={() => handleEditClick(app)}
                         className="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-xs px-3 py-1.5 focus:outline-none"
                       >
                         Edit
                       </button>
                       <button 
-                        onClick={() => handleDelete(intern._id)}
+                        onClick={() => handleDelete(app._id)}
                         className="text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-xs px-3 py-1.5 focus:outline-none"
                       >
                         Delete
@@ -253,7 +253,7 @@ function InternshipList() {
       </div>
 
       {/* Edit Modal */}
-      {isEditModalOpen && editingIntern && (
+      {isEditModalOpen && editingApplication && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto">
           <div className="rounded-xl shadow-2xl w-full max-w-md m-4 p-6 relative border" style={{ backgroundColor: "rgb(var(--dash-panel))", borderColor: "rgba(var(--dash-border))" }}>
             <div className="flex justify-between items-center mb-5">
@@ -272,7 +272,7 @@ function InternshipList() {
                 <input 
                   type="text" 
                   name="name" 
-                  value={editingIntern.name} 
+                  value={editingApplication.name} 
                   onChange={handleEditChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500 text-gray-900"
                   required
@@ -284,7 +284,7 @@ function InternshipList() {
                 <input 
                   type="text" 
                   name="phone" 
-                  value={editingIntern.phone} 
+                  value={editingApplication.phone} 
                   onChange={handleEditChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500 text-gray-900"
                   required
@@ -296,7 +296,7 @@ function InternshipList() {
                 <input 
                   type="text" 
                   name="college" 
-                  value={editingIntern.college} 
+                  value={editingApplication.college} 
                   onChange={handleEditChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500 text-gray-900"
                   required
@@ -304,27 +304,15 @@ function InternshipList() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Tech Track</label>
-                <select 
+                <label className="block text-sm font-medium text-gray-700 mb-1">Career Profile</label>
+                <input 
+                  type="text"
                   name="techStack" 
-                  value={editingIntern.techStack} 
+                  value={editingApplication.techStack} 
                   onChange={handleEditChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500 text-gray-900"
                   required
-                >
-                  <option value="Full Stack Web Development (React + Node.js)">Full Stack Web Development (React + Node.js)</option>
-                  <option value="Python & Django Backend Development">Python & Django Backend Development</option>
-                  <option value="Data Structures & Algorithms (C++ / Python)">Data Structures & Algorithms (C++ / Python)</option>
-                  <option value="C++ Programming & Competitive Coding">C++ Programming & Competitive Coding</option>
-                  <option value="Python for Data Science">Python for Data Science</option>
-                  <option value="Artificial Intelligence">Artificial Intelligence</option>
-                  <option value="Machine Learning">Machine Learning</option>
-                  <option value="Deep Learning & Generative AI">Deep Learning & Generative AI</option>
-                  <option value="Flutter Mobile Development">Flutter Mobile Development</option>
-                  <option value="UI/UX Design (Figma)">UI/UX Design (Figma)</option>
-                  <option value="DevOps & Cloud (Docker + AWS)">DevOps & Cloud (Docker + AWS)</option>
-                  <option value="FULL STACK AI MERN STACK">FULL STACK AI MERN STACK</option>
-                </select>
+                />
               </div>
 
               <div className="pt-4 flex justify-end gap-3 border-t">
@@ -366,4 +354,4 @@ function InternshipList() {
   );
 }
 
-export default InternshipList;
+export default CareerApplicationsList;

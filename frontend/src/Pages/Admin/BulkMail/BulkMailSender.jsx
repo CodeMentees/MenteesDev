@@ -274,7 +274,7 @@ export default function BulkMailSender() {
               <input
                 id="bm-subject"
                 className="bm-input"
-                placeholder="e.g. Exciting Summer Internship Opportunity at CodeMentees 🚀"
+                placeholder="e.g. Exciting Career Opportunity at CodeMentees 🚀"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
               />
@@ -286,7 +286,7 @@ export default function BulkMailSender() {
               <textarea
                 id="bm-body"
                 className="bm-input"
-                placeholder={"Dear Student,\n\nWe are excited to announce our Summer Internship Program…"}
+                placeholder={"Dear Student,\n\nWe are excited to announce our Career Opportunities…"}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
               />

@@ -95,10 +95,13 @@ const ALL_MENU_ITEMS = [
   },
   {
     id: 11,
-    title: "Interns",
+    title: "Careers",
     icon: <FaUsers />,
     permission: "manage_careers",
-    subItems: [{ id: 111, title: "Applicants", link: "/admin/interns" }],
+    subItems: [
+      { id: 111, title: "Applicants", link: "/admin/career-applications" },
+      { id: 112, title: "Manage Careers", link: "/admin/careers" }
+    ],
   },
   {
     id: 12,

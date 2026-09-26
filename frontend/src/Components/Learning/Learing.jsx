@@ -10,7 +10,7 @@ const tabs = [
 
 const featuresData = {
   referrals: [
-    { icon: "🤝", description: "Referrals for Placements and Internships" },
+    { icon: "🤝", description: "Referrals for Placements and Careers" },
     { icon: "📋", description: "Continuous feedback & monitoring" },
   ],
   peer_group: [
