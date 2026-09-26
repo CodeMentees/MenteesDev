@@ -31,6 +31,12 @@ const careerApplicationSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    resumeData: {
+      type: Buffer,
+    },
+    resumeContentType: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

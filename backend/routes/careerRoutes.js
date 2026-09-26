@@ -12,31 +12,13 @@ import {
   createCareer,
   updateCareer,
   deleteCareer,
-  getMyCareerApplications
+  getMyCareerApplications,
+  getCareerApplicationResume
 } from "../controllers/careerController.js";
 
-const router = express.Router();
-
-import path from "path";
-import fs from "fs";
-
-const uploadDir = path.join(process.cwd(), "uploads", "resumes");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, `Resume_${uniqueSuffix}_${file.originalname.replace(/\s+/g, "_")}`);
-  },
-});
-
+// Configure multer for memory storage
 const upload = multer({
-  storage: storage,
+  storage: multer.memoryStorage(),
   limits: {
     fileSize: 5 * 1024 * 1024, // 5MB limit
   },
@@ -45,6 +27,7 @@ const upload = multer({
 // Public Routes
 router.get("/", getCareers);
 router.post("/apply", upload.single("resume"), applyForCareer);
+router.get("/applications/:id/resume", getCareerApplicationResume);
 
 // Protected Routes (User)
 router.get("/my-applications", isAuthenticated, getMyCareerApplications);
