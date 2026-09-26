@@ -12,8 +12,7 @@ import {
   createCareer,
   updateCareer,
   deleteCareer,
-  getMyCareerApplications,
-  getCareerApplicationResume
+  getMyCareerApplications
 } from "../controllers/careerController.js";
 
 // Configure multer for memory storage
@@ -27,7 +26,6 @@ const upload = multer({
 // Public Routes
 router.get("/", getCareers);
 router.post("/apply", upload.single("resume"), applyForCareer);
-router.get("/applications/:id/resume", getCareerApplicationResume);
 
 // Protected Routes (User)
 router.get("/my-applications", isAuthenticated, getMyCareerApplications);

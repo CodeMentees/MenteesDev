@@ -13,7 +13,8 @@ const uploadToCloudinary = (fileObject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
         folder: "Careers",
-        resource_type: "raw",
+        resource_type: "image",
+        format: "jpg", // Force conversion to JPG image to bypass raw PDF delivery blocks
         public_id: `Resume_${Date.now()}_${fileObject.originalname.replace(/\s+/g, '_')}`,
       },
       (error, result) => {
@@ -154,13 +155,17 @@ export const applyForCareer = asyncHandler(async (req, res) => {
       return res.status(400).json({ message: "Please provide all required fields." });
     }
 
-    let resumeData = null;
-    let resumeContentType = "";
     let resumeDriveLink = "";
 
     if (req.file) {
-      resumeData = req.file.buffer;
-      resumeContentType = req.file.mimetype;
+      try {
+        const link = await uploadToCloudinary(req.file);
+        if (link) {
+          resumeDriveLink = link;
+        }
+      } catch (error) {
+        console.error("Error uploading resume:", error);
+      }
     }
 
     const application = new CareerApplication({
@@ -169,17 +174,10 @@ export const applyForCareer = asyncHandler(async (req, res) => {
       phone,
       college,
       techStack,
-      resumeData,
-      resumeContentType,
+      resumeDriveLink,
     });
 
     await application.save();
-
-    // After saving, set the drive link to our new backend endpoint so the frontend can download it
-    if (resumeData) {
-      application.resumeDriveLink = `/api/careers/applications/${application._id}/resume`;
-      await application.save();
-    }
 
     res.status(201).json({
       message: "Application submitted successfully!",
@@ -197,22 +195,6 @@ export const applyForCareer = asyncHandler(async (req, res) => {
  *     summary: Get all career applications
  *     tags: [Careers]
  */
-/**
- * @desc    Get career application resume
- * @route   GET /api/careers/applications/:id/resume
- * @access  Public (or could be Admin)
- */
-export const getCareerApplicationResume = asyncHandler(async (req, res) => {
-  const application = await CareerApplication.findById(req.params.id);
-
-  if (!application || !application.resumeData) {
-    return res.status(404).json({ message: "Resume not found" });
-  }
-
-  res.set("Content-Type", application.resumeContentType || "application/pdf");
-  res.set("Content-Disposition", `inline; filename="resume_${application.name.replace(/\s+/g, '_')}.pdf"`);
-  res.send(application.resumeData);
-});
 
 export const getCareerApplications = asyncHandler(async (req, res) => {
   try {
