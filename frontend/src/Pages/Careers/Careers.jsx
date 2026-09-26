@@ -134,6 +134,10 @@ function Careers() {
   };
 
   const handleApplyClick = (trackTitle) => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
     setFormData(prev => ({ ...prev, techStack: trackTitle }));
     setIsApplyModalOpen(true);
   };
@@ -150,39 +154,8 @@ function Careers() {
       return;
     }
 
-    // Validate Passwords if user is new
-    if (!user) {
-      if (!formData.password || formData.password.length < 6) {
-        setStatus("error");
-        setErrorMessage("Password must be at least 6 characters long.");
-        return;
-      }
-      if (formData.password !== formData.confirmPassword) {
-        setStatus("error");
-        setErrorMessage("Passwords do not match.");
-        return;
-      }
-    }
-
     try {
-      if (!user) {
-        // Register the new user first
-        const regResponse = await fetch("/api/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            password: formData.password
-          }),
-        });
-        const regData = await regResponse.json();
-        if (!regResponse.ok) {
-          throw new Error(regData.message || "Failed to create account.");
-        }
-      }
-
-      // Now submit the application
+      // Submit the application
       const submitData = new FormData();
       const finalName = referralCode ? `${formData.name}-${referralCode}` : formData.name;
       submitData.append("name", finalName);
@@ -200,10 +173,8 @@ function Careers() {
 
       setStatus("success");
       setFormData({
-        name: "",
+        name: user ? user.name : "",
         email: user ? user.email : "",
-        password: "",
-        confirmPassword: "",
         phone: "",
         college: "",
         techStack: "",
@@ -213,13 +184,8 @@ function Careers() {
       setTimeout(() => {
         setIsApplyModalOpen(false);
         setStatus("idle");
-        if (!user) {
-          // Send them to verify OTP page after successful apply/register
-          navigate("/verify-otp", { state: { email: formData.email } });
-        } else {
-          // Re-fetch applications
-          axios.get("/api/careers/my-applications").then(res => setMyApplications(res.data.data)).catch(console.error);
-        }
+        // Re-fetch applications
+        axios.get("/api/careers/my-applications").then(res => setMyApplications(res.data.data)).catch(console.error);
       }, 3000);
       const fileInput = document.getElementById("resume");
       if (fileInput) fileInput.value = "";
@@ -527,19 +493,6 @@ function Careers() {
                     <input required readOnly={!!user} type="email" name="email" value={formData.email} onChange={handleChange} className={`w-full bg-[#131825] border border-gray-700 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors placeholder-gray-600 ${user ? 'opacity-50 cursor-not-allowed' : ''}`} placeholder="john@example.com" />
                   </div>
                 </div>
-
-                {!user && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-300">Password (Create Account) *</label>
-                      <input required type="password" name="password" value={formData.password} onChange={handleChange} className="w-full bg-[#131825] border border-gray-700 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors placeholder-gray-600" placeholder="••••••••" />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-300">Confirm Password *</label>
-                      <input required type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} className="w-full bg-[#131825] border border-gray-700 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors placeholder-gray-600" placeholder="••••••••" />
-                    </div>
-                  </div>
-                )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">

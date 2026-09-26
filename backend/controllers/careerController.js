@@ -14,7 +14,7 @@ const uploadToCloudinary = (fileObject) => {
       {
         folder: "Careers",
         resource_type: "auto",
-        public_id: `Resume_${Date.now()}_${fileObject.originalname.replace(/[^a-zA-Z0-9]/g, '_')}`,
+        public_id: `Resume_${Date.now()}`,
       },
       (error, result) => {
         if (error) {
