@@ -105,7 +105,8 @@ function LoginPage() {
           <p className="mt-2 text-center text-sm text-gray-400 max-w">
             Or{" "}
             <Link
-              to={"/register"}
+              to="/register"
+              state={{ from }}
               className="font-medium text-dark-btn hover:underline"
             >
               create an account

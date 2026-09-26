@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Toast from "../UI/Toast";
 import { useAuth } from "../../api/authApi";
 
 function Register() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || "/";
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const [formData, setFormData] = useState({
     name: "",
@@ -71,7 +73,7 @@ function Register() {
       if (response.ok) {
         showToast(data.message || "Registration successful! Please verify your email.", "success");
         setTimeout(() => {
-          navigate("/verify-otp", { state: { email: formData.email } });
+          navigate("/verify-otp", { state: { email: formData.email, from } });
         }, 1500);
       } else {
         showToast(data.message || "Registration failed.", "error");
@@ -91,7 +93,7 @@ function Register() {
         client_id: googleResponse.clientId,
       });
       showToast(data.message || "Registration successful!", "success");
-      setTimeout(() => navigate("/"), 1500);
+      setTimeout(() => navigate(from), 1500);
     } catch (error) {
       showToast("Google Registration failed", "error");
     }

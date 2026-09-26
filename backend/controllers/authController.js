@@ -126,7 +126,19 @@ export const verifyOTP = asyncHandler(async (req, res) => {
   user.otpExpiresAt = undefined;
   await user.save();
 
-  res.json({ message: "Email verified successfully! You can now log in." });
+  const token = generateToken(user, 30 * 24 * 60 * 60 * 1000); // 30 days expiry
+  
+  res.json({
+    message: "Email verified successfully! You are now logged in.",
+    user: {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      isSuperAdmin: user.isSuperAdmin,
+    },
+    token
+  });
 });
 
 /**

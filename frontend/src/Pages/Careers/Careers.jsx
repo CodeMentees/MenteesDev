@@ -135,7 +135,7 @@ function Careers() {
 
   const handleApplyClick = (trackTitle) => {
     if (!user) {
-      navigate("/login");
+      navigate("/login", { state: { from: location.pathname + "?job=" + encodeURIComponent(trackTitle) } });
       return;
     }
     setFormData(prev => ({ ...prev, techStack: trackTitle }));
@@ -464,14 +464,7 @@ function Careers() {
                     ? "Thank you for applying. Our hiring team will review your profile and get back to you shortly."
                     : "Application submitted! We have also created an account for you. Please check your email to verify your account."}
                 </p>
-                {user && (
-                  <button
-                    onClick={() => setStatus("idle")}
-                    className="px-8 py-3 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-xl transition-colors border border-gray-600"
-                  >
-                    Submit Another
-                  </button>
-                )}
+                {/* Submit Another removed based on feedback */}
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">

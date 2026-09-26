@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../Slices/authSlice";
 import { ShieldCheck, Loader2, RefreshCw } from "lucide-react";
 import Toast from "../Components/UI/Toast";
 
 const OTPVerification = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
+  const from = location.state?.from || "/login";
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
@@ -84,8 +88,9 @@ const OTPVerification = () => {
 
       const data = await response.json();
       if (response.ok) {
-        showToast("Email verified successfully!", "success");
-        setTimeout(() => navigate("/login"), 2000);
+        dispatch(login({ user: data.user, token: data.token }));
+        showToast("Email verified successfully! You are now logged in.", "success");
+        setTimeout(() => navigate(from), 2000);
       } else {
         showToast(data.message || "Verification failed.", "error");
       }
