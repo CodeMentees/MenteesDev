@@ -15,6 +15,8 @@ import {
   getMyCareerApplications
 } from "../controllers/careerController.js";
 
+const router = express.Router();
+
 // Configure multer for memory storage
 const upload = multer({
   storage: multer.memoryStorage(),
