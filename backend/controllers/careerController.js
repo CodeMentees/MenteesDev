@@ -13,8 +13,8 @@ const uploadToCloudinary = (fileObject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
         folder: "Careers",
-        resource_type: "auto",
-        public_id: `Resume_${Date.now()}`,
+        resource_type: "raw",
+        public_id: `Resume_${Date.now()}_${fileObject.originalname.replace(/\s+/g, '_')}`,
       },
       (error, result) => {
         if (error) {
