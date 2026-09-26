@@ -126,8 +126,16 @@ export const verifyOTP = asyncHandler(async (req, res) => {
   user.otpExpiresAt = undefined;
   await user.save();
 
-  const token = generateToken(user, 30 * 24 * 60 * 60 * 1000); // 30 days expiry
+  const cookieMaxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
+  const token = generateToken(user, '30d');
   
+  res.cookie("token", token, {
+    maxAge: cookieMaxAge,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  });
+
   res.json({
     message: "Email verified successfully! You are now logged in.",
     user: {

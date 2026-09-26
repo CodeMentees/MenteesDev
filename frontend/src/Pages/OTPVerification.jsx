@@ -88,7 +88,7 @@ const OTPVerification = () => {
 
       const data = await response.json();
       if (response.ok) {
-        dispatch(login({ user: data.user, token: data.token }));
+        dispatch(login(data.user));
         showToast("Email verified successfully! You are now logged in.", "success");
         setTimeout(() => navigate(from), 2000);
       } else {
