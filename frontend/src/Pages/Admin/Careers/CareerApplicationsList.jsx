@@ -213,7 +213,7 @@ function CareerApplicationsList() {
                   <td className="px-6 py-4 text-center">
                     {app.resumeDriveLink ? (
                       <a 
-                        href={app.resumeDriveLink} 
+                        href={app.resumeDriveLink.includes('/image/upload/') && !app.resumeDriveLink.includes('fl_attachment') ? app.resumeDriveLink.replace('/image/upload/', '/image/upload/fl_attachment/') : app.resumeDriveLink} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 bg-green-100 text-green-700 hover:bg-green-200 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors"
