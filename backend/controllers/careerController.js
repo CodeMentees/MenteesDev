@@ -157,14 +157,8 @@ export const applyForCareer = asyncHandler(async (req, res) => {
     let resumeDriveLink = "";
 
     if (req.file) {
-      try {
-        const link = await uploadToCloudinary(req.file);
-        if (link) {
-          resumeDriveLink = link;
-        }
-      } catch (error) {
-        console.error("Error uploading resume:", error);
-      }
+      // Use local file path from diskStorage
+      resumeDriveLink = `/uploads/resumes/${req.file.filename}`;
     }
 
     const application = new CareerApplication({

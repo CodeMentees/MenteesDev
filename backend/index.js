@@ -129,6 +129,10 @@ app.use("/api", routes)
 app.get("/api/ping", (req, res) => res.json({ message: "pong" }));
 
 app.use("/api", swaggerRoutes);
+
+// Serve static files from the uploads directory (e.g. resumes)
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
 // Serve static files from the frontend/dist directory
 let frontendDistPath = path.join(process.cwd(), "frontend", "dist");
 if (!fs.existsSync(frontendDistPath)) {
