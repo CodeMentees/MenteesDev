@@ -11,8 +11,16 @@ import messageRoutes from "./messageRoutes.js";
 import eventRoutes from "./eventRoutes.js";
 import blogCategoryRoutes from "./blogCategoryRoutes.js";
 import testRoutes from "./test.js";
+import careerRoutes from "./careerRoutes.js";
+import bulkMailRoutes from "./bulkMailRoutes.js";
+import visitorRoutes from "./visitorRoutes.js";
+import siteSettingsRoutes from "./siteSettingsRoutes.js";
+import aiRoutes from "./aiRoutes.js";
+import planlyRoutes from "./planlyRoutes.js";
 
 const router = express.Router();
+router.use("/ai", aiRoutes);
+router.use("/planly", planlyRoutes);
 router.use("/home", homeRoutes);
 router.use("/users", userRoutes);
 router.use("/auth", authRoutes);

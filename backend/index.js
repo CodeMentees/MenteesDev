@@ -50,12 +50,19 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
 
-// Clear blocked IPs older than 24 hours
-cron.schedule("0 0 * * *", async () => {
-  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  await BlockedIp.deleteMany({ timestamp: { $lt: twentyFourHoursAgo } });
-  console.log("Cleared old blocked IPs.");
-});
+import { initBlogCronWorker } from "./services/blogCronWorker.js";
+
+// Clear blocked IPs older than 24 hours & start AI blog scheduler (only in dedicated server mode)
+if (!process.env.VERCEL) {
+  cron.schedule("0 0 * * *", async () => {
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    await BlockedIp.deleteMany({ timestamp: { $lt: twentyFourHoursAgo } });
+    console.log("Cleared old blocked IPs.");
+  });
+
+  // Initialize automated 2-hour AI blog cron worker
+  initBlogCronWorker();
+}
 
 app.use(errorHandler);
 
