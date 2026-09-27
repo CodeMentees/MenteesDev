@@ -1,0 +1,180 @@
+'use client';
+
+import React from "react";
+import ReactDOM from "react-dom";
+import { motion } from "framer-motion";
+
+/** Inline spinner — use inside buttons or small containers */
+export default function LoadingSpinner({ size = "md", className = "" }) {
+  const sizes = {
+    sm: "w-4 h-4 border-2",
+    md: "w-8 h-8 border-2",
+    lg: "w-12 h-12 border-4",
+    xl: "w-16 h-16 border-4",
+  };
+
+  return (
+    <div
+      className={`inline-block ${sizes[size]} rounded-full animate-spin ${className}`}
+      style={{
+        borderColor: "rgba(249,115,22,0.2)",
+        borderTopColor: "rgb(249,115,22)",
+      }}
+    />
+  );
+}
+
+/** Full-screen overlay with backdrop blur */
+export function LoadingOverlay({ message = "Loading..." }) {
+  const overlayContent = (
+    <div className="fixed inset-0 z-[9998] flex items-center justify-center"
+      style={{ background: "rgba(0,0,0,0.65)", backdropFilter: "blur(8px)" }}>
+      <div
+        className="rounded-2xl p-8 flex flex-col items-center gap-4 shadow-2xl"
+        style={{
+          background: "rgb(var(--dash-panel))",
+          border: "1px solid rgba(var(--dash-border))",
+        }}
+      >
+        <LoadingSpinner size="xl" />
+        <p className="text-sm font-semibold" style={{ color: "rgb(var(--dash-ink))" }}>
+          {message}
+        </p>
+      </div>
+    </div>
+  );
+  
+  return ReactDOM.createPortal(overlayContent, document.body);
+}
+
+/** Centered page-level spinner for route transitions */
+export function PageLoader({ message = "Loading..." }) {
+  const dotVariants = {
+    jump: {
+      y: "-30px",
+      transition: {
+        duration: 0.8,
+        repeat: Infinity,
+        repeatType: "mirror",
+        ease: "easeInOut",
+      },
+    },
+  };
+  
+  const containerVariants = {
+    jump: {
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center gap-10"
+      style={{ background: "rgb(var(--bg))" }}>
+      
+      <motion.div
+        className="flex justify-center items-center gap-[10px]"
+        variants={containerVariants}
+        initial="initial"
+        animate="jump"
+      >
+        <motion.div 
+          className="w-5 h-5 rounded-full" 
+          style={{ backgroundColor: "#ff0088", willChange: "transform" }}
+          variants={dotVariants} 
+        />
+        <motion.div 
+          className="w-5 h-5 rounded-full" 
+          style={{ backgroundColor: "#ff0088", willChange: "transform" }}
+          variants={dotVariants} 
+        />
+        <motion.div 
+          className="w-5 h-5 rounded-full" 
+          style={{ backgroundColor: "#ff0088", willChange: "transform" }}
+          variants={dotVariants} 
+        />
+      </motion.div>
+
+      <p className="text-sm font-medium uppercase tracking-widest" style={{ color: "rgb(var(--text-secondary))" }}>
+        {message}
+      </p>
+    </div>
+  );
+}
+
+
+/** Animated pulse skeleton — drop in while fetching course/blog cards */
+export function SkeletonCard() {
+  return (
+    <div
+      className="relative overflow-hidden rounded-2xl p-5"
+      style={{
+        background: "rgb(var(--surface))",
+        border: "1px solid rgba(var(--border))",
+      }}
+    >
+      {/* Shimmer Effect using framer-motion */}
+      <motion.div 
+        className="absolute inset-0"
+        initial={{ x: "-100%" }}
+        animate={{ x: "100%" }}
+        transition={{ 
+          repeat: Infinity, 
+          duration: 1.5, 
+          ease: "linear",
+          repeatDelay: 0.2
+        }}
+        style={{
+          background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%)",
+          zIndex: 10
+        }}
+      />
+      
+      {/* Image placeholder */}
+      <div className="h-36 rounded-xl mb-4"
+        style={{ background: "rgba(255,255,255,0.04)" }} />
+      {/* Badge row */}
+      <div className="flex gap-2 mb-3">
+        <div className="h-5 w-16 rounded-full"
+          style={{ background: "rgba(255,255,255,0.05)" }} />
+      </div>
+      {/* Title */}
+      <div className="h-5 rounded mb-2"
+        style={{ background: "rgba(255,255,255,0.06)", width: "75%" }} />
+      <div className="h-4 rounded mb-4"
+        style={{ background: "rgba(255,255,255,0.04)", width: "55%" }} />
+      {/* Description lines */}
+      <div className="space-y-2 mb-4">
+        <div className="h-3 rounded" style={{ background: "rgba(255,255,255,0.03)" }} />
+        <div className="h-3 rounded" style={{ background: "rgba(255,255,255,0.03)", width: "85%" }} />
+        <div className="h-3 rounded" style={{ background: "rgba(255,255,255,0.03)", width: "70%" }} />
+      </div>
+      {/* Tags */}
+      <div className="flex gap-2 mb-4">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-5 w-12 rounded"
+            style={{ background: "rgba(255,255,255,0.04)" }} />
+        ))}
+      </div>
+      {/* Divider */}
+      <div className="h-px mb-4" style={{ background: "rgba(255,255,255,0.03)" }} />
+      {/* CTA row */}
+      <div className="flex justify-between items-center">
+        <div className="h-5 w-24 rounded" style={{ background: "rgba(249,115,22,0.1)" }} />
+        <div className="h-7 w-20 rounded-full" style={{ background: "rgba(255,255,255,0.05)" }} />
+      </div>
+    </div>
+  );
+}
+
+/** Grid of SkeletonCards for list loading states */
+export function SkeletonGrid({ count = 6 }) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {Array.from({ length: count }).map((_, i) => (
+        <SkeletonCard key={i} />
+      ))}
+    </div>
+  );
+}
